@@ -1,0 +1,77 @@
+---
+title: "Li et al. Human Melanoma Data"
+author: "Yingxin Lin"
+output:
+  html_document:
+    theme: flatly
+    number_sections: yes
+    toc: yes
+    fig_height: 8
+    fig_width: 8
+    toc_float:
+      collapsed: true
+      smooth_scroll: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r echo = FALSE}
+library(ggplot2)
+library(ggthemes)
+library(scClassify)
+library(plotly)
+```
+
+
+# Train Model
+
+```{r}
+trainLiresClass <- readRDS("trainLiresClass.rds")
+```
+
+
+```{r}
+trainLiresClass
+```
+
+
+Cell type composition:
+
+```{r}
+knitr::kable((table(trainLiresClass@cellTypeTrain)), 
+             col.names = c("Cell Tpye", "Freq"), align = "c", format = "markdown")
+```
+
+
+
+# Visualisation
+
+## tSNE
+
+```{r fig.height = 6, fig.width = 9}
+
+g <- ggplot(data.frame(trainLiresClass@metaData), 
+       aes(x = tSNE1, y = tSNE2, color = trainLiresClass@cellTypeTrain)) +
+  geom_point() +
+  scale_colour_tableau(palette = "Tableau 20") +
+  theme_bw() +
+  theme(legend.position = "bottom",
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill = NA, 
+                                    size = 1.2)) +
+  labs(title = "Li et al.")
+ggplotly(g)
+```
+
+
+## Cell Type Tree
+
+```{r}
+plotCellTypeTree(trainLiresClass@cellTypeTree, group_level = 4)
+```
+
+## Reference
+
+Li, H. et al., 2019. Dysfunctional CD8 T Cells Form a Proliferative, Dynamically Regulated Compartment within Human Melanoma. Cell, 176(4), p.775–789.e18. Available at: https://doi.org/10.1016/j.cell.2018.11.043.

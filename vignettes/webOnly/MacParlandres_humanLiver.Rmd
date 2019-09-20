@@ -1,0 +1,75 @@
+---
+title: "MacParland et al. Human Liver Data"
+author: "Yingxin Lin"
+output:
+  html_document:
+    number_sections: yes
+    toc: yes
+    fig_height: 8
+    fig_width: 8
+    toc_float:
+      collapsed: true
+      smooth_scroll: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r echo = FALSE}
+library(ggplot2)
+library(ggthemes)
+library(scClassify)
+library(plotly)
+```
+
+
+# Train Model
+
+```{r}
+trainMacParlandresClass <- readRDS("trainMacParlandresClass.rds")
+```
+
+
+```{r}
+trainMacParlandresClass
+```
+
+
+Cell type composition:
+
+```{r}
+knitr::kable((table(trainMacParlandresClass@cellTypeTrain)), 
+             col.names = c("Cell Tpye", "Freq"), align = "c", format = "markdown")
+```
+
+
+
+# Visualisation
+
+## tSNE
+```{r fig.height = 6, fig.width = 9}
+
+g <- ggplot(data.frame(trainMacParlandresClass@metaData), 
+       aes(x = tSNE1, y = tSNE2, color = trainMacParlandresClass@cellTypeTrain)) +
+  geom_point() +
+  scale_colour_tableau(palette = "Tableau 20") +
+  theme_bw() +
+  theme(legend.position = "bottom",
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill = NA, 
+                                    size = 1.2)) +
+  labs(title = "MacParland et al.")
+ggplotly(g)
+```
+
+
+## Cell Type Tree
+
+```{r}
+plotCellTypeTree(trainMacParlandresClass@cellTypeTree)
+```
+
+## Reference
+
+MacParland, S.A. et al., 2018. Single cell RNA sequencing of human liver reveals distinct intrahepatic macrophage populations. Nature Communications.

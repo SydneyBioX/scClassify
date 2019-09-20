@@ -1,0 +1,76 @@
+---
+title: "Tasic et al. (2018) Mouse Neuronal Data"
+author: "Yingxin Lin"
+output:
+  html_document:
+    theme: flatly
+    number_sections: yes
+    toc: yes
+    fig_height: 8
+    fig_width: 8
+    toc_float:
+      collapsed: true
+      smooth_scroll: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r echo = FALSE}
+library(ggplot2)
+library(ggthemes)
+library(scClassify)
+library(plotly)
+```
+
+
+# Train Model
+
+```{r}
+trainTasicresClass <- readRDS("trainTasicV2resClass.rds")
+```
+
+
+```{r}
+trainTasicresClass
+```
+
+
+Cell type composition:
+
+```{r}
+knitr::kable((table(trainTasicresClass@cellTypeTrain)), 
+             col.names = c("Cell Tpye", "Freq"), align = "c", format = "markdown")
+```
+
+
+
+# Visualisation
+
+## tSNE
+```{r fig.height = 6, fig.width = 9}
+
+g <- ggplot(data.frame(trainTasicresClass@metaData), 
+       aes(x = tSNE1, y = tSNE2, color = trainTasicresClass@cellTypeTrain)) +
+  geom_point() +
+  scale_colour_hue() +
+  theme_bw() +
+  theme(legend.position = "bottom",
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill = NA, 
+                                    size = 1.2)) +
+  labs(title = "Tasic et al. (2018)")
+ggplotly(g)
+```
+
+
+## Cell Type Tree
+
+```{r}
+plotCellTypeTree(trainTasicresClass@cellTypeTree)
+```
+
+## Reference
+
+Tasic, B. et al., 2018. Shared and distinct transcriptomic cell types across neocortical areas. Nature.
