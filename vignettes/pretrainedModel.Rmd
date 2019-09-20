@@ -1,0 +1,97 @@
+---
+title: "Performing scClassify using pretrained model"
+output: rmarkdown::html_vignette
+author: Yingxin Lin
+vignette: >
+  %\VignetteIndexEntry{pretrainedModel}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This vignette will provide an example showing how to use pretrained model we provided to predict cell types.
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  comment = "#>"
+)
+```
+
+
+
+
+# Setting up the data
+
+We assume that you have *log-transformed* (size-factor normalized) matrices where each row is a gene and each column a cell as a query dataset. For demonstration purposes, we will take a subset of single-cell pancreas datasets from one independent studies (Wang et al.).
+
+
+```{r eval = TRUE, results='hide'}
+load("data/scClassify_example.rda")
+wang_cellTypes <- scClassify_example$wang_cellTypes
+exprsMat_wang_subset <- scClassify_example$exprsMat_wang_subset
+exprsMat_wang_subset <- as(exprsMat_wang_subset, "dgCMatrix")
+```
+
+Here, we load our pretrained model using a subset of Xin et al. human pancreas as reference data.
+
+First, check basic info of our pretrained model. 
+
+```{r setup}
+library(scClassify)
+load("data/trainClassExample.rda")
+trainClassExample
+```
+
+In this pretrained model, we have select the features based on Differential Expression using limma. To check the features that are available in the pretrained model: 
+
+```{r}
+trainClassExample@features
+```
+
+
+We can also visualise the cell type tree of the reference data.
+
+```{r}
+plotCellTypeTree(trainClassExample@cellTypeTree)
+```
+
+# Running scClassify
+
+Next, we perform `predict_scClassify` to predict the cell types of our query data matrix `exprsMat_wang_subset_sparse`, using our pretrained model `trainRes = trainClassExample`. Here, we used `pearson` and `spearman` as similarity metrics.
+
+```{r}
+pred_res <- predict_scClassify(exprsMat_test = exprsMat_wang_subset,
+                               trainRes = trainClassExample,
+                               cellTypes_test = wang_cellTypes,
+                               algorithm = "WKNN",
+                               features = c("limma"),
+                               similarity = c("pearson", "spearman"),
+                               prob_threshold = 0.7,
+                               verbose = TRUE)
+```
+
+Noted that the `cellType_test` is not a necessarily input. For the dataset with unknown label, users can simply leave it as `cellType_test = NULL`.
+
+
+
+Pearson as similarity metrics prediction results:
+
+```{r}
+table(pred_res$pearson_WKNN_limma$predRes, wang_cellTypes)
+```
+
+
+Spearman as similarity metrics prediction results:
+```{r}
+table(pred_res$spearman_WKNN_limma$predRes, wang_cellTypes)
+```
+
+
+
+# Session Info
+
+```{r}
+sessionInfo()
+```

@@ -1,0 +1,23 @@
+pandoc: 1.19.2.1
+pkgdown: 1.3.0
+pkgdown_sha: ~
+articles:
+  pretrainedModel: pretrainedModel.html
+  sampleSizeCal: sampleSizeCal.html
+  scClassify: scClassify.html
+  Aizarani_humanLiver: webOnly/Aizarani_humanLiver.html
+  Baron_humanPancreas: webOnly/Baron_humanPancreas.html
+  Cohen_mouseLung: webOnly/Cohen_mouseLung.html
+  Hrvatin_mouseNeuronal: webOnly/Hrvatin_mouseNeuronal.html
+  Lawlor_humanPancreas: webOnly/Lawlor_humanPancreas.html
+  Li_humanMelanoma: webOnly/Li_humanMelanoma.html
+  MacParlandres_humanLiver: webOnly/MacParlandres_humanLiver.html
+  Muraro_humanPancreas: webOnly/Muraro_humanPancreas.html
+  Park_mouseKidney: webOnly/Park_mouseKidney.html
+  Segerstolpe_humanPancreas: webOnly/Segerstolpe_humanPancreas.html
+  TabulaMuris: webOnly/TabulaMuris.html
+  Tasic2016_mouseNeuronal: webOnly/Tasic2016_mouseNeuronal.html
+  Tasic2018_mouseNeuronal: webOnly/Tasic2018_mouseNeuronal.html
+  Wang_humanPancreas: webOnly/Wang_humanPancreas.html
+  Xin_humanPancreas: webOnly/Xin_humanPancreas.html
+

@@ -1,0 +1,56 @@
+template:
+  params:
+    bootswatch: cosmo
+navbar:
+  title: ~
+  left:
+    - text: Classify Your Cells
+      menu:
+        - text: Prediction using pretrained model
+          href: articles/pretrainedModel.html
+    - text: Build Your Own Models
+      menu:
+        - text: scClassify Model Building and Prediction
+          href: articles/scClassify.html
+        - text: Sample size learning
+          href: articles/sampleSizeCal.html
+    - text: Reference
+      href: reference/index.html
+    - text: Pretrained Models
+      menu:
+        - text: Tasic (2016) (Mouse neuronal)
+          href: articles/webOnly/Tasic2016_mouseNeuronal.html
+        - text: Tasic (2018) (Mouse neuronal)
+          href: articles/webOnly/Tasic2018_mouseNeuronal.html
+        - text: Hrvatin (Mouse neuronal)
+          href: articles/webOnly/Hrvatin_mouseNeuronal.html
+        - text: Cohen (Mouse lung)
+          href: articles/webOnly/Cohen_mouseLung.html
+        - text: Park (Mouse kidney)
+          href: articles/webOnly/Park_mouseKidney.html
+        - text: MacParland (Human Liver)
+          href: articles/webOnly/MacParlandres_humanLiver.html
+        - text: Aizarani (Human Liver)
+          href: articles/webOnly/Aizarani_humanLiver.html
+        - text: Baron (Human Pancreas)
+          href: articles/webOnly/Baron_humanPancreas.html
+        - text: Muraro (Human Pancreas)
+          href: articles/webOnly/Muraro_humanPancreas.html
+        - text: Lawlor (Human Pancreas)
+          href: articles/webOnly/Lawlor_humanPancreas.html
+        - text: Xin (Human Pancreas)
+          href: articles/webOnly/Xin_humanPancreas.html
+        - text: Wang (Human Pancreas)
+          href: articles/webOnly/Wang_humanPancreas.html
+        - text: Segerstolpe (Human Pancreas)
+          href: articles/webOnly/Segerstolpe_humanPancreas.html
+        - text: Li (Human Melanoma)
+          href: articles/webOnly/Li_humanMelanoma.html
+        - text: Tabula Muris (Mouse cell atlas)
+          href: articles/webOnly/TabulaMuris.html
+  right:
+    - icon: fa-github fa-lg
+      href: https://github.com/SydneyBioX/scClassify
+
+
+

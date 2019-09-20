@@ -1,0 +1,34 @@
+Package: scClassify
+Type: Package
+Title: scClassify: single-cell Hierarchical Classification 
+Version: 0.1.3
+Author: Yingxin Lin
+Maintainer: Yingxin Lin <yingxin.lin@sydney.edu.au>
+Description: Classification of single cells via cell-type hierarchies based on ensemble learning and sample size estimation.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Depends: R (>= 3.5.0)
+Imports:
+    S4Vectors,
+    limma,
+    ggraph,
+    igraph,
+    methods,
+    cluster,
+    minpack.lm,
+    mixtools,
+    pbmcapply,
+    proxy,
+    proxyC,
+    Matrix,
+    ggplot2,
+    hopach,
+    diptest,
+    statmod,
+    mgcv
+RoxygenNote: 6.1.1
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
