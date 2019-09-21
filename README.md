@@ -9,6 +9,14 @@ Single cell classification via cell-type hierarchies based on ensemble learning 
 
 ## Installation
 
+
+Install `hopach` package from Bioconductor:
+
+```r
+BiocManager::install("hopach")
+```
+
+
 ```r
 library(devtools)
 devtools::install_github("SydneyBioX/scClassify")
