@@ -66,7 +66,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scClassify</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -185,13 +185,11 @@
     <p>Testing scClassify model</p>
     </div>
 
-    <pre class="usage"><span class='fu'>predict_scClassify</span>(<span class='no'>exprsMat_test</span>, <span class='no'>trainRes</span>, <span class='no'>cellTypes_test</span>, <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>prob_threshold</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>cor_threshold_static</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
-  <span class='kw'>cor_threshold_high</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>features</span> <span class='kw'>=</span> <span class='st'>"limma"</span>, <span class='kw'>algorithm</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"WKNN"</span>,
-  <span class='st'>"KNN"</span>, <span class='st'>"DWKNN"</span>), <span class='kw'>similarity</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"pearson"</span>, <span class='st'>"spearman"</span>, <span class='st'>"cosine"</span>,
-  <span class='st'>"jaccard"</span>, <span class='st'>"kendall"</span>, <span class='st'>"weighted_rank"</span>, <span class='st'>"manhattan"</span>),
-  <span class='kw'>cutoff_method</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"dynamic"</span>, <span class='st'>"static"</span>), <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>ncores</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>predict_scClassify</span>(<span class='no'>exprsMat_test</span>, <span class='no'>trainRes</span>, <span class='kw'>cellTypes_test</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>prob_threshold</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>cor_threshold_static</span> <span class='kw'>=</span> <span class='fl'>0.5</span>,
+  <span class='kw'>cor_threshold_high</span> <span class='kw'>=</span> <span class='fl'>0.7</span>, <span class='kw'>features</span> <span class='kw'>=</span> <span class='st'>"limma"</span>, <span class='kw'>algorithm</span> <span class='kw'>=</span> <span class='st'>"WKNN"</span>,
+  <span class='kw'>similarity</span> <span class='kw'>=</span> <span class='st'>"pearson"</span>, <span class='kw'>cutoff_method</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"dynamic"</span>, <span class='st'>"static"</span>),
+  <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ncores</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

@@ -44,7 +44,7 @@ load("data/trainClassExample.rda")
 trainClassExample
 ```
 
-In this pretrained model, we have select the features based on Differential Expression using limma. To check the features that are available in the pretrained model: 
+In this pretrained model, we have select the genes based on Differential Expression using limma. To check the genes that are available in the pretrained model: 
 
 ```{r}
 trainClassExample@features

@@ -25,8 +25,8 @@
 
 train_scClassify <- function(exprsMat_train,
                              cellTypes_train,
-                             tree = c("HOPACH", "HC"),
-                             selectFeatures = c("limma", "DV", "DD", "chisq", "BI"),
+                             tree = "HOPACH",
+                             selectFeatures = "limma",
                              topN = 50,
                              hopach_kmax = 5,
                              pSig = 0.05,

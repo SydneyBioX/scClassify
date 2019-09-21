@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scClassify</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -188,7 +188,7 @@ exprsMat_wang_subset &lt;-<span class="st"> </span><span class="kw">as</span>(ex
 <div id="non-ensemble-scclassify" class="section level2">
 <h2 class="hasAnchor">
 <a href="#non-ensemble-scclassify" class="anchor"></a>Non-ensemble scClassify</h2>
-<p>We first perform non-ensemble <code>scClassify</code> by using Xin et al. as reference dataset, and Wang et al data as query data, using <code>WKNN</code> as KNN algorithm, <code>DE</code> as feature selection method, and <code>pearson</code> as similarity calculation method.</p>
+<p>We first perform non-ensemble <code>scClassify</code> by using Xin et al. as reference dataset, and Wang et al data as query data, using <code>WKNN</code> as KNN algorithm, <code>DE</code> (differential expression genes) as gene selection method, and <code>pearson</code> as similarity calculation method.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scClassify_res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scClassify.html">scClassify</a></span>(<span class="dt">exprsMat_train =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">as.matrix</a></span>(exprsMat_xin_subset),
                       <span class="dt">cellTypes_train =</span> xin_cellTypes,
                       <span class="dt">exprsMat_test =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">wang =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">as.matrix</a></span>(exprsMat_wang_subset)),
@@ -214,8 +214,8 @@ exprsMat_wang_subset &lt;-<span class="st"> </span><span class="kw">as</span>(ex
 <span class="co">#&gt;                   wang_cellTypes</span>
 <span class="co">#&gt;                    acinar alpha beta delta ductal gamma stellate</span>
 <span class="co">#&gt;   alpha                 0   206    0     0      0     2        0</span>
-<span class="co">#&gt;   beta                  2     0  118     0     14     0        0</span>
-<span class="co">#&gt;   beta_delta_gamma      3     0    0     0     81     0       36</span>
+<span class="co">#&gt;   beta                  0     0  118     0     14     0        0</span>
+<span class="co">#&gt;   beta_delta_gamma      5     0    0     0     81     0       36</span>
 <span class="co">#&gt;   delta                 0     0    0    10      1     0        4</span>
 <span class="co">#&gt;   gamma                 0     0    0     0      0    19        0</span>
 <span class="co">#&gt;   unassigned            0     0    0     0      0     0        5</span></code></pre></div>
@@ -223,7 +223,7 @@ exprsMat_wang_subset &lt;-<span class="st"> </span><span class="kw">as</span>(ex
 <div id="ensemble-classify" class="section level2">
 <h2 class="hasAnchor">
 <a href="#ensemble-classify" class="anchor"></a>Ensemble Classify</h2>
-<p>We next perform ensemble <code>scClassify</code> by using Xin et al. as reference dataset, and Wang et al data as query data, using <code>WKNN</code> as KNN algorithm, <code>DE</code> as feature selection method, and <code>pearson</code>, <code>spearman</code> as similarity calculation methods. Thus, we are performing two combinations of gene selection models and similarity metrics as train classifiers, that is,</p>
+<p>We next perform ensemble <code>scClassify</code> by using Xin et al. as reference dataset, and Wang et al data as query data, using <code>WKNN</code> as KNN algorithm, <code>DE</code> as gene selection method, and <code>pearson</code>, <code>spearman</code> as similarity calculation methods. Thus, we are performing two combinations of gene selection models and similarity metrics as train classifiers, that is,</p>
 <ol style="list-style-type: decimal">
 <li>
 <code>WKNN</code> + <code>DE</code> + <code>pearson</code>
