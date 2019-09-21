@@ -4,10 +4,10 @@
 \alias{train_scClassify}
 \title{Training scClassify model}
 \usage{
-train_scClassify(exprsMat_train, cellTypes_train, tree = c("HOPACH",
-  "HC"), selectFeatures = c("limma", "DV", "DD", "chisq", "BI"),
-  topN = 50, hopach_kmax = 5, pSig = 0.05, cellType_tree = NULL,
-  parallel = F, ncores = 1, verbose = T)
+train_scClassify(exprsMat_train, cellTypes_train, tree = "HOPACH",
+  selectFeatures = "limma", topN = 50, hopach_kmax = 5,
+  pSig = 0.05, cellType_tree = NULL, parallel = F, ncores = 1,
+  verbose = T)
 }
 \arguments{
 \item{exprsMat_train}{A matrix of expression matrix of reference dataset}

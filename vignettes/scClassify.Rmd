@@ -59,7 +59,7 @@ We can see that Xin et al. data only have 4 cell types, while Wang et al. has 7 
 
 ## Non-ensemble scClassify
 
-We first perform non-ensemble `scClassify` by using Xin et al. as reference dataset, and Wang et al data as query data, using `WKNN` as KNN algorithm, `DE` as feature selection method, and `pearson` as similarity calculation method.
+We first perform non-ensemble `scClassify` by using Xin et al. as reference dataset, and Wang et al data as query data, using `WKNN` as KNN algorithm, `DE` (differential expression genes) as gene selection method, and `pearson` as similarity calculation method.
 
 ```{r}
 scClassify_res <- scClassify(exprsMat_train = as.matrix(exprsMat_xin_subset),
@@ -96,7 +96,7 @@ table(scClassify_res$testRes$wang$pearson_WKNN_limma$predRes, wang_cellTypes)
 
 ## Ensemble Classify
 
-We next perform ensemble `scClassify` by using Xin et al. as reference dataset, and Wang et al data as query data, using `WKNN` as KNN algorithm, `DE` as feature selection method, and `pearson`, `spearman` as similarity calculation methods. Thus, we are performing two combinations of gene selection models and similarity metrics as train classifiers, that is, 
+We next perform ensemble `scClassify` by using Xin et al. as reference dataset, and Wang et al data as query data, using `WKNN` as KNN algorithm, `DE` as gene selection method, and `pearson`, `spearman` as similarity calculation methods. Thus, we are performing two combinations of gene selection models and similarity metrics as train classifiers, that is, 
 
 1. `WKNN` + `DE` + `pearson`
 2. `WKNN` + `DE` + `spearman`

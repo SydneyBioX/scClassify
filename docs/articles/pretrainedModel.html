@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scClassify</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -170,7 +170,7 @@ trainClassExample
 <span class="co">#&gt; Feature selection methods: limma </span>
 <span class="co">#&gt; Number of cells in the training data: 674 </span>
 <span class="co">#&gt; Number of cell types in the training data: 4</span></code></pre></div>
-<p>In this pretrained model, we have select the features based on Differential Expression using limma. To check the features that are available in the pretrained model:</p>
+<p>In this pretrained model, we have select the genes based on Differential Expression using limma. To check the genes that are available in the pretrained model:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">trainClassExample<span class="op">@</span>features
 <span class="co">#&gt; [1] "limma"</span></code></pre></div>
 <p>We can also visualise the cell type tree of the reference data.</p>
@@ -225,8 +225,8 @@ trainClassExample
 <span class="co">#&gt;                   wang_cellTypes</span>
 <span class="co">#&gt;                    acinar alpha beta delta ductal gamma stellate</span>
 <span class="co">#&gt;   alpha                 0   206    0     0      0     2        2</span>
-<span class="co">#&gt;   beta                  2     0  118     0     30     0        7</span>
-<span class="co">#&gt;   beta_delta_gamma      1     0    0     0     65     0       30</span>
+<span class="co">#&gt;   beta                  1     0  118     0     28     0        5</span>
+<span class="co">#&gt;   beta_delta_gamma      2     0    0     0     67     0       32</span>
 <span class="co">#&gt;   delta                 0     0    0    10      0     0        2</span>
 <span class="co">#&gt;   gamma                 0     0    0     0      0    18        0</span>
 <span class="co">#&gt;   unassigned            2     0    0     0      1     1        4</span></code></pre></div>

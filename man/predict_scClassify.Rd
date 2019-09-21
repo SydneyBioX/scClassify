@@ -4,13 +4,11 @@
 \alias{predict_scClassify}
 \title{Testing scClassify model}
 \usage{
-predict_scClassify(exprsMat_test, trainRes, cellTypes_test, k = 10,
-  prob_threshold = 0.7, cor_threshold_static = 0.5,
-  cor_threshold_high = 0.7, features = "limma", algorithm = c("WKNN",
-  "KNN", "DWKNN"), similarity = c("pearson", "spearman", "cosine",
-  "jaccard", "kendall", "weighted_rank", "manhattan"),
-  cutoff_method = c("dynamic", "static"), parallel = FALSE,
-  ncores = 1, verbose = FALSE)
+predict_scClassify(exprsMat_test, trainRes, cellTypes_test = NULL,
+  k = 10, prob_threshold = 0.7, cor_threshold_static = 0.5,
+  cor_threshold_high = 0.7, features = "limma", algorithm = "WKNN",
+  similarity = "pearson", cutoff_method = c("dynamic", "static"),
+  parallel = FALSE, ncores = 1, verbose = FALSE)
 }
 \arguments{
 \item{exprsMat_test}{A list or a matrix indicates the expression matrices of the query datasets}
