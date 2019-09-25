@@ -327,16 +327,17 @@ scClassify <- function(exprsMat_train = NULL,
                                                              features = selectFeatures,
                                                              similarity = similarity,
                                                              cutoff_method = cutoff_method,
+                                                             weighted_ensemble = weighted_ensemble,
                                                              parallel = parallel,
                                                              ncores = ncores,
                                                              verbose = verbose)
 
-          if (ensemble) {
-            ensembleRes <- getEnsembleRes(predictRes[[train_list_idx]],
-                                          trainRes[[train_list_idx]]$modelweights,
-                                          exclude = NULL, weighted_ensemble = weighted_ensemble)
-            predictRes[[train_list_idx]]$ensembleRes <- ensembleRes
-          }
+          # if (ensemble) {
+          #   ensembleRes <- getEnsembleRes(predictRes[[train_list_idx]],
+          #                                 trainRes[[train_list_idx]]$modelweights,
+          #                                 exclude = NULL, weighted_ensemble = weighted_ensemble)
+          #   predictRes[[train_list_idx]]$ensembleRes <- ensembleRes
+          # }
         }
         names(predictRes) <- paste("Trained_by", names(trainRes), sep = "_")
       }else {
@@ -351,16 +352,17 @@ scClassify <- function(exprsMat_train = NULL,
                                          features = selectFeatures,
                                          similarity = similarity,
                                          cutoff_method = cutoff_method,
+                                         weighted_ensemble = weighted_ensemble,
                                          parallel = parallel,
                                          ncores = ncores,
                                          verbose = verbose)
 
-        if (ensemble) {
-          ensembleRes <- getEnsembleRes(predictRes,
-                                        trainRes$modelweights,
-                                        exclude = NULL, weighted_ensemble = weighted_ensemble)
-          predictRes$ensembleRes <- ensembleRes
-        }
+        # if (ensemble) {
+        #   ensembleRes <- getEnsembleRes(predictRes,
+        #                                 trainRes$modelweights,
+        #                                 exclude = NULL, weighted_ensemble = weighted_ensemble)
+        #   predictRes$ensembleRes <- ensembleRes
+        # }
 
       }
 
@@ -391,15 +393,16 @@ scClassify <- function(exprsMat_train = NULL,
                                                         features = selectFeatures,
                                                         similarity = similarity,
                                                         cutoff_method = cutoff_method,
+                                                        weighted_ensemble = weighted_ensemble,
                                                         parallel = parallel,
                                                         ncores = ncores,
                                                         verbose = verbose)
-        if (ensemble) {
-          ensembleRes <- getEnsembleRes(testRes[[train_list_idx]],
-                                        trainRes[[train_list_idx]]$selfTrainRes,
-                                        exclude = NULL, weighted_ensemble = weighted_ensemble)
-          testRes[[train_list_idx]]$ensembleRes <- ensembleRes
-        }
+        # if (ensemble) {
+        #   ensembleRes <- getEnsembleRes(testRes[[train_list_idx]],
+        #                                 trainRes[[train_list_idx]]$selfTrainRes,
+        #                                 exclude = NULL, weighted_ensemble = weighted_ensemble)
+        #   testRes[[train_list_idx]]$ensembleRes <- ensembleRes
+        # }
 
       }
       names(testRes) <- paste("Trained_by", names(trainRes), sep = "_")
@@ -415,16 +418,17 @@ scClassify <- function(exprsMat_train = NULL,
                                        features = selectFeatures,
                                        similarity = similarity,
                                        cutoff_method = cutoff_method,
+                                       weighted_ensemble = weighted_ensemble,
                                        parallel = parallel,
                                        ncores = ncores,
                                        verbose = verbose)
-      if (ensemble) {
-        ensembleRes <- getEnsembleRes(predictRes,
-                                      trainRes$selfTrainRes,
-                                      exclude = NULL,
-                                      weighted_ensemble = weighted_ensemble)
-        predictRes$ensembleRes <- ensembleRes
-      }
+      # if (ensemble) {
+      #   ensembleRes <- getEnsembleRes(predictRes,
+      #                                 trainRes$selfTrainRes,
+      #                                 exclude = NULL,
+      #                                 weighted_ensemble = weighted_ensemble)
+      #   predictRes$ensembleRes <- ensembleRes
+      # }
       testRes <- list(test = predictRes)
     }
 

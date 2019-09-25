@@ -14,6 +14,8 @@
 #' @param similarity A vector indicates the similarity measure that are used, set as "pearson" by default.
 #' This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kendall", "binomial", "weighted_rank","manhattan"
 #' @param cutoff_method A vector indicates the method to cutoff the correlation distribution. Set as "dynamic" by default.
+#' @param weighted_ensemble A logical input indicates in ensemble learning, whether the results is combined by a
+#' weighted score for each base classifier.
 #' @param parallel A logical input indicates whether running in paralllel or not
 #' @param ncores An integer indicates the number of cores that are used
 #' @param verbose A logical input indicates whether the intermediate steps will be printed
@@ -35,6 +37,7 @@ predict_scClassify <- function(exprsMat_test,
                                algorithm = "WKNN",
                                similarity = "pearson",
                                cutoff_method = c("dynamic", "static"),
+                               weighted_ensemble = FALSE,
                                parallel = FALSE,
                                ncores = 1,
                                verbose = FALSE){
@@ -54,6 +57,34 @@ predict_scClassify <- function(exprsMat_test,
 
   if (!class(trainRes) %in% c("scClassifyTrainModel", "list")) {
     stop("Wrong trainRes input. Need to be either scClassifyTrainModel or list")
+  }
+
+  if ((length(features) > 1 | length(algorithm) > 1 | length(similarity) > 1) ) {
+    if (weighted_ensemble) {
+      weighted_ensemble <- TRUE
+      ensemble <- TRUE
+
+      if (verbose) {
+        cat("Performing weighted ensemble learning... \n")
+      }
+
+    } else {
+      weighted_ensemble <- FALSE
+      ensemble <- TRUE
+
+      if (verbose) {
+        cat("Performing unweighted ensemble learning... \n")
+      }
+
+    }
+  } else {
+    weighted_ensemble <- FALSE
+    ensemble <- FALSE
+
+    if (verbose) {
+      cat("Ensemble learning is disabled... \n")
+    }
+
   }
 
 
@@ -111,6 +142,16 @@ predict_scClassify <- function(exprsMat_test,
                              ensemble_methods[, 2],
                              ensemble_methods[, 3],
                              sep = "_")
+
+
+  if (ensemble) {
+    ensembleRes <- getEnsembleRes(predictRes,
+                                  trainRes$modelweights,
+                                  exclude = NULL,
+                                  weighted_ensemble = weighted_ensemble)
+    predictRes$ensembleRes <- ensembleRes
+  }
+
 
   return(predictRes)
 }
