@@ -156,7 +156,7 @@ train_scClassify <- function(exprsMat_train,
           cellTypeTrain = trainRes[[train_list_idx]]$cellTypes_train,
           features = names(trainRes[[train_list_idx]]$hierarchyKNNRes),
           model = trainRes[[train_list_idx]]$hierarchyKNNRes,
-          modelweights = trainRes[[train_list_idx]]$modelWeights,
+          modelweights = as.numeric(trainRes[[train_list_idx]]$modelWeights),
           metaData = S4Vectors::DataFrame())
       }
       trainClassList <- scClassifyTrainModelList(trainClassList)
@@ -167,7 +167,7 @@ train_scClassify <- function(exprsMat_train,
         cellTypeTrain = trainRes$cellTypes_train,
         features = names(trainRes$hierarchyKNNRes),
         model = trainRes$hierarchyKNNRes,
-        modelweights = trainRes$modelWeights,
+        modelweights = as.numeric(trainRes$modelWeights),
         metaData = S4Vectors::DataFrame())
     }
     return(trainClassList)

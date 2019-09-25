@@ -5,7 +5,7 @@
 Single cell classification via cell-type hierarchies based on ensemble learning and sample size estimation.
 
 
-[![](https://travis-ci.com/SydneyBioX/scClassify.svg?token=Mgp3nhHdKGyRbLPymfkS&branch=master)]()
+[![](https://travis-ci.org/SydneyBioX/scClassify.svg?branch=master)]()
 
 ## Installation
 
