@@ -6,8 +6,8 @@
 \usage{
 train_scClassify(exprsMat_train, cellTypes_train, tree = "HOPACH",
   selectFeatures = "limma", topN = 50, hopach_kmax = 5,
-  pSig = 0.05, cellType_tree = NULL, parallel = F, ncores = 1,
-  verbose = T)
+  pSig = 0.05, cellType_tree = NULL, weightsCal = FALSE,
+  parallel = F, ncores = 1, verbose = T, returnList = TRUE, ...)
 }
 \arguments{
 \item{exprsMat_train}{A matrix of expression matrix of reference dataset}
@@ -29,11 +29,17 @@ children at each node in the HOPACH tree.}
 
 \item{cellType_tree}{A list indicates the cell type tree provided by user. (By default, it is NULL)}
 
+\item{weightsCal}{A logical input indicates whether we need to calculate the weights for the model.}
+
 \item{parallel}{A logical input indicates whether the algorihms will run in parallel}
 
 \item{ncores}{An integer indicates the number of cores that are used}
 
 \item{verbose}{A logical input indicates whether the intermediate steps will be printed}
+
+\item{returnList}{A logical input indicates whether the output will be class of list}
+
+\item{...}{Other input for predict_scClassify for the case when weights calculation of the pretrained model is performed}
 }
 \value{
 list of results

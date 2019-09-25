@@ -14,7 +14,7 @@ navbar:
           href: articles/scClassify.html
         - text: Sample size learning
           href: articles/sampleSizeCal.html
-    - text: Reference
+    - text: Functions
       href: reference/index.html
     - text: Pretrained Models
       menu:
@@ -44,10 +44,14 @@ navbar:
           href: articles/webOnly/Wang_humanPancreas.html
         - text: Segerstolpe (Human Pancreas)
           href: articles/webOnly/Segerstolpe_humanPancreas.html
+        - text: Joint (Human Pancreas)
+          href: articles/webOnly/Joint_humanPancreas.html
         - text: Li (Human Melanoma)
           href: articles/webOnly/Li_humanMelanoma.html
         - text: Tabula Muris (Mouse cell atlas)
           href: articles/webOnly/TabulaMuris.html
+    - text: Interactive scClassify shiny app
+      href: http://shiny.maths.usyd.edu.au/scClassify/
   right:
     - icon: fa-github fa-lg
       href: https://github.com/SydneyBioX/scClassify

@@ -100,7 +100,7 @@
   </ul>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../reference/index.html">Functions</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -149,12 +149,18 @@
       <a href="../articles/webOnly/Segerstolpe_humanPancreas.html">Segerstolpe (Human Pancreas)</a>
     </li>
     <li>
+      <a href="../articles/webOnly/Joint_humanPancreas.html">Joint (Human Pancreas)</a>
+    </li>
+    <li>
       <a href="../articles/webOnly/Li_humanMelanoma.html">Li (Human Melanoma)</a>
     </li>
     <li>
       <a href="../articles/webOnly/TabulaMuris.html">Tabula Muris (Mouse cell atlas)</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="http://shiny.maths.usyd.edu.au/scClassify/">Interactive scClassify shiny app</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -187,8 +193,8 @@
 
     <pre class="usage"><span class='fu'>train_scClassify</span>(<span class='no'>exprsMat_train</span>, <span class='no'>cellTypes_train</span>, <span class='kw'>tree</span> <span class='kw'>=</span> <span class='st'>"HOPACH"</span>,
   <span class='kw'>selectFeatures</span> <span class='kw'>=</span> <span class='st'>"limma"</span>, <span class='kw'>topN</span> <span class='kw'>=</span> <span class='fl'>50</span>, <span class='kw'>hopach_kmax</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-  <span class='kw'>pSig</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>cellType_tree</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>ncores</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='no'>T</span>)</pre>
+  <span class='kw'>pSig</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>cellType_tree</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>weightsCal</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='no'>F</span>, <span class='kw'>ncores</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>returnList</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -229,6 +235,10 @@ children at each node in the HOPACH tree.</p></td>
       <td><p>A list indicates the cell type tree provided by user. (By default, it is NULL)</p></td>
     </tr>
     <tr>
+      <th>weightsCal</th>
+      <td><p>A logical input indicates whether we need to calculate the weights for the model.</p></td>
+    </tr>
+    <tr>
       <th>parallel</th>
       <td><p>A logical input indicates whether the algorihms will run in parallel</p></td>
     </tr>
@@ -239,6 +249,14 @@ children at each node in the HOPACH tree.</p></td>
     <tr>
       <th>verbose</th>
       <td><p>A logical input indicates whether the intermediate steps will be printed</p></td>
+    </tr>
+    <tr>
+      <th>returnList</th>
+      <td><p>A logical input indicates whether the output will be class of list</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Other input for predict_scClassify for the case when weights calculation of the pretrained model is performed</p></td>
     </tr>
     </table>
 
