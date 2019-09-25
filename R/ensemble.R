@@ -11,20 +11,23 @@ alpha <- function(e) {
 
 
 
+getTrainWeights <- function(trainRes) {
+  errClass_train <- do.call(rbind, lapply(trainRes, function(x) table(x$classifyRes)/length(x$classifyRes)))
+  weighted_train <- alpha(1 - (errClass_train[, 1] + errClass_train[, 2]))
+  return(weighted_train)
+}
+
+
 # function to get the ensemble res
-getEnsembleRes <- function(testRes, trainRes, exclude = NULL, weighted_ensemble = TRUE) {
+getEnsembleRes <- function(testRes, weighted_train, exclude = NULL, weighted_ensemble = TRUE) {
 #
 #    trainRes <- testRes$train
   # Get the weighted
   if (weighted_ensemble) {
     if (!is.null(exclude)) {
-      keep_method <- !grepl(paste(exclude, collapse = "|"), names(trainRes))
-      trainRes <- trainRes[keep_method]
-      weight <- weight[keep_method]
+      keep_method <- !grepl(paste(exclude, collapse = "|"), names(weighted_train))
+      weighted_train <- weighted_train[keep_method]
     }
-
-    errClass_train <- do.call(rbind, lapply(trainRes, function(x) table(x$classifyRes)/length(x$classifyRes)))
-    weighted_train <- alpha(1 - (errClass_train[, 1] + errClass_train[, 2]))
 
   } else {
     weighted_train <- NULL

@@ -11,9 +11,12 @@
 #' children at each node in the HOPACH tree.
 #' @param pSig A numeric indicates the cutoff of pvalue for features
 #' @param cellType_tree A list indicates the cell type tree provided by user. (By default, it is NULL)
+#' @param weightsCal A logical input indicates whether we need to calculate the weights for the model.
 #' @param parallel A logical input indicates whether the algorihms will run in parallel
 #' @param ncores An integer indicates the number of cores that are used
 #' @param verbose A logical input indicates whether the intermediate steps will be printed
+#' @param returnList A logical input indicates whether the output will be class of list
+#' @param ... Other input for predict_scClassify for the case when weights calculation of the pretrained model is performed
 #' @return list of results
 #' @author Yingxin Lin
 #'
@@ -31,9 +34,166 @@ train_scClassify <- function(exprsMat_train,
                              hopach_kmax = 5,
                              pSig = 0.05,
                              cellType_tree = NULL,
+                             weightsCal = FALSE,
                              parallel = F,
                              ncores = 1,
-                             verbose = T){
+                             verbose = T,
+                             returnList = TRUE,
+                             ...){
+
+
+  if (is.null(exprsMat_train) | is.null(cellTypes_train)) {
+    stop("exprsMat_train or cellTypes_train or exprsMat_test is NULL!")
+  }
+
+  # Matching the argument of the tree construction method
+  # TODO: Allow user to provide their own tree
+  tree <- match.arg(tree, c("HOPACH", "HC"), several.ok = FALSE)
+
+  # Matching the argument of feature selection method
+  # TODO: 1. Allow user to provide their own markers
+  selectFeatures <- match.arg(selectFeatures, c("limma", "DV", "DD", "chisq", "BI"), several.ok = TRUE)
+
+
+  if (class(exprsMat_train) == "list") {
+    if (sum(unlist(lapply(cellTypes_train, length)) != unlist(lapply(exprsMat_train, ncol))) != 0) {
+      stop("Length of training cell types does not match with number of column of training expression matrix")
+    }
+  }else {
+    if (length(cellTypes_train) != ncol(exprsMat_train)) {
+      stop("Length of training cell types does not match with number of column of training expression matrix")
+    }
+  }
+
+
+
+
+  # To rename the train list if name is null (only when there are multiple training datasets)
+  if (class(exprsMat_train) == "list") {
+    if (is.null(names(exprsMat_train))) {
+      names(exprsMat_train) <- names(cellTypes_train) <- paste("TrainData", seq_len(length(exprsMat_train)), sep = "_")
+    } else if (sum(names(exprsMat_train) == "") != 0) {
+      names(exprsMat_train)[names(exprsMat_train) == ""] <-
+        names(cellTypes_train)[names(cellTypes_train) == ""] <-
+        paste("TrainData", which(names(exprsMat_train) == ""), sep = "_")
+    }
+  }
+
+  # QC for the training data set
+
+  if (class(exprsMat_train) %in% c("matrix", "dgCMatrix")) {
+
+    zeros <- apply(exprsMat_train, 1, function(x) sum(x == 0)/length(x))
+    minPctCell <- min(table(cellTypes_train)/length(cellTypes_train))
+    exprsMat_train <- exprsMat_train[zeros <= max(1 - minPctCell, 0.95), ]
+    if (verbose) {
+      cat("after filtering not expressed genes \n")
+      print(dim(exprsMat_train))
+    }
+  } else {
+    for (train_list_idx in seq_len(length(exprsMat_train))) {
+      zeros <- apply(exprsMat_train[[train_list_idx]], 1, function(x) sum(x == 0)/length(x))
+      minPctCell <- min(table(cellTypes_train[[train_list_idx]])/length(cellTypes_train[[train_list_idx]]))
+      exprsMat_train[[train_list_idx]] <- exprsMat_train[[train_list_idx]][zeros <= max(1 - minPctCell, 0.95), ]
+    }
+    if (verbose) {
+      cat("after filtering not expressed genes \n")
+      print(lapply(exprsMat_train, dim))
+    }
+  }
+
+  ### train_scClassify
+  if (class(exprsMat_train) == "list") {
+    trainRes <- list()
+    for (train_list_idx in seq_len(length(exprsMat_train))) {
+      trainRes[[train_list_idx]] <- train_scClassifySingle(exprsMat_train[[train_list_idx]],
+                                                           cellTypes_train[[train_list_idx]],
+                                                           tree = tree,
+                                                           selectFeatures = selectFeatures,
+                                                           topN = topN,
+                                                           hopach_kmax = hopach_kmax,
+                                                           pSig = pSig,
+                                                           weightsCal = weightsCal,
+                                                           parallel = parallel,
+                                                           ncores = min(ncores, length(selectFeatures)),
+                                                           verbose = verbose,
+                                                           ...)
+    }
+    names(trainRes) <- names(exprsMat_train)
+  } else{
+
+    trainRes <- train_scClassifySingle(exprsMat_train,
+                                       cellTypes_train,
+                                       tree = tree,
+                                       selectFeatures = selectFeatures,
+                                       topN = topN,
+                                       hopach_kmax = hopach_kmax,
+                                       pSig = pSig,
+                                       cellType_tree = cellType_tree,
+                                       weightsCal = weightsCal,
+                                       parallel = parallel,
+                                       ncores = min(ncores, length(selectFeatures)),
+                                       verbose = verbose,
+                                       ...)
+  }
+
+
+
+
+
+  # return the results
+  if (returnList) {
+
+   return(trainRes)
+
+  } else {
+    if (class(exprsMat_train) == "list") {
+      trainClassList <- list()
+      for (train_list_idx in 1:length(trainRes)) {
+        trainClassList[[train_list_idx]] <- scClassifyTrainModel(
+          name = names(trainRes)[train_list_idx],
+          cellTypeTree = trainRes[[train_list_idx]]$cutree_list,
+          cellTypeTrain = trainRes[[train_list_idx]]$cellTypes_train,
+          features = names(trainRes[[train_list_idx]]$hierarchyKNNRes),
+          model = trainRes[[train_list_idx]]$hierarchyKNNRes,
+          modelweights = trainRes[[train_list_idx]]$modelWeights,
+          metaData = S4Vectors::DataFrame())
+      }
+      trainClassList <- scClassifyTrainModelList(trainClassList)
+    } else {
+      trainClassList <- scClassifyTrainModel(
+        name = "training",
+        cellTypeTree = trainRes$cutree_list,
+        cellTypeTrain = trainRes$cellTypes_train,
+        features = names(trainRes$hierarchyKNNRes),
+        model = trainRes$hierarchyKNNRes,
+        modelweights = trainRes$modelWeights,
+        metaData = S4Vectors::DataFrame())
+    }
+    return(trainClassList)
+
+  }
+
+
+}
+
+
+
+
+
+train_scClassifySingle <- function(exprsMat_train,
+                                   cellTypes_train,
+                                   tree = "HOPACH",
+                                   selectFeatures = "limma",
+                                   topN = 50,
+                                   hopach_kmax = 5,
+                                   pSig = 0.05,
+                                   cellType_tree = NULL,
+                                   weightsCal = FALSE,
+                                   parallel = F,
+                                   ncores = 1,
+                                   verbose = T,
+                                   ...){
 
   if (is.null(rownames(exprsMat_train))) {
     stop("rownames of the exprssion matrix is NULL!")
@@ -133,9 +293,30 @@ train_scClassify <- function(exprsMat_train,
   }
 
 
-  return(list(hierarchyKNNRes = hierarchyKNNRes,
-              cutree_list = cutree_list,
-              cellTypes_train = cellTypes_train))
+  trainRes <- list(hierarchyKNNRes = hierarchyKNNRes,
+                   cutree_list = cutree_list,
+                   cellTypes_train = cellTypes_train)
+
+
+  if (weightsCal) {
+    if (verbose) {
+      cat("=====================  SelfTraining to calculate weight  ========================== \n")
+    }
+
+    selfTrainRes <- predict_scClassify(exprsMat_test = exprsMat_train,
+                                          trainRes  = trainRes,
+                                          cellTypes_test = cellTypes_train,
+                                          parallel = parallel,
+                                          ncores = ncores,
+                                          verbose = verbose,
+                                          ...)
+    trainRes$selfTrainRes <- selfTrainRes
+    trainRes$modelWeights <- getTrainWeights(selfTrainRes)
+  }
+
+
+
+  return(trainRes)
 }
 
 

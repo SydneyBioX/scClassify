@@ -53,6 +53,7 @@ table(wang_cellTypes)
 
 We can see that Xin et al. data only have 4 cell types, while Wang et al. has 7 cell types
 
+
 # scClassify
 
 
@@ -131,6 +132,24 @@ Check the final ensemble results
 table(scClassify_res_ensemble$testRes$wang$ensembleRes$cellTypes, 
       wang_cellTypes)
 ```
+
+
+
+# Train your own model
+
+You can also train your own model `scClassifyTrainModel` using `train_scClassify()`. Noted that by setting `weightsCal = TRUE`, we will calculate the training error of the reference data as the weights for the individual classifiers.
+
+Here, we illustrates the training function using genes selection method based on differential expressed ("limma"), and biomodally distributed ("BI")
+
+```{r}
+trainClass <- train_scClassify(exprsMat_train = exprsMat_xin_subset,
+                 cellTypes_train = xin_cellTypes,
+                 selectFeatures = c("limma", "BI")
+                 )
+trainClass
+```
+
+
 
 # Session Info
 

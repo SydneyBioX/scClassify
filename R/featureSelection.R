@@ -108,7 +108,7 @@ doDV <- function(exprsMat, cellTypes){
 
 
     posNeg <- (meanPct[,2] - meanPct[,1]) > 0.05
-    print(sum(posNeg))
+    # print(sum(posNeg))
     exprsMat_filt <- exprsMat[posNeg,]
     tt[[i]] <- apply(exprsMat_filt, 1, function(x) {
       df <- data.frame(gene = x, cellTypes = as.factor(tmp_celltype))
@@ -138,7 +138,7 @@ doDD <- function(exprsMat, cellTypes){
     }))
 
     posNeg <- (meanPct[,2] - meanPct[,1]) > 0.05
-    print(sum(posNeg))
+    # print(sum(posNeg))
     exprsMat_filt <- exprsMat[posNeg,]
     tt[[i]] <- apply(exprsMat_filt, 1, function(x) {
       x1 <- x[tmp_celltype == 0]

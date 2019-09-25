@@ -165,7 +165,7 @@ predict_scClassifyJoint <- function(exprsMat_test,
 
 
   if (class(trainRes) != "scClassifyTrainModelList") {
-    stop("For a list of training model, please use predict_scClassifyJoint() instead to get joint training results.")
+    stop("trainRes needs to be a scClassifyTrainModelList object")
   }
 
 
@@ -277,108 +277,138 @@ predict_scClassifySingle <- function(exprsMat_test,
     # If this level is not NULL (Not Level1)
     if (!is.null(levelModel[[i]])) {
 
-      pred_level <- list()
 
-      for (j in 1:length(levelModel[[i]])) {
-        # print(paste(i,j))
-        # If the model of level i-1, cells labeled as j is NOT "no model"
-        if (class(levelModel[[i]][[j]]) != "character") {
+      #If not all the cells are not unassigned in the parent nodes
+      if (sum(pred[[i - 1]] != 0) != 0) {
+        pred_level <- list()
 
-          # Select the cells that are going to classified
-          # (according to what they are classified in last level)
-          predIdx <- which(pred[[i - 1]] == j)
+        for (j in 1:length(levelModel[[i]])) {
+          # print(paste(i,j))
+          # If the model of level i-1, cells labeled as j is NOT "no model"
+          if (class(levelModel[[i]][[j]]) != "character") {
 
-          if (length(predIdx) != 0) {
+            # Select the cells that are going to classified
+            # (according to what they are classified in last level)
+            predIdx <- which(pred[[i - 1]] == j)
 
-            # features that are in the test dataset
-            common_HVG <- intersect(rownames(exprsMat_test), levelHVG[[i]][[j]])
-            exprsMat_toTest <- exprsMat_test[common_HVG, predIdx, drop = FALSE]
-            exprsMat_toTest <- exprsMat_toTest[Matrix::rowSums(exprsMat_toTest) != 0, , drop = FALSE]
+            if (length(predIdx) != 0) {
 
-            # Calculate the similarity
-            corMat <- calculateSimilarity(exprsMat_train = Matrix::t(levelModel[[i]][[j]]$train[ ,rownames(exprsMat_toTest)]),
-                                          exprsMat_test = exprsMat_toTest,
-                                          similarity = similarity)
+              # features that are in the test dataset
+              common_HVG <- intersect(rownames(exprsMat_test), levelHVG[[i]][[j]])
+              exprsMat_toTest <- exprsMat_test[common_HVG, predIdx, drop = FALSE]
+              exprsMat_toTest <- exprsMat_toTest[Matrix::rowSums(exprsMat_toTest) != 0, , drop = FALSE]
 
-            # Different algorithm
-            if (algorithm == "KNN") {
-              predRes <- KNNcor(corMat = corMat,
-                                subLevelModel = levelModel[[i]][[j]],
-                                cutoff_method = cutoff_method,
-                                k = k,
-                                prob_threshold = prob_threshold,
-                                cor_threshold_static = cor_threshold_static,
-                                cor_threshold_high = cor_threshold_high,
-                                topLevel = F,
-                                verbose = verbose)
+              if (nrow(exprsMat_toTest) < 5) {
+
+                message(paste("There are only", nrow(exprsMat_toTest),
+                              "selected genes in reference data expressed in query data"))
+                pred_level[[j]] <- rep(0, length(predIdx))
+              }else{
+
+                # Calculate the similarity
+                corMat <- calculateSimilarity(exprsMat_train = Matrix::t(levelModel[[i]][[j]]$train[ ,rownames(exprsMat_toTest)]),
+                                              exprsMat_test = exprsMat_toTest,
+                                              similarity = similarity)
+
+                # Different algorithm
+                if (algorithm == "KNN") {
+                  predRes <- KNNcor(corMat = corMat,
+                                    subLevelModel = levelModel[[i]][[j]],
+                                    cutoff_method = cutoff_method,
+                                    k = k,
+                                    prob_threshold = prob_threshold,
+                                    cor_threshold_static = cor_threshold_static,
+                                    cor_threshold_high = cor_threshold_high,
+                                    topLevel = F,
+                                    verbose = verbose)
+                }
+                if (algorithm == "WKNN") {
+                  predRes <- WKNNcor(corMat = corMat,
+                                     subLevelModel = levelModel[[i]][[j]],
+                                     cutoff_method = cutoff_method,
+                                     k = k,
+                                     prob_threshold = prob_threshold,
+                                     cor_threshold_static = cor_threshold_static,
+                                     cor_threshold_high = cor_threshold_high,
+                                     topLevel = F,
+                                     verbose = verbose)
+                }
+
+                if (algorithm == "DWKNN") {
+                  predRes <- DWKNNcor(corMat = corMat,
+                                      subLevelModel = levelModel[[i]][[j]],
+                                      cutoff_method = cutoff_method,
+                                      k = k,
+                                      prob_threshold = prob_threshold,
+                                      cor_threshold_static = cor_threshold_static,
+                                      cor_threshold_high = cor_threshold_high,
+                                      topLevel = F,
+                                      verbose = verbose)
+                }
+
+
+
+
+
+                pred_level[[j]] <- predRes$predRes
+              }
+
             }
-            if (algorithm == "WKNN") {
-              predRes <- WKNNcor(corMat = corMat,
-                                 subLevelModel = levelModel[[i]][[j]],
-                                 cutoff_method = cutoff_method,
-                                 k = k,
-                                 prob_threshold = prob_threshold,
-                                 cor_threshold_static = cor_threshold_static,
-                                 cor_threshold_high = cor_threshold_high,
-                                 topLevel = F,
-                                 verbose = verbose)
-            }
-
-            if (algorithm == "DWKNN") {
-              predRes <- DWKNNcor(corMat = corMat,
-                                  subLevelModel = levelModel[[i]][[j]],
-                                  cutoff_method = cutoff_method,
-                                  k = k,
-                                  prob_threshold = prob_threshold,
-                                  cor_threshold_static = cor_threshold_static,
-                                  cor_threshold_high = cor_threshold_high,
-                                  topLevel = F,
-                                  verbose = verbose)
-            }
-
-
-
-
-
-            pred_level[[j]] <- predRes$predRes
-
 
           }
 
+          # Else, the model of (level i-1, cells labeled as j) IS "no model"
+          # maintain the same class.
+          else {
+            predIdx <- which(pred[[i - 1]] == j)
+            # check the label of current level based on the label of last level
+            pred_level[[j]] <- as.factor(rep(unique(cutree_list[[i]][cutree_list[[i - 1]] == j]), length(predIdx)))
+            names(pred_level[[j]]) <- colnames(exprsMat_test)[predIdx]
+          }
         }
 
-        # Else, the model of (level i-1, cells labeled as j) IS "no model"
-        # maintain the same class.
-        else {
-          predIdx <- which(pred[[i - 1]] == j)
-          # check the label of current level based on the label of last level
-          pred_level[[j]] <- as.factor(rep(unique(cutree_list[[i]][cutree_list[[i - 1]] == j]), length(predIdx)))
-          names(pred_level[[j]]) <- colnames(exprsMat_test)[predIdx]
-        }
+
+
+        # Get the predict results for level i, change it to the numeric
+
+        pred[[i]] <- unlist(lapply(pred_level, function(x){
+          cellNames <- names(x)
+          x <- as.numeric(as.character(x))
+          names(x) <- cellNames
+          x
+        }))
+
+        # reorder the prediction results to consistent with the exprsMat_test
+        pred[[i]] <- pred[[i]][colnames(exprsMat_test)]
+
+        names(pred[[i]]) <- colnames(exprsMat_test)
+        pred[[i]] <- as.numeric(as.character(pred[[i]]))
+        # there will be NA since they are unassigned from the last level, and therefore are not predicted in this level
+        pred[[i]][is.na(pred[[i]])] <- 0
+        names(pred[[i]]) <- colnames(exprsMat_test)
+
+
+      }
+      else{
+
+        # else, if all the cells in paraent nodes are unassigned
+        pred[[i]] <- as.factor(rep(0, ncol(exprsMat_test)))
+        names(pred[[i]]) <- colnames(exprsMat_test)
       }
 
-      # Get the predict results for level i, change it to the numeric
 
-      pred[[i]] <- unlist(lapply(pred_level, function(x){
-        cellNames <- names(x)
-        x <- as.numeric(as.character(x))
-        names(x) <- cellNames
-        x
-      }))
 
-      # reorder the prediction results to consistent with the exprsMat_test
-      pred[[i]] <- pred[[i]][colnames(exprsMat_test)]
-
-      names(pred[[i]]) <- colnames(exprsMat_test)
-      pred[[i]] <- as.numeric(as.character(pred[[i]]))
-      # there will be NA since they are unassigned from the last level, and therefore are not predicted in this level
-      pred[[i]][is.na(pred[[i]])] <- 0
-      names(pred[[i]]) <- colnames(exprsMat_test)
     }else{
       # If this level is NULL (Level 1)
       pred[[i]] <- as.factor(rep(1,ncol(exprsMat_test)))
       names(pred[[i]]) <- colnames(exprsMat_test)
     }
+
+
+
+
+
+
 
   }
 
@@ -446,14 +476,14 @@ calculateSimilarity <- function(exprsMat_train,
                                           method = "cosine"))
     }
 
-    corMat[is.na(corMat)] <- min(corMat)
+    corMat[is.na(corMat) | is.infinite(corMat)] <- min(corMat)
 
   } else if (similarity == "kendall") {
 
 
 
     corMat <- stats::cor(as.matrix(exprsMat_train), as.matrix(exprsMat_test), method = "kendall")
-    corMat[is.na(corMat)] <- -1
+    corMat[is.na(corMat) | is.infinite(corMat)] <- -1
 
   } else if (similarity == "jaccard") {
 
@@ -467,12 +497,12 @@ calculateSimilarity <- function(exprsMat_train,
                                           method = "Jaccard"))
 
     }
-    corMat[is.na(corMat)] <- min(corMat)
+    corMat[is.na(corMat) | is.infinite(corMat)] <- min(corMat)
   }else if (similarity == "weighted_rank") {
 
     corMat <- wtd_rank2(as.matrix(exprsMat_train),
                         as.matrix(exprsMat_test), method = "pearson")
-    corMat[is.na(corMat)] <- -1
+    corMat[is.na(corMat) | is.infinite(corMat)] <- -1
 
   }else if (similarity == "manhattan") {
     if (class(exprsMat_test) == "dgCMatrix" & class(exprsMat_train) == "dgCMatrix") {
@@ -487,12 +517,12 @@ calculateSimilarity <- function(exprsMat_train,
                                         t(as.matrix(exprsMat_test)),
                                         method = "Manhattan"))
     }
-    corMat[is.na(corMat)] <- min(corMat)
+    corMat[is.na(corMat) | is.infinite(corMat)] <- min(corMat)
 
   }else if (similarity == "spearman") {
 
     corMat <- stats::cor(as.matrix(exprsMat_train), as.matrix(exprsMat_test), method = "spearman")
-    corMat[is.na(corMat)] <- -1
+    corMat[is.na(corMat) | is.infinite(corMat)] <- -1
 
   }else if (similarity == "pearson") {
 
@@ -503,7 +533,7 @@ calculateSimilarity <- function(exprsMat_train,
     } else {
       corMat <- stats::cor(as.matrix(exprsMat_train), as.matrix(exprsMat_test), method = "pearson")
     }
-    corMat[is.na(corMat)] <- -1
+    corMat[is.na(corMat) | is.infinite(corMat)] <- -1
 
   }else{
 
@@ -514,7 +544,7 @@ calculateSimilarity <- function(exprsMat_train,
     } else {
       corMat <- stats::cor(as.matrix(exprsMat_train), as.matrix(exprsMat_test), method = "pearson")
     }
-    corMat[is.na(corMat)] <- -1
+    corMat[is.na(corMat) | is.infinite(corMat)] <- -1
   }
 
   return(corMat)

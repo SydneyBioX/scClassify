@@ -8,7 +8,8 @@ predict_scClassify(exprsMat_test, trainRes, cellTypes_test = NULL,
   k = 10, prob_threshold = 0.7, cor_threshold_static = 0.5,
   cor_threshold_high = 0.7, features = "limma", algorithm = "WKNN",
   similarity = "pearson", cutoff_method = c("dynamic", "static"),
-  parallel = FALSE, ncores = 1, verbose = FALSE)
+  weighted_ensemble = FALSE, parallel = FALSE, ncores = 1,
+  verbose = FALSE)
 }
 \arguments{
 \item{exprsMat_test}{A list or a matrix indicates the expression matrices of the query datasets}
@@ -35,6 +36,9 @@ should be one or more of "WKNN", "KNN", "DWKNN".}
 This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kendall", "binomial", "weighted_rank","manhattan"}
 
 \item{cutoff_method}{A vector indicates the method to cutoff the correlation distribution. Set as "dynamic" by default.}
+
+\item{weighted_ensemble}{A logical input indicates in ensemble learning, whether the results is combined by a
+weighted score for each base classifier.}
 
 \item{parallel}{A logical input indicates whether running in paralllel or not}
 
