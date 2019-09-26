@@ -157,16 +157,14 @@
 
     
     
-<p>This vignette will provide an example showing how to fit the learning curve based on classification accuracy of <code>scClassify</code>.</p>
-<p>Suppose we have a small pilot reference data, and we would like to use this reference data to build scClassify model. We can construct the learning curve to estimate the number of cells required in a reference dataset to discriminate accurately between two cell types at a given level in the cell type hierarchy.</p>
+<p>This vignette will provide an example of how we can fit a learning curve based on classification accuracies derived from <code>scClassify</code>.</p>
+<p>Suppose we have a small pilot reference data, and we would like to use this reference data to build scClassify model. We can construct the learning curve to estimate the number of cells required in a reference dataset to accurately discriminate between two cell types at a given level in the cell type hierarchy.</p>
 <div id="data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#data" class="anchor"></a>Data</h1>
-<p>Here, we illustrate the learning curve construction using a small example data with 4 cell types, with only 980 genes and 674 cells.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(scClassify)
-
-
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="st">"data/scClassify_example.rda"</span>)
+<p>Here, we illustrate the learning curve construction with a small example dataset with 4 cell types, with only 980 genes and 674 cells.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(scClassify)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="st">"data/scClassify_example.rda"</span>)
 xin_cellTypes &lt;-<span class="st"> </span>scClassify_example<span class="op">$</span>xin_cellTypes
 exprsMat_xin_subset &lt;-<span class="st"> </span>scClassify_example<span class="op">$</span>exprsMat_xin_subset
 
@@ -178,7 +176,7 @@ exprsMat_xin_subset &lt;-<span class="st"> </span><span class="kw">as</span>(exp
 <span class="co">#&gt; xin_cellTypes</span>
 <span class="co">#&gt; alpha  beta delta gamma </span>
 <span class="co">#&gt;   285   261    49    79</span></code></pre></div>
-<p>We can first have a look at the cell type tree constructed by the whole data. We can see here, we have a cell type tree that have two levels cell type labels:</p>
+<p>We can first have a look at the cell type tree constructed by the whole data. The cell type tree has two levels of cell type labels:</p>
 <ul>
 <li>
 <strong>First level</strong>: “gamma_delta_beta”, “alpha”</li>
@@ -193,45 +191,45 @@ trainClassExample
 <span class="co">#&gt; Number of cells in the training data: 674 </span>
 <span class="co">#&gt; Number of cell types in the training data: 4</span>
 <span class="kw"><a href="../reference/plotCellTypeTree.html">plotCellTypeTree</a></span>(trainClassExample<span class="op">@</span>cellTypeTree)</code></pre></div>
-<p><img src="sampleSizeCal_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
-<p>By default, <code>scClassify</code> will construct the learning curve based on the bottom level (i.e., second level in the example).</p>
+<p><img src="sampleSizeCal_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<p>By default, <code>scClassify</code> will construct the learning curve on the basis of classification accuracies calculated at the bottom level (i.e., second level in the example).</p>
 </div>
 <div id="learning-curve-construction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#learning-curve-construction" class="anchor"></a>Learning curve construction</h1>
-<p>Next, we can get an accuracy matrix by running <code>runSampleCal</code> function, where the parameter <code>n_list</code> indicates a list of sample size (N) that you would like to subsample from the data as training set, and <code>num_repeat</code> indicates the number of times to repeat this procedure for each <code>N</code>.</p>
+<p>Next, we can get an accuracy matrix by running <code>runSampleCal</code> function, where the parameter <code>n_list</code> indicates a list of sample sizes (N) that you would like to subsample from the data as the training set, and <code>num_repeat</code> indicates the number of times to repeat this procedure for each <code>N</code>.</p>
 <p>For the purpose of illustration, here we set a short length of <code>n_list</code> and a small number of <code>num_repeat</code>. A longer <code>n_list</code> and a larger number of <code>num_repeat</code> is recommended for better learning curve fitting.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">2019</span>)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(accMat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/runSampleCal.html">runSampleCal</a></span>(exprsMat_xin_subset, 
                                    xin_cellTypes,
                                    <span class="dt">n_list =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq</a></span>(<span class="dv">40</span>, <span class="dv">200</span>, <span class="dv">40</span>), 
                                    <span class="dt">num_repeat =</span> <span class="dv">5</span>, <span class="dt">ncores =</span> <span class="dv">1</span>))</code></pre></div>
-<p>After we obtain an accuracy matrix, we can fit the learning curve using <code>learningCurve</code> function.</p>
+<p>After we obtain an accuracy matrix, we can fit the learning curve by using the <code>learningCurve</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/learningCurve.html">learningCurve</a></span>(<span class="dt">accMat =</span> accMat,
                      <span class="dt">n =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">as.numeric</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(accMat)))</code></pre></div>
-<p>Check the parameters estimated from average accuracy rates.</p>
+<p>Check the parameters estimated from the average accuracy rates.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res<span class="op">$</span>model<span class="op">$</span>mean
 <span class="co">#&gt; Nonlinear regression model</span>
 <span class="co">#&gt;   model: acc ~ I(1/n^(c) * a) + b</span>
 <span class="co">#&gt;    data: dat_train</span>
 <span class="co">#&gt;                 a.(Intercept) c.log(max(acc) + 0.001 - acc) </span>
-<span class="co">#&gt;                       -0.8191                        0.5548 </span>
+<span class="co">#&gt;                       -0.2378                        0.2679 </span>
 <span class="co">#&gt;                             b </span>
 <span class="co">#&gt;                        1.0000 </span>
-<span class="co">#&gt;  residual sum-of-squares: 0.002311</span>
+<span class="co">#&gt;  residual sum-of-squares: 0.0009443</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Number of iterations to convergence: 8 </span>
+<span class="co">#&gt; Number of iterations to convergence: 7 </span>
 <span class="co">#&gt; Achieved convergence tolerance: 1.49e-08</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res<span class="op">$</span>plot</code></pre></div>
-<p><img src="sampleSizeCal_files/figure-html/unnamed-chunk-6-1.png" width="768"></p>
-<p>We can also get the sample size for future experiment given the accuracy rate using <code>getN</code> function</p>
+<p><img src="sampleSizeCal_files/figure-html/unnamed-chunk-7-1.png" width="768"></p>
+<p>Using <code>getN</code> function, we can also esimate a sample size for future experiments given the accuracy rate.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/getN.html">getN</a></span>(res, <span class="dt">acc =</span> <span class="fl">0.93</span>)
-<span class="co">#&gt; [1] 84</span></code></pre></div>
+<span class="co">#&gt; [1] 96</span></code></pre></div>
 </div>
-<div id="constructing-learning-curve-based-on-higher-level-of-labels-in-cell-type-tree" class="section level1">
+<div id="constructing-learning-curves-based-on-labels-from-higher-level-of-the-cell-type-tree" class="section level1">
 <h1 class="hasAnchor">
-<a href="#constructing-learning-curve-based-on-higher-level-of-labels-in-cell-type-tree" class="anchor"></a>Constructing learning curve based on higher level of labels in cell type tree</h1>
-<p>We can input <code>cellType_tree</code> and specify the level of labels we would like to construct the learning curve. Here, we set <code>level = 1</code> to calculate the learning curve for <strong>First level</strong> cell type labels.</p>
+<a href="#constructing-learning-curves-based-on-labels-from-higher-level-of-the-cell-type-tree" class="anchor"></a>Constructing learning curves based on labels from higher level of the cell type tree</h1>
+<p>We can input <code>cellType_tree</code> and specify the level of labels we would like to use to construct the learning curve. Here, we set <code>level = 1</code> to calculate the learning curve for <strong>First level</strong> cell type labels.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Random">set.seed</a></span>(<span class="dv">2019</span>)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(accMat_level1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/runSampleCal.html">runSampleCal</a></span>(exprsMat_xin_subset, 
                                           xin_cellTypes,
@@ -244,7 +242,7 @@ trainClassExample
 res_level1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/learningCurve.html">learningCurve</a></span>(accMat_level1,
                             <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/numeric">as.numeric</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colnames">colnames</a></span>(accMat_level1)))</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res_level1<span class="op">$</span>plot</code></pre></div>
-<p><img src="sampleSizeCal_files/figure-html/unnamed-chunk-9-1.png" width="768"></p>
+<p><img src="sampleSizeCal_files/figure-html/unnamed-chunk-10-1.png" width="768"></p>
 </div>
 <div id="session-info" class="section level1">
 <h1 class="hasAnchor">
@@ -305,7 +303,7 @@ res_level1 &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
       <ul class="nav nav-pills nav-stacked">
 <li><a href="#data">Data</a></li>
       <li><a href="#learning-curve-construction">Learning curve construction</a></li>
-      <li><a href="#constructing-learning-curve-based-on-higher-level-of-labels-in-cell-type-tree">Constructing learning curve based on higher level of labels in cell type tree</a></li>
+      <li><a href="#constructing-learning-curves-based-on-labels-from-higher-level-of-the-cell-type-tree">Constructing learning curves based on labels from higher level of the cell type tree</a></li>
       <li><a href="#session-info">Session Info</a></li>
       </ul>
 </div>

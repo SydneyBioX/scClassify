@@ -1,6 +1,6 @@
-# scClassify
+# scClassify: hierarchical classification of cells
 
-<img src="man/figures/scClassifySticker.png" align="right" width="300"/>
+<img src="man/figures/scClassifySticker.png" align="right" width="200"/>
 
 Single cell classification via cell-type hierarchies based on ensemble learning and sample size estimation.
 
@@ -10,17 +10,28 @@ Single cell classification via cell-type hierarchies based on ensemble learning 
 ## Installation
 
 
-Install `hopach` package from Bioconductor:
+Install Bioconductor packages `S4Vectors`, `hopach` and `limma` packages using `BiocManager`:
 
 ```r
-BiocManager::install("hopach")
+# install.packages("BiocManager")
+BiocManager::install(c("S4Vectors", "hopach", "limma"))
 ```
 
+Then install `scClassify` using `devtools`:
 
 ```r
 library(devtools)
 devtools::install_github("SydneyBioX/scClassify")
 ```
+
+## Vignette and Shiny app
+
+You can find the vignette at this webiste: https://sydneybiox.github.io/scClassify/index.html.
+
+Also, you can find our interactive shiny application (beta) at this webiste:
+http://shiny.maths.usyd.edu.au/scClassify.
+
+
 
 ## Pretrained models
 
@@ -43,23 +54,19 @@ Currently available pre-trained scClassify models (in `scClassifyTrainModel` cla
 |    Pancreas            |   human  |  Baron        |   [GSE84133](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE84133)         |  [link](https://SydneyBioX.github.io/scClassify/articles/webOnly/Baron_humanPancreas.html)          |   [link](http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/trainBaronClass.rds)               |
 |    Pancreas            |   human  |  joint        |    -     |  [link](https://SydneyBioX.github.io/scClassify/articles/webOnly/Joint_humanPancreas.html)          |        [link](http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/jointPancreasClass.rds)          |
 |    Melanoma            |   human  |  Li           | [GSE123139](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE123139)          |   [link](https://SydneyBioX.github.io/scClassify/articles/webOnly/Li_humanMelanoma.html)         |    [link](http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/trainLiresClass.rds)     |
-|    PBMC                |   human  |  Ding (joint) |    -   |     |           [link](http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/jointPBMCClass.rds)        |
+|    PBMC                |   human  |  Ding (joint) |    -   |  [link](https://SydneyBioX.github.io/scClassify/articles/webOnly/Joint_humanPBMC.html)   |           [link](http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/jointPBMCClass.rds)        |
 |    Tabula Muris        |   mouse  |  Tabula Muris | [GSE109774](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE109774)           |   [link](https://SydneyBioX.github.io/scClassify/articles/webOnly/TabulaMuris.html)        |    [link](http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/trainTMresClass.rds)              |
 
 
-# Vignette
 
-You can find the vignette at our webiste: https://sydneybiox.github.io/scClassify/index.html.
-
-
-# Contact us
+## Contact us
 
 If you have any enquiries, espcially about performing `scClassify` to classify your cells or to build your own models, please contact <yingxin.lin@sydney.edu.au> or <bioinformatics@maths.usyd.edu.au>.
 
 
-# Reference
+## Reference
 
-*scClassify: hierarchical classification of cells*
+**scClassify: hierarchical classification of cells**
 
 Yingxin Lin, Yue Cao, Hani J Kim, Agus Salim, Terence P. Speed, Dave Lin, Pengyi Yang, Jean Yee Hwa Yang
 

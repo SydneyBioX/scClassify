@@ -59,7 +59,7 @@
       <a href="../articles/scClassify.html">scClassify Model Building and Prediction</a>
     </li>
     <li>
-      <a href="../articles/sampleSizeCal.html">Sample size learning</a>
+      <a href="../articles/webOnly/sampleSizeCal.html">Sample size learning</a>
     </li>
   </ul>
 </li>
@@ -116,6 +116,9 @@
       <a href="../articles/webOnly/Joint_humanPancreas.html">Joint (Human Pancreas)</a>
     </li>
     <li>
+      <a href="../articles/webOnly/Joint_humanPBMC.html">Joint (Human PBMC)</a>
+    </li>
+    <li>
       <a href="../articles/webOnly/Li_humanMelanoma.html">Li (Human Melanoma)</a>
     </li>
     <li>
@@ -124,7 +127,11 @@
   </ul>
 </li>
 <li>
-  <a href="http://shiny.maths.usyd.edu.au/scClassify/">Interactive scClassify shiny app</a>
+  <a href="http://shiny.maths.usyd.edu.au/scClassify/">
+    <span class="fa fa-star"></span>
+     
+    Interactive scClassify shiny app (beta)
+  </a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -166,14 +173,14 @@
 <a href="#setting-up-the-data" class="anchor"></a>Setting up the data</h1>
 <p>We assume that you have <em>log-transformed</em> (size-factor normalized) matrices where each row is a gene and each column a cell for a reference dataset and a query dataset. For demonstration purposes, we will take a subset of single-cell pancreas datasets from two independent studies (Wang et al., and Xin et al.).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"scClassify"</span>)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="st">"data/scClassify_example.rda"</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">xin_cellTypes &lt;-<span class="st"> </span>scClassify_example<span class="op">$</span>xin_cellTypes
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="st">"data/scClassify_example.rda"</span>)
+xin_cellTypes &lt;-<span class="st"> </span>scClassify_example<span class="op">$</span>xin_cellTypes
 exprsMat_xin_subset &lt;-<span class="st"> </span>scClassify_example<span class="op">$</span>exprsMat_xin_subset
 wang_cellTypes &lt;-<span class="st"> </span>scClassify_example<span class="op">$</span>wang_cellTypes
 exprsMat_wang_subset &lt;-<span class="st"> </span>scClassify_example<span class="op">$</span>exprsMat_wang_subset
 exprsMat_xin_subset &lt;-<span class="st"> </span><span class="kw">as</span>(exprsMat_xin_subset, <span class="st">"dgCMatrix"</span>)
 exprsMat_wang_subset &lt;-<span class="st"> </span><span class="kw">as</span>(exprsMat_wang_subset, <span class="st">"dgCMatrix"</span>)</code></pre></div>
-<p>The original cell type annotations and the example datasets can be easily accessed as shown below. The cell type compositions can be</p>
+<p>The original cell type annotations and compositions of the example datasets can be easily accessed as shown below.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/cat">cat</a></span>(<span class="st">"Cell type composition of Xin et al. data"</span>)
 <span class="co">#&gt; Cell type composition of Xin et al. data</span>
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/table">table</a></span>(xin_cellTypes)
@@ -186,7 +193,7 @@ exprsMat_wang_subset &lt;-<span class="st"> </span><span class="kw">as</span>(ex
 <span class="co">#&gt; wang_cellTypes</span>
 <span class="co">#&gt;   acinar    alpha     beta    delta   ductal    gamma stellate </span>
 <span class="co">#&gt;        5      206      118       10       96       21       45</span></code></pre></div>
-<p>We can see that Xin et al. data only have 4 cell types, while Wang et al. has 7 cell types</p>
+<p>We can see that Xin et al. data only have 4 cell types, while Wang et al. has 7 cell types.</p>
 </div>
 <div id="scclassify" class="section level1">
 <h1 class="hasAnchor">
@@ -194,10 +201,10 @@ exprsMat_wang_subset &lt;-<span class="st"> </span><span class="kw">as</span>(ex
 <div id="non-ensemble-scclassify" class="section level2">
 <h2 class="hasAnchor">
 <a href="#non-ensemble-scclassify" class="anchor"></a>Non-ensemble scClassify</h2>
-<p>We first perform non-ensemble <code>scClassify</code> by using Xin et al. as reference dataset, and Wang et al data as query data, using <code>WKNN</code> as KNN algorithm, <code>DE</code> (differential expression genes) as gene selection method, and <code>pearson</code> as similarity calculation method.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scClassify_res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scClassify.html">scClassify</a></span>(<span class="dt">exprsMat_train =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">as.matrix</a></span>(exprsMat_xin_subset),
+<p>We first perform non-ensemble <code>scClassify</code> by using Xin et al. as our reference dataset and Wang et al. data as ur query data. We use <code>WKNN</code> as the KNN algorithm, <code>DE</code> (differential expression genes) as the gene selection method, and lastly <code>pearson</code> as the similarity calculation method.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scClassify_res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scClassify.html">scClassify</a></span>(<span class="dt">exprsMat_train =</span> exprsMat_xin_subset,
                       <span class="dt">cellTypes_train =</span> xin_cellTypes,
-                      <span class="dt">exprsMat_test =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">wang =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">as.matrix</a></span>(exprsMat_wang_subset)),
+                      <span class="dt">exprsMat_test =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">wang =</span> exprsMat_wang_subset),
                       <span class="dt">cellTypes_test =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">wang =</span> wang_cellTypes),
                       <span class="dt">tree =</span> <span class="st">"HOPACH"</span>,
                       <span class="dt">algorithm =</span> <span class="st">"WKNN"</span>,
@@ -205,7 +212,7 @@ exprsMat_wang_subset &lt;-<span class="st"> </span><span class="kw">as</span>(ex
                       <span class="dt">similarity =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"pearson"</span>),
                       <span class="dt">returnList =</span> <span class="ot">FALSE</span>,
                       <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<p>Check the cell type tree generated by the reference data</p>
+<p>We can check the cell type tree generated by the reference data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scClassify_res<span class="op">$</span>trainRes
 <span class="co">#&gt; Class: scClassifyTrainModel </span>
 <span class="co">#&gt; Model name: training </span>
@@ -213,7 +220,7 @@ exprsMat_wang_subset &lt;-<span class="st"> </span><span class="kw">as</span>(ex
 <span class="co">#&gt; Number of cells in the training data: 674 </span>
 <span class="co">#&gt; Number of cell types in the training data: 4</span>
 <span class="kw"><a href="../reference/plotCellTypeTree.html">plotCellTypeTree</a></span>(scClassify_res<span class="op">$</span>trainRes<span class="op">@</span>cellTypeTree)</code></pre></div>
-<p><img src="scClassify_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p><img src="scClassify_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <p>Noted that <code>scClassify_res$trainRes</code> is a <code>scClassifyTrainModel</code> class.</p>
 <p>Check the prediction results.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/table">table</a></span>(scClassify_res<span class="op">$</span>testRes<span class="op">$</span>wang<span class="op">$</span>pearson_WKNN_limma<span class="op">$</span>predRes, wang_cellTypes)
@@ -229,7 +236,7 @@ exprsMat_wang_subset &lt;-<span class="st"> </span><span class="kw">as</span>(ex
 <div id="ensemble-classify" class="section level2">
 <h2 class="hasAnchor">
 <a href="#ensemble-classify" class="anchor"></a>Ensemble Classify</h2>
-<p>We next perform ensemble <code>scClassify</code> by using Xin et al. as reference dataset, and Wang et al data as query data, using <code>WKNN</code> as KNN algorithm, <code>DE</code> as gene selection method, and <code>pearson</code>, <code>spearman</code> as similarity calculation methods. Thus, we are performing two combinations of gene selection models and similarity metrics as train classifiers, that is,</p>
+<p>We next perform ensemble <code>scClassify</code> by using Xin et al. as our reference dataset and Wang et al. data as our query data. We use <code>WKNN</code> as the KNN algorithm, <code>DE</code> as the gene selection method, and <code>pearson</code> and <code>spearman</code> as the similarity calculation methods. Thus, we will generate two combinations of gene selection models and similarity metrics as training classifiers:</p>
 <ol style="list-style-type: decimal">
 <li>
 <code>WKNN</code> + <code>DE</code> + <code>pearson</code>
@@ -238,10 +245,10 @@ exprsMat_wang_subset &lt;-<span class="st"> </span><span class="kw">as</span>(ex
 <code>WKNN</code> + <code>DE</code> + <code>spearman</code>
 </li>
 </ol>
-<p>Here, we will weight this two classifiers equally by setting <code>wegihted_ensemble = FALSE</code>. By default this is set as <code>TRUE</code>, and each base classifiers will be weighted by the accuracy rates trained in reference data.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scClassify_res_ensemble &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scClassify.html">scClassify</a></span>(<span class="dt">exprsMat_train =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">as.matrix</a></span>(exprsMat_xin_subset),
+<p>Here, we will weight these two classifiers equally by setting <code>wegihted_ensemble = FALSE</code>. By default this is set as <code>TRUE</code>, so each base classifier will be weighted by the accuracy rates trained in the reference data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scClassify_res_ensemble &lt;-<span class="st"> </span><span class="kw"><a href="../reference/scClassify.html">scClassify</a></span>(<span class="dt">exprsMat_train =</span> exprsMat_xin_subset,
                                       <span class="dt">cellTypes_train =</span> xin_cellTypes,
-                                      <span class="dt">exprsMat_test =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">wang =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/matrix">as.matrix</a></span>(exprsMat_wang_subset)),
+                                      <span class="dt">exprsMat_test =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">wang =</span> exprsMat_wang_subset),
                                       <span class="dt">cellTypes_test =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">wang =</span> wang_cellTypes),
                                       <span class="dt">tree =</span> <span class="st">"HOPACH"</span>,
                                       <span class="dt">algorithm =</span> <span class="st">"WKNN"</span>,
@@ -250,18 +257,18 @@ exprsMat_wang_subset &lt;-<span class="st"> </span><span class="kw">as</span>(ex
                                       <span class="dt">weighted_ensemble =</span> <span class="ot">FALSE</span>,
                                       <span class="dt">returnList =</span> <span class="ot">FALSE</span>,
                                       <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<p>Comparing two base classifiers prediction</p>
+<p>We can compare the two base classifiers predictions as below.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/table">table</a></span>(scClassify_res_ensemble<span class="op">$</span>testRes<span class="op">$</span>wang<span class="op">$</span>pearson_WKNN_limma<span class="op">$</span>predRes,
       scClassify_res_ensemble<span class="op">$</span>testRes<span class="op">$</span>wang<span class="op">$</span>cosine_WKNN_limma<span class="op">$</span>predRes)
 <span class="co">#&gt;                   </span>
 <span class="co">#&gt;                    alpha beta beta_delta_gamma delta gamma unassigned</span>
 <span class="co">#&gt;   alpha              208    0                0     0     0          0</span>
 <span class="co">#&gt;   beta                 0  119                0     0     0          0</span>
-<span class="co">#&gt;   beta_delta_gamma     0    0               20     0     0          0</span>
+<span class="co">#&gt;   beta_delta_gamma     0    0               13     0     0          7</span>
 <span class="co">#&gt;   delta                0    0                0    10     0          0</span>
 <span class="co">#&gt;   gamma                0    0                0     0    19          0</span>
-<span class="co">#&gt;   unassigned           1   13               99     7     0          5</span></code></pre></div>
-<p>Check the final ensemble results</p>
+<span class="co">#&gt;   unassigned           1    3                8     0     0        113</span></code></pre></div>
+<p>Now, check the final ensemble results:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/table">table</a></span>(scClassify_res_ensemble<span class="op">$</span>testRes<span class="op">$</span>wang<span class="op">$</span>ensembleRes<span class="op">$</span>cellTypes, 
       wang_cellTypes)
 <span class="co">#&gt;                   wang_cellTypes</span>
@@ -277,8 +284,8 @@ exprsMat_wang_subset &lt;-<span class="st"> </span><span class="kw">as</span>(ex
 <div id="train-your-own-model" class="section level1">
 <h1 class="hasAnchor">
 <a href="#train-your-own-model" class="anchor"></a>Train your own model</h1>
-<p>You can also train your own model <code>scClassifyTrainModel</code> using <code><a href="../reference/train_scClassify.html">train_scClassify()</a></code>. Noted that by setting <code>weightsCal = TRUE</code>, we will calculate the training error of the reference data as the weights for the individual classifiers.</p>
-<p>Here, we illustrates the training function using genes selection method based on differential expressed (“limma”), and biomodally distributed (“BI”)</p>
+<p>You can also train your own model <code>scClassifyTrainModel</code> using <code><a href="../reference/train_scClassify.html">train_scClassify()</a></code>. Note that by setting <code>weightsCal = TRUE</code>, we will calculate the training error of the reference data as the weights for the individual classifiers.</p>
+<p>Here, we illustrate the training function with gene selection methods based on differential expression (“limma”) and biomodal distribution (“BI”).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">trainClass &lt;-<span class="st"> </span><span class="kw"><a href="../reference/train_scClassify.html">train_scClassify</a></span>(<span class="dt">exprsMat_train =</span> exprsMat_xin_subset,
                  <span class="dt">cellTypes_train =</span> xin_cellTypes,
                  <span class="dt">selectFeatures =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"limma"</span>, <span class="st">"BI"</span>),

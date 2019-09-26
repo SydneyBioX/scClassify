@@ -59,7 +59,7 @@
       <a href="../articles/scClassify.html">scClassify Model Building and Prediction</a>
     </li>
     <li>
-      <a href="../articles/sampleSizeCal.html">Sample size learning</a>
+      <a href="../articles/webOnly/sampleSizeCal.html">Sample size learning</a>
     </li>
   </ul>
 </li>
@@ -116,6 +116,9 @@
       <a href="../articles/webOnly/Joint_humanPancreas.html">Joint (Human Pancreas)</a>
     </li>
     <li>
+      <a href="../articles/webOnly/Joint_humanPBMC.html">Joint (Human PBMC)</a>
+    </li>
+    <li>
       <a href="../articles/webOnly/Li_humanMelanoma.html">Li (Human Melanoma)</a>
     </li>
     <li>
@@ -124,7 +127,11 @@
   </ul>
 </li>
 <li>
-  <a href="http://shiny.maths.usyd.edu.au/scClassify/">Interactive scClassify shiny app</a>
+  <a href="http://shiny.maths.usyd.edu.au/scClassify/">
+    <span class="fa fa-star"></span>
+     
+    Interactive scClassify shiny app (beta)
+  </a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -147,7 +154,6 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Performing scClassify using pretrained model</h1>
-                        <h4 class="author">Yingxin Lin</h4>
             
       
       
@@ -157,26 +163,26 @@
 
     
     
-<p>This vignette will provide an example showing how to use pretrained model we provided to predict cell types.</p>
+<p>This vignette will provide an example showing how one can use a pretrained model to predict cell types.</p>
 <div id="setting-up-the-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#setting-up-the-data" class="anchor"></a>Setting up the data</h1>
-<p>We assume that you have <em>log-transformed</em> (size-factor normalized) matrices where each row is a gene and each column a cell as a query dataset. For demonstration purposes, we will take a subset of single-cell pancreas datasets from one independent studies (Wang et al.).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="st">"data/scClassify_example.rda"</span>)
+<p>We assume that you have <em>log-transformed</em> (size-factor normalized) matrices as query datasets, where each row refers to a gene and each column a cell. For demonstration purposes, we will take a subset of single-cell pancreas datasets from one independent study (Wang et al.).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(scClassify)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="st">"data/scClassify_example.rda"</span>)
 wang_cellTypes &lt;-<span class="st"> </span>scClassify_example<span class="op">$</span>wang_cellTypes
 exprsMat_wang_subset &lt;-<span class="st"> </span>scClassify_example<span class="op">$</span>exprsMat_wang_subset
 exprsMat_wang_subset &lt;-<span class="st"> </span><span class="kw">as</span>(exprsMat_wang_subset, <span class="st">"dgCMatrix"</span>)</code></pre></div>
-<p>Here, we load our pretrained model using a subset of Xin et al. human pancreas as reference data.</p>
-<p>First, check basic info of our pretrained model.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(scClassify)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="st">"data/trainClassExample.rda"</span>)
+<p>Here, we load our pretrained model using a subset of the Xin et al. human pancreas dataset as our reference data.</p>
+<p>First, let us check basic information relating to our pretrained model.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="st">"data/trainClassExample.rda"</span>)
 trainClassExample
 <span class="co">#&gt; Class: scClassifyTrainModel </span>
 <span class="co">#&gt; Model name: training </span>
 <span class="co">#&gt; Feature selection methods: limma </span>
 <span class="co">#&gt; Number of cells in the training data: 674 </span>
 <span class="co">#&gt; Number of cell types in the training data: 4</span></code></pre></div>
-<p>In this pretrained model, we have select the genes based on Differential Expression using limma. To check the genes that are available in the pretrained model:</p>
+<p>In this pretrained model, we have selected the genes based on Differential Expression using limma. To check the genes that are available in the pretrained model:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">trainClassExample<span class="op">@</span>features
 <span class="co">#&gt; [1] "limma"</span></code></pre></div>
 <p>We can also visualise the cell type tree of the reference data.</p>
@@ -186,7 +192,7 @@ trainClassExample
 <div id="running-scclassify" class="section level1">
 <h1 class="hasAnchor">
 <a href="#running-scclassify" class="anchor"></a>Running scClassify</h1>
-<p>Next, we perform <code>predict_scClassify</code> to predict the cell types of our query data matrix <code>exprsMat_wang_subset_sparse</code>, using our pretrained model <code>trainRes = trainClassExample</code>. Here, we used <code>pearson</code> and <code>spearman</code> as similarity metrics.</p>
+<p>Next, we perform <code>predict_scClassify</code> with our pretrained model <code>trainRes = trainClassExample</code> to predict the cell types of our query data matrix <code>exprsMat_wang_subset_sparse</code>. Here, we used <code>pearson</code> and <code>spearman</code> as similarity metrics.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pred_res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/predict_scClassify.html">predict_scClassify</a></span>(<span class="dt">exprsMat_test =</span> exprsMat_wang_subset,
                                <span class="dt">trainRes =</span> trainClassExample,
                                <span class="dt">cellTypes_test =</span> wang_cellTypes,
@@ -213,11 +219,11 @@ trainClassExample
 <span class="co">#&gt; [1] "Using dynamic correlation cutoff..."</span>
 <span class="co">#&gt; classify_res</span>
 <span class="co">#&gt;                correct   correctly unassigned           intermediate </span>
-<span class="co">#&gt;            0.702594810            0.013972056            0.000000000 </span>
+<span class="co">#&gt;            0.698602794            0.283433134            0.000000000 </span>
 <span class="co">#&gt; incorrectly unassigned         error assigned          misclassified </span>
-<span class="co">#&gt;            0.001996008            0.277445110            0.003992016</span></code></pre></div>
-<p>Noted that the <code>cellType_test</code> is not a necessarily input. For the dataset with unknown label, users can simply leave it as <code>cellType_test = NULL</code>.</p>
-<p>Pearson as similarity metrics prediction results:</p>
+<span class="co">#&gt;            0.005988024            0.007984032            0.003992016</span></code></pre></div>
+<p>Noted that the <code>cellType_test</code> is not a required input. For datasets with unknown labels, users can simply leave it as <code>cellType_test = NULL</code>.</p>
+<p>Prediction results for pearson as the similarity metric:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/table">table</a></span>(pred_res<span class="op">$</span>pearson_WKNN_limma<span class="op">$</span>predRes, wang_cellTypes)
 <span class="co">#&gt;                   wang_cellTypes</span>
 <span class="co">#&gt;                    acinar alpha beta delta ductal gamma stellate</span>
@@ -227,16 +233,16 @@ trainClassExample
 <span class="co">#&gt;   delta                 0     0    0    10      0     0        0</span>
 <span class="co">#&gt;   gamma                 0     0    0     0      0    19        0</span>
 <span class="co">#&gt;   unassigned            5     0    0     0     75     0       45</span></code></pre></div>
-<p>Spearman as similarity metrics prediction results:</p>
+<p>Prediction results for spearman as the similarity metric:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/table">table</a></span>(pred_res<span class="op">$</span>spearman_WKNN_limma<span class="op">$</span>predRes, wang_cellTypes)
 <span class="co">#&gt;                   wang_cellTypes</span>
 <span class="co">#&gt;                    acinar alpha beta delta ductal gamma stellate</span>
 <span class="co">#&gt;   alpha                 0   206    0     0      0     2        2</span>
-<span class="co">#&gt;   beta                  2     0  118     0     30     0        7</span>
-<span class="co">#&gt;   beta_delta_gamma      1     0    0     0     65     0       30</span>
-<span class="co">#&gt;   delta                 0     0    0    10      0     0        2</span>
-<span class="co">#&gt;   gamma                 0     0    0     0      0    18        0</span>
-<span class="co">#&gt;   unassigned            2     0    0     0      1     1        4</span></code></pre></div>
+<span class="co">#&gt;   beta                  0     0  117     0      1     0        0</span>
+<span class="co">#&gt;   beta_delta_gamma      0     0    0     0      1     0        0</span>
+<span class="co">#&gt;   delta                 0     0    0    10      0     0        0</span>
+<span class="co">#&gt;   gamma                 0     0    0     0      0    17        0</span>
+<span class="co">#&gt;   unassigned            5     0    1     0     94     2       43</span></code></pre></div>
 </div>
 <div id="session-info" class="section level1">
 <h1 class="hasAnchor">

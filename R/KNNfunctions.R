@@ -77,10 +77,12 @@ KNNcor <- function(corMat,
         suppressMessages(dip_test <- diptest::dip.test(corMat_vec, B = 10000))
         if (dip_test$p.value <= 0.01) {
           quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = T, maxrestarts = 100,
-                                                               k = length(unique_y), maxit = 2000,
-                                                               mu = c(-0.5, rep(0.5, length(unique_y) - 2),  1),
-                                                               ECM = TRUE, verb = verbose),
-                                         silent = T))
+                                                    k = length(unique_y), maxit = 2000,
+                                                    mu = c(-0.5, rep(0.5, length(unique_y) - 2),  1),
+                                                    lambda = c(1/length(unique_y)),
+                                                    sigma = rep(0.2, length(unique_y)),
+                                                    ECM = TRUE, verb = verbose),
+                              silent = T))
 
           if (class(mixmdl) != "try-error" ) {
             if (suppressWarnings(min(unique(mixmdl$rho)) == 0)) {
@@ -161,10 +163,12 @@ KNNcor <- function(corMat,
         suppressMessages(dip_test <- diptest::dip.test(corMat_vec, B = 10000))
         if (dip_test$p.value <= 0.01) {
           quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = T, maxrestarts = 100,
-                                                               k = length(unique_y), maxit = 2000,
-                                                               mu = c(-0.5, rep(0.5, length(unique_y) - 2),  1),
-                                                               ECM = TRUE, verb = verbose),
-                                         silent = T))
+                                                    k = length(unique_y), maxit = 2000,
+                                                    mu = c(-0.5, rep(0.5, length(unique_y) - 2),  1),
+                                                    lambda = c(1/length(unique_y)),
+                                                    sigma = rep(0.2, length(unique_y)),
+                                                    ECM = TRUE, verb = verbose),
+                              silent = T))
 
           if (class(mixmdl) != "try-error" ) {
             if (suppressWarnings(min(unique(mixmdl$rho)) == 0)) {
@@ -310,10 +314,12 @@ WKNNcor <- function(corMat,
         suppressMessages(dip_test <- diptest::dip.test(corMat_vec, B = 10000))
         if (dip_test$p.value <= 0.01) {
           quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = T, maxrestarts = 100,
-                                                               k = length(unique_y), maxit = 2000,
-                                                               mu = c(-0.5, rep(0.5, length(unique_y) - 2),  1),
-                                                               ECM = TRUE, verb = verbose),
-                                         silent = T))
+                                                    k = length(unique_y), maxit = 2000,
+                                                    mu = c(-0.5, rep(0.5, length(unique_y) - 2),  1),
+                                                    lambda = c(1/length(unique_y)),
+                                                    sigma = rep(0.2, length(unique_y)),
+                                                    ECM = TRUE, verb = verbose),
+                              silent = T))
 
           if (class(mixmdl) != "try-error" ) {
             if (suppressWarnings(min(unique(mixmdl$rho)) == 0)) {
@@ -422,10 +428,12 @@ WKNNcor <- function(corMat,
         suppressMessages(dip_test <- diptest::dip.test(corMat_vec, B = 10000))
         if (dip_test$p.value <= 0.01) {
           quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = T, maxrestarts = 100,
-                                                               k = length(unique_y), maxit = 2000,
-                                                               mu = c(-0.5, rep(0.5, length(unique_y) - 2),  1),
-                                                               ECM = TRUE, verb = verbose),
-                                         silent = T))
+                                                    k = length(unique_y), maxit = 2000,
+                                                    mu = c(-0.5, rep(0.5, length(unique_y) - 2),  1),
+                                                    lambda = c(1/length(unique_y)),
+                                                    sigma = rep(0.2, length(unique_y)),
+                                                    ECM = TRUE, verb = verbose),
+                              silent = T))
 
           if (class(mixmdl) != "try-error" ) {
             if (suppressWarnings(min(unique(mixmdl$rho)) == 0)) {
@@ -605,10 +613,12 @@ DWKNNcor <- function(corMat,
         suppressMessages(dip_test <- diptest::dip.test(corMat_vec, B = 10000))
         if (dip_test$p.value <= 0.01) {
           quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = T, maxrestarts = 100,
-                                                               k = length(unique_y), maxit = 2000,
-                                                               mu = c(-0.5, rep(0.5, length(unique_y) - 2),  1),
-                                                               ECM = TRUE, verb = verbose),
-                                         silent = T))
+                                                    k = length(unique_y), maxit = 2000,
+                                                    mu = c(-0.5, rep(0.5, length(unique_y) - 2),  1),
+                                                    lambda = c(1/length(unique_y)),
+                                                    sigma = rep(0.2, length(unique_y)),
+                                                    ECM = TRUE, verb = verbose),
+                              silent = T))
 
           if (class(mixmdl) != "try-error" ) {
             if (suppressWarnings(min(unique(mixmdl$rho)) == 0)) {
@@ -710,10 +720,12 @@ DWKNNcor <- function(corMat,
         suppressMessages(dip_test <- diptest::dip.test(corMat_vec, B = 10000))
         if (dip_test$p.value <= 0.01) {
           quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = T, maxrestarts = 100,
-                                                               k = length(unique_y), maxit = 2000,
-                                                               mu = c(-0.5, rep(0.5, length(unique_y) - 2),  1),
-                                                               ECM = TRUE, verb = verbose),
-                                         silent = T))
+                                                    k = length(unique_y), maxit = 2000,
+                                                    mu = c(-0.5, rep(0.5, length(unique_y) - 2),  1),
+                                                    lambda = c(1/length(unique_y)),
+                                                    sigma = rep(0.2, length(unique_y)),
+                                                    ECM = TRUE, verb = verbose),
+                              silent = T))
 
           if (class(mixmdl) != "try-error" ) {
             if (suppressWarnings(min(unique(mixmdl$rho)) == 0)) {

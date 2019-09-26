@@ -59,7 +59,7 @@
       <a href="articles/scClassify.html">scClassify Model Building and Prediction</a>
     </li>
     <li>
-      <a href="articles/sampleSizeCal.html">Sample size learning</a>
+      <a href="articles/webOnly/sampleSizeCal.html">Sample size learning</a>
     </li>
   </ul>
 </li>
@@ -116,6 +116,9 @@
       <a href="articles/webOnly/Joint_humanPancreas.html">Joint (Human Pancreas)</a>
     </li>
     <li>
+      <a href="articles/webOnly/Joint_humanPBMC.html">Joint (Human PBMC)</a>
+    </li>
+    <li>
       <a href="articles/webOnly/Li_humanMelanoma.html">Li (Human Melanoma)</a>
     </li>
     <li>
@@ -124,7 +127,11 @@
   </ul>
 </li>
 <li>
-  <a href="http://shiny.maths.usyd.edu.au/scClassify/">Interactive scClassify shiny app</a>
+  <a href="http://shiny.maths.usyd.edu.au/scClassify/">
+    <span class="fa fa-star"></span>
+     
+    Interactive scClassify shiny app (beta)
+  </a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -145,20 +152,27 @@
       
       </header><div class="row">
   <div class="contents col-md-9">
-
-<div id="scclassify" class="section level1">
+<div id="scclassify-hierarchical-classification-of-cells" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#scclassify" class="anchor"></a>scClassify</h1></div>
-<p><img src="reference/figures/scClassifySticker.png" align="right" width="300"></p>
+<a href="#scclassify-hierarchical-classification-of-cells" class="anchor"></a>scClassify: hierarchical classification of cells</h1></div>
+<p><img src="reference/figures/scClassifySticker.png" align="right" width="200"></p>
 <p>Single cell classification via cell-type hierarchies based on ensemble learning and sample size estimation.</p>
 <p><a href=""><img src="https://travis-ci.org/SydneyBioX/scClassify.svg?branch=master"></a></p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>Install <code>hopach</code> package from Bioconductor:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">BiocManager<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/BiocManager/topics/install">install</a></span>(<span class="st">"hopach"</span>)</code></pre></div>
+<p>Install Bioconductor packages <code>S4Vectors</code>, <code>hopach</code> and <code>limma</code> packages using <code>BiocManager</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("BiocManager")</span>
+BiocManager<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/BiocManager/topics/install">install</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"S4Vectors"</span>, <span class="st">"hopach"</span>, <span class="st">"limma"</span>))</code></pre></div>
+<p>Then install <code>scClassify</code> using <code>devtools</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(devtools)
 devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/devtools/topics/reexports">install_github</a></span>(<span class="st">"SydneyBioX/scClassify"</span>)</code></pre></div>
+</div>
+<div id="vignette-and-shiny-app" class="section level2">
+<h2 class="hasAnchor">
+<a href="#vignette-and-shiny-app" class="anchor"></a>Vignette and Shiny app</h2>
+<p>You can find the vignette at this webiste: <a href="https://sydneybiox.github.io/scClassify/index.html" class="uri">https://sydneybiox.github.io/scClassify/index.html</a>.</p>
+<p>Also, you can find our interactive shiny application (beta) at this webiste: <a href="http://shiny.maths.usyd.edu.au/scClassify" class="uri">http://shiny.maths.usyd.edu.au/scClassify</a>.</p>
 </div>
 <div id="pretrained-models" class="section level2">
 <h2 class="hasAnchor">
@@ -300,7 +314,7 @@ devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumen
 <td align="center">human</td>
 <td align="center">Ding (joint)</td>
 <td align="center">-</td>
-<td align="center"></td>
+<td align="center"><a href="https://SydneyBioX.github.io/scClassify/articles/webOnly/Joint_humanPBMC.html">link</a></td>
 <td align="center"><a href="http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/jointPBMCClass.rds">link</a></td>
 </tr>
 <tr class="odd">
@@ -314,25 +328,19 @@ devtools<span class="op">::</span><span class="kw"><a href="https://www.rdocumen
 </tbody>
 </table>
 </div>
-</div>
-<div id="vignette" class="section level1">
-<h1 class="hasAnchor">
-<a href="#vignette" class="anchor"></a>Vignette</h1>
-<p>You can find the vignette at our webiste: <a href="https://sydneybiox.github.io/scClassify/index.html" class="uri">https://sydneybiox.github.io/scClassify/index.html</a>.</p>
-</div>
-<div id="contact-us" class="section level1">
-<h1 class="hasAnchor">
-<a href="#contact-us" class="anchor"></a>Contact us</h1>
+<div id="contact-us" class="section level2">
+<h2 class="hasAnchor">
+<a href="#contact-us" class="anchor"></a>Contact us</h2>
 <p>If you have any enquiries, espcially about performing <code>scClassify</code> to classify your cells or to build your own models, please contact <a href="mailto:yingxin.lin@sydney.edu.au">yingxin.lin@sydney.edu.au</a> or <a href="mailto:bioinformatics@maths.usyd.edu.au">bioinformatics@maths.usyd.edu.au</a>.</p>
 </div>
-<div id="reference" class="section level1">
-<h1 class="hasAnchor">
-<a href="#reference" class="anchor"></a>Reference</h1>
-<p><em>scClassify: hierarchical classification of cells</em></p>
+<div id="reference" class="section level2">
+<h2 class="hasAnchor">
+<a href="#reference" class="anchor"></a>Reference</h2>
+<p><strong>scClassify: hierarchical classification of cells</strong></p>
 <p>Yingxin Lin, Yue Cao, Hani J Kim, Agus Salim, Terence P. Speed, Dave Lin, Pengyi Yang, Jean Yee Hwa Yang</p>
 <p>bioRxiv 776948; doi: <a href="https://doi.org/10.1101/776948" class="uri">https://doi.org/10.1101/776948</a></p>
 </div>
-
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
