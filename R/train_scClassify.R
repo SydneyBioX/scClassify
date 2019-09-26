@@ -153,7 +153,7 @@ train_scClassify <- function(exprsMat_train,
         trainClassList[[train_list_idx]] <- scClassifyTrainModel(
           name = names(trainRes)[train_list_idx],
           cellTypeTree = trainRes[[train_list_idx]]$cutree_list,
-          cellTypeTrain = trainRes[[train_list_idx]]$cellTypes_train,
+          cellTypeTrain = as.character(trainRes[[train_list_idx]]$cellTypes_train),
           features = names(trainRes[[train_list_idx]]$hierarchyKNNRes),
           model = trainRes[[train_list_idx]]$hierarchyKNNRes,
           modelweights = as.numeric(trainRes[[train_list_idx]]$modelWeights),
@@ -164,7 +164,7 @@ train_scClassify <- function(exprsMat_train,
       trainClassList <- scClassifyTrainModel(
         name = "training",
         cellTypeTree = trainRes$cutree_list,
-        cellTypeTrain = trainRes$cellTypes_train,
+        cellTypeTrain = as.character(trainRes$cellTypes_train),
         features = names(trainRes$hierarchyKNNRes),
         model = trainRes$hierarchyKNNRes,
         modelweights = as.numeric(trainRes$modelWeights),
@@ -196,7 +196,11 @@ train_scClassifySingle <- function(exprsMat_train,
                                    ...){
 
   if (is.null(rownames(exprsMat_train))) {
-    stop("rownames of the exprssion matrix is NULL!")
+    stop("rownames of the exprsMat_train is NULL!")
+  }
+
+  if (is.null(rownames(exprsMat_train)) | sum(duplicated(colnames(exprsMat_train))) != 0) {
+    stop("colnames of exprsMat_train is NULL or not unique")
   }
 
   if (length(cellTypes_train) != ncol(exprsMat_train)) {

@@ -245,24 +245,33 @@ predict_scClassifyJoint <- function(exprsMat_test,
 
 
 predict_scClassifySingle <- function(exprsMat_test,
-                               trainRes,
-                               cellTypes_test,
-                               k = 10,
-                               prob_threshold = 0.7,
-                               cor_threshold_static = 0.5,
-                               cor_threshold_high = 0.7,
-                               features = "limma",
-                               algorithm = c("WKNN", "KNN", "DWKNN"),
-                               similarity = c("pearson",  "spearman",
-                                              "cosine", "jaccard", "kendall",
-                                              "weighted_rank","manhattan"),
-                               cutoff_method = c("dynamic", "static"),
-                               verbose = T){
+                                     trainRes,
+                                     cellTypes_test,
+                                     k = 10,
+                                     prob_threshold = 0.7,
+                                     cor_threshold_static = 0.5,
+                                     cor_threshold_high = 0.7,
+                                     features = "limma",
+                                     algorithm = c("WKNN", "KNN", "DWKNN"),
+                                     similarity = c("pearson",  "spearman",
+                                                    "cosine", "jaccard", "kendall",
+                                                    "weighted_rank","manhattan"),
+                                     cutoff_method = c("dynamic", "static"),
+                                     verbose = T){
+
 
   if (!is.null(cellTypes_test)) {
     if (length(cellTypes_test) != ncol(exprsMat_test)) {
       stop("Length of testing cell types does not match with number of column of testing expression matrix")
     }
+  }
+
+  if (is.null(rownames(exprsMat_test))) {
+    stop("rownames of exprsMat_test is NULL")
+  }
+
+  if (is.null(colnames(exprsMat_test)) | sum(duplicated(colnames(exprsMat_test))) != 0) {
+    stop("colnames of exprsMat_test is NULL or not unique")
   }
 
   # check input
@@ -324,7 +333,7 @@ predict_scClassifySingle <- function(exprsMat_test,
         pred_level <- list()
 
         for (j in 1:length(levelModel[[i]])) {
-          # print(paste(i,j))
+
           # If the model of level i-1, cells labeled as j is NOT "no model"
           if (class(levelModel[[i]][[j]]) != "character") {
 
@@ -441,7 +450,7 @@ predict_scClassifySingle <- function(exprsMat_test,
 
     }else{
       # If this level is NULL (Level 1)
-      pred[[i]] <- as.factor(rep(1,ncol(exprsMat_test)))
+      pred[[i]] <- as.factor(rep(1, ncol(exprsMat_test)))
       names(pred[[i]]) <- colnames(exprsMat_test)
     }
 

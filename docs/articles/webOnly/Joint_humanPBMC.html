@@ -157,7 +157,7 @@
             
       
       
-      <div class="hidden name"><code>Joint_humanPancreas.Rmd</code></div>
+      <div class="hidden name"><code>Joint_humanPBMC.Rmd</code></div>
 
     </div>
 
@@ -167,145 +167,110 @@
 <h1 class="hasAnchor">
 <a href="#train-model" class="anchor"></a>Train Model</h1>
 <pre><code>## Class: scClassifyTrainModelList 
-## Number of Trainin model: 6 
-## Training data name: Lawlor_HumanPancreas Wang_HumanPancreas Xin_HumanPancreas segerstolpe_HumanPancreas Muraro_HumanPancreas baron_HumanPancreas</code></pre>
+## Number of Trainin model: 7 
+## Training data name: PBMC_tenX(V3) PBMC_tenX(V2) PBMC_smartSeq PBMC_celSeq PBMC_dropSeqs PBMC_inDrops PBMC_dropSeqs</code></pre>
 <p>Cell type composition:</p>
 <table class="table">
 <thead><tr class="header">
 <th></th>
-<th align="right">Lawlor_HumanPancreas</th>
-<th align="right">Wang_HumanPancreas</th>
-<th align="right">Xin_HumanPancreas</th>
-<th align="right">segerstolpe_HumanPancreas</th>
-<th align="right">Muraro_HumanPancreas</th>
-<th align="right">baron_HumanPancreas</th>
+<th align="right">PBMC_tenX(V3)</th>
+<th align="right">PBMC_tenX(V2)</th>
+<th align="right">PBMC_smartSeq</th>
+<th align="right">PBMC_celSeq</th>
+<th align="right">PBMC_dropSeqs</th>
+<th align="right">PBMC_inDrops</th>
+<th align="right">PBMC_dropSeqs</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>acinar</td>
-<td align="right">24</td>
-<td align="right">5</td>
-<td align="right">0</td>
-<td align="right">185</td>
-<td align="right">219</td>
-<td align="right">958</td>
-</tr>
-<tr class="even">
-<td>alpha</td>
-<td align="right">239</td>
-<td align="right">206</td>
-<td align="right">885</td>
-<td align="right">886</td>
-<td align="right">812</td>
-<td align="right">2326</td>
-</tr>
-<tr class="odd">
-<td>beta</td>
-<td align="right">264</td>
-<td align="right">118</td>
-<td align="right">461</td>
-<td align="right">270</td>
-<td align="right">448</td>
-<td align="right">2525</td>
-</tr>
-<tr class="even">
-<td>delta</td>
-<td align="right">25</td>
-<td align="right">10</td>
-<td align="right">49</td>
-<td align="right">114</td>
-<td align="right">193</td>
-<td align="right">601</td>
-</tr>
-<tr class="odd">
-<td>ductal</td>
-<td align="right">28</td>
-<td align="right">96</td>
-<td align="right">0</td>
-<td align="right">386</td>
-<td align="right">245</td>
-<td align="right">1077</td>
-</tr>
-<tr class="even">
-<td>gamma</td>
-<td align="right">18</td>
-<td align="right">21</td>
+<td>B cell</td>
+<td align="right">346</td>
+<td align="right">862</td>
 <td align="right">79</td>
-<td align="right">197</td>
-<td align="right">101</td>
-<td align="right">255</td>
-</tr>
-<tr class="odd">
-<td>stellate</td>
-<td align="right">19</td>
-<td align="right">45</td>
-<td align="right">0</td>
-<td align="right">54</td>
 <td align="right">80</td>
-<td align="right">457</td>
+<td align="right">1405</td>
+<td align="right">1045</td>
+<td align="right">1405</td>
 </tr>
 <tr class="even">
-<td>endothelial</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">16</td>
-<td align="right">21</td>
-<td align="right">252</td>
+<td>CD14+ monocyte</td>
+<td align="right">354</td>
+<td align="right">436</td>
+<td align="right">60</td>
+<td align="right">31</td>
+<td align="right">357</td>
+<td align="right">2038</td>
+<td align="right">357</td>
 </tr>
 <tr class="odd">
-<td>epsilon</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">7</td>
-<td align="right">3</td>
+<td>CD16+ monocyte</td>
+<td align="right">98</td>
+<td align="right">50</td>
 <td align="right">18</td>
+<td align="right">21</td>
+<td align="right">198</td>
+<td align="right">244</td>
+<td align="right">198</td>
 </tr>
 <tr class="even">
-<td>mast</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">7</td>
-<td align="right">0</td>
-<td align="right">25</td>
+<td>CD4+ T cell</td>
+<td align="right">960</td>
+<td align="right">963</td>
+<td align="right">112</td>
+<td align="right">160</td>
+<td align="right">2061</td>
+<td align="right">1111</td>
+<td align="right">2061</td>
 </tr>
 <tr class="odd">
-<td>MHC class II</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">5</td>
-<td align="right">0</td>
-<td align="right">0</td>
+<td>Cytotoxic T cell</td>
+<td align="right">962</td>
+<td align="right">694</td>
+<td align="right">193</td>
+<td align="right">174</td>
+<td align="right">1978</td>
+<td align="right">1664</td>
+<td align="right">1978</td>
 </tr>
 <tr class="even">
-<td>immune</td>
+<td>Dendritic cell</td>
+<td align="right">38</td>
+<td align="right">76</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">7</td>
+<td align="right">46</td>
+<td align="right">148</td>
+<td align="right">46</td>
 </tr>
 <tr class="odd">
-<td>macrophage</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">55</td>
+<td>Megakaryocyte</td>
+<td align="right">270</td>
+<td align="right">32</td>
+<td align="right">14</td>
+<td align="right">18</td>
+<td align="right">27</td>
+<td align="right">145</td>
+<td align="right">27</td>
 </tr>
 <tr class="even">
-<td>schwann</td>
+<td>Natural killer cell</td>
+<td align="right">194</td>
+<td align="right">219</td>
+<td align="right">50</td>
+<td align="right">42</td>
+<td align="right">484</td>
+<td align="right">147</td>
+<td align="right">484</td>
+</tr>
+<tr class="odd">
+<td>Plasmacytoid dendritic cell</td>
+<td align="right">0</td>
+<td align="right">30</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">13</td>
+<td align="right">28</td>
+<td align="right">42</td>
+<td align="right">28</td>
 </tr>
 </tbody>
 </table>
