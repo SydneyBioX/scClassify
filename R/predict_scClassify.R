@@ -502,6 +502,7 @@ predict_scClassifySingle <- function(exprsMat_test,
 #' @importFrom proxyC simil
 #' @importFrom proxy as.dist
 #' @importFrom proxy dist
+#' @importFrom methods as
 
 
 calculateSimilarity <- function(exprsMat_train,
@@ -510,9 +511,19 @@ calculateSimilarity <- function(exprsMat_train,
                                                "cosine", "jaccard", "kendall",
                                                "weighted_rank","manhattan")) {
 
+
   similarity <- match.arg(similarity, c("pearson",  "spearman",
                                         "cosine", "jaccard", "kendall",
                                         "weighted_rank","manhattan"))
+
+  if (class(exprsMat_test) == "dgCMatrix" & class(exprsMat_train) != "dgCMatrix") {
+    exprsMat_train <- methods::as(exprsMat_train, "dgCMatrix")
+  }
+
+  if (class(exprsMat_test) != "dgCMatrix" & class(exprsMat_train) == "dgCMatrix") {
+    exprsMat_test <- methods::as(exprsMat_test, "dgCMatrix")
+  }
+
 
   if (similarity == "cosine") {
 
