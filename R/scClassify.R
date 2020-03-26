@@ -15,6 +15,7 @@
 #' @param cutoff_method A vector indicates the method to cutoff the correlation distribution. Set as "dynamic" by default.
 #' @param weighted_ensemble A logical input indicates in ensemble learning, whether the results is combined by a
 #' weighted score for each base classifier.
+#' @param weights A vector indicates the weights for ensemble
 #' @param weighted_jointClassification A logical input indicates in joint classification using multiple training datasets,
 #' whether the results is combined by a weighted score for each training model.
 #' @param cellType_tree A list indicates the cell type tree provided by user. (By default, it is NULL) (Only for one training data input)
@@ -48,6 +49,7 @@ scClassify <- function(exprsMat_train = NULL,
                        similarity = "pearson",
                        cutoff_method = c("dynamic", "static"),
                        weighted_ensemble = FALSE,
+                       weights = NULL,
                        weighted_jointClassification = TRUE,
                        cellType_tree = NULL,
                        k = 10,
@@ -167,15 +169,22 @@ scClassify <- function(exprsMat_train = NULL,
                                             algorithm = algorithm,
                                             features = selectFeatures))
 
+  if (!is.null(weights)) {
+    if (length(weights) != nrow(ensemble_methods)) {
+      stop("The length of weights is not equal to
+           the number of combination of ensemble methods")
+    }
+  }
 
 
 
   # calculate the weights for train model
-  if (weighted_jointClassification | weighted_ensemble) {
+  if (weighted_jointClassification | (weighted_ensemble & is.null(weights))) {
     weightsCal = TRUE
   } else {
     weightsCal = FALSE
   }
+
 
 
   ### train_scClassify
@@ -199,6 +208,7 @@ scClassify <- function(exprsMat_train = NULL,
                                similarity = similarity,
                                cutoff_method = cutoff_method
                                )
+
 
 
 
@@ -261,6 +271,7 @@ scClassify <- function(exprsMat_train = NULL,
                                                              similarity = similarity,
                                                              cutoff_method = cutoff_method,
                                                              weighted_ensemble = weighted_ensemble,
+                                                             weights = weights,
                                                              parallel = parallel,
                                                              ncores = ncores,
                                                              verbose = verbose)
@@ -286,6 +297,7 @@ scClassify <- function(exprsMat_train = NULL,
                                          similarity = similarity,
                                          cutoff_method = cutoff_method,
                                          weighted_ensemble = weighted_ensemble,
+                                         weights = weights,
                                          parallel = parallel,
                                          ncores = ncores,
                                          verbose = verbose)
@@ -327,6 +339,7 @@ scClassify <- function(exprsMat_train = NULL,
                                                         similarity = similarity,
                                                         cutoff_method = cutoff_method,
                                                         weighted_ensemble = weighted_ensemble,
+                                                        weights = weights,
                                                         parallel = parallel,
                                                         ncores = ncores,
                                                         verbose = verbose)
@@ -352,6 +365,7 @@ scClassify <- function(exprsMat_train = NULL,
                                        similarity = similarity,
                                        cutoff_method = cutoff_method,
                                        weighted_ensemble = weighted_ensemble,
+                                       weights = weights,
                                        parallel = parallel,
                                        ncores = ncores,
                                        verbose = verbose)
@@ -384,7 +398,7 @@ scClassify <- function(exprsMat_train = NULL,
           cellTypeTrain = as.character(trainRes[[train_list_idx]]$cellTypes_train),
           features = names(trainRes[[train_list_idx]]$hierarchyKNNRes),
           model = trainRes[[train_list_idx]]$hierarchyKNNRes,
-          modelweights = as.numeric(trainRes[[train_list_idx]]$modelWeights),
+          modelweights = trainRes[[train_list_idx]]$modelweights,
           metaData = S4Vectors::DataFrame())
 
       }
@@ -396,7 +410,7 @@ scClassify <- function(exprsMat_train = NULL,
         cellTypeTrain = as.character(trainRes$cellTypes_train),
         features = names(trainRes$hierarchyKNNRes),
         model = trainRes$hierarchyKNNRes,
-        modelweights = as.numeric(trainRes$modelWeights),
+        modelweights = trainRes$modelweights,
         metaData = S4Vectors::DataFrame())
     }
 

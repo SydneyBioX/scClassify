@@ -15,6 +15,7 @@ scClassify(
   similarity = "pearson",
   cutoff_method = c("dynamic", "static"),
   weighted_ensemble = FALSE,
+  weights = NULL,
   weighted_jointClassification = TRUE,
   cellType_tree = NULL,
   k = 10,
@@ -55,6 +56,8 @@ This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kend
 
 \item{weighted_ensemble}{A logical input indicates in ensemble learning, whether the results is combined by a
 weighted score for each base classifier.}
+
+\item{weights}{A vector indicates the weights for ensemble}
 
 \item{weighted_jointClassification}{A logical input indicates in joint classification using multiple training datasets,
 whether the results is combined by a weighted score for each training model.}

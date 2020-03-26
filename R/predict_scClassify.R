@@ -16,11 +16,15 @@
 #' @param cutoff_method A vector indicates the method to cutoff the correlation distribution. Set as "dynamic" by default.
 #' @param weighted_ensemble A logical input indicates in ensemble learning, whether the results is combined by a
 #' weighted score for each base classifier.
+#' @param weights A vector indicates the weights for ensemble
 #' @param parallel A logical input indicates whether running in paralllel or not
 #' @param ncores An integer indicates the number of cores that are used
 #' @param verbose A logical input indicates whether the intermediate steps will be printed
 #' @return list of results
+#'
 #' @author Yingxin Lin
+#'
+#' @importFrom methods is
 #'
 #' @export
 
@@ -38,6 +42,7 @@ predict_scClassify <- function(exprsMat_test,
                                similarity = "pearson",
                                cutoff_method = c("dynamic", "static"),
                                weighted_ensemble = FALSE,
+                               weights = NULL,
                                parallel = FALSE,
                                ncores = 1,
                                verbose = FALSE){
@@ -51,11 +56,11 @@ predict_scClassify <- function(exprsMat_test,
   cutoff_method <- match.arg(cutoff_method, c("dynamic", "static"), several.ok = TRUE)
 
 
-  if (class(trainRes) == "scClassifyTrainModelList") {
+  if (is(trainRes) %in% "scClassifyTrainModelList") {
     stop("For a list of training model, please use predict_scClassifyJoint() instead to get joint training results.")
   }
 
-  if (!class(trainRes) %in% c("scClassifyTrainModel", "list")) {
+  if (!is(trainRes) %in% c("scClassifyTrainModel", "list")) {
     stop("Wrong trainRes input. Need to be either scClassifyTrainModel or list")
   }
 
@@ -92,6 +97,13 @@ predict_scClassify <- function(exprsMat_test,
   ensemble_methods <- as.matrix(expand.grid(similarity = similarity,
                                             algorithm = algorithm,
                                             features = features))
+
+  if (!is.null(weights)) {
+    if (length(weights) != nrow(ensemble_methods)) {
+      stop("The length of weights is not equal to
+           the number of combination of ensemble methods")
+    }
+  }
 
 
 
@@ -143,12 +155,31 @@ predict_scClassify <- function(exprsMat_test,
                              ensemble_methods[, 3],
                              sep = "_")
 
+  if (is.null(weights)) {
+    if (is(trainRes) %in% "list") {
+      weights <- trainRes$modelweights
+    }
+
+    if (is(trainRes) %in% "scClassifyTrainModel") {
+      weights <- trainRes@modelweights
+    }
+
+  }
+
+  if (verbose) {
+    cat("weights for each base method")
+    print(weights)
+  }
+
+
 
   if (ensemble) {
     ensembleRes <- getEnsembleRes(predictRes,
-                                  trainRes$modelweights,
+                                  weights,
                                   exclude = NULL,
                                   weighted_ensemble = weighted_ensemble)
+
+
     predictRes$ensembleRes <- ensembleRes
   }
 
@@ -584,9 +615,9 @@ calculateSimilarity <- function(exprsMat_train,
       #                         Matrix::t(exprsMat_test),
       #                         method = "manhattan")
     } else {
-    corMat <- 1 - as.matrix(proxy::dist(t(as.matrix(exprsMat_train)),
-                                        t(as.matrix(exprsMat_test)),
-                                        method = "Manhattan"))
+      corMat <- 1 - as.matrix(proxy::dist(t(as.matrix(exprsMat_train)),
+                                          t(as.matrix(exprsMat_test)),
+                                          method = "Manhattan"))
     }
     corMat[is.na(corMat) | is.infinite(corMat)] <- min(corMat)
 
@@ -681,7 +712,8 @@ getPredRes <- function(predMat, cutree_list, level){
 
 ClassifyError <- function(cellTypes_pred, cellTypes_test, cellTypes_train){
 
-  errClass <- c("correct", "correctly unassigned",  "intermediate", "incorrectly unassigned",
+  errClass <- c("correct", "correctly unassigned",
+                "intermediate", "incorrectly unassigned",
                 "error assigned", "misclassified")
 
 

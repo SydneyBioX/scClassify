@@ -17,6 +17,7 @@ predict_scClassify(
   similarity = "pearson",
   cutoff_method = c("dynamic", "static"),
   weighted_ensemble = FALSE,
+  weights = NULL,
   parallel = FALSE,
   ncores = 1,
   verbose = FALSE
@@ -50,6 +51,8 @@ This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kend
 
 \item{weighted_ensemble}{A logical input indicates in ensemble learning, whether the results is combined by a
 weighted score for each base classifier.}
+
+\item{weights}{A vector indicates the weights for ensemble}
 
 \item{parallel}{A logical input indicates whether running in paralllel or not}
 

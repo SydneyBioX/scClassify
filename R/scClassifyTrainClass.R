@@ -1,3 +1,7 @@
+
+setClassUnion("numeric_OR_NULL", members = c("numeric","NULL"))
+
+
 #' An S4 class to stored training model for scClassify
 #'
 #' @slot name Name of the training dataset
@@ -20,9 +24,8 @@ setClass("scClassifyTrainModel",
            cellTypeTree = "list",
            features = "character",
            model = "list",
-           modelweights = "numeric",
+           modelweights = "numeric_OR_NULL",
            metaData = "DataFrame"))
-
 
 
 
@@ -50,14 +53,18 @@ scClassifyTrainModel <- function(name,
                                  model,
                                  modelweights,
                                  metaData) {
-  new("scClassifyTrainModel",
-      name = name,
-      cellTypeTree = cellTypeTree,
-      cellTypeTrain = cellTypeTrain,
-      features = features,
-      model = model,
-      modelweights = modelweights,
-      metaData = metaData)
+
+  scClassify_train_obj <- new("scClassifyTrainModel",
+                              name = name,
+                              cellTypeTree = cellTypeTree,
+                              cellTypeTrain = cellTypeTrain,
+                              features = features,
+                              model = model,
+                              modelweights = modelweights,
+                              metaData = metaData)
+  names(scClassify_train_obj@modelweights) <- names(modelweights)
+  return(scClassify_train_obj)
+
 }
 
 

@@ -148,7 +148,7 @@ train_scClassify <- function(exprsMat_train,
   # return the results
   if (returnList) {
 
-   return(trainRes)
+    return(trainRes)
 
   } else {
     if (class(exprsMat_train) == "list") {
@@ -160,8 +160,9 @@ train_scClassify <- function(exprsMat_train,
           cellTypeTrain = as.character(trainRes[[train_list_idx]]$cellTypes_train),
           features = names(trainRes[[train_list_idx]]$hierarchyKNNRes),
           model = trainRes[[train_list_idx]]$hierarchyKNNRes,
-          modelweights = as.numeric(trainRes[[train_list_idx]]$modelWeights),
+          modelweights = trainRes[[train_list_idx]]$modelweights,
           metaData = S4Vectors::DataFrame())
+
       }
       trainClassList <- scClassifyTrainModelList(trainClassList)
     } else {
@@ -171,9 +172,10 @@ train_scClassify <- function(exprsMat_train,
         cellTypeTrain = as.character(trainRes$cellTypes_train),
         features = names(trainRes$hierarchyKNNRes),
         model = trainRes$hierarchyKNNRes,
-        modelweights = as.numeric(trainRes$modelWeights),
+        modelweights = trainRes$modelweights,
         metaData = S4Vectors::DataFrame())
     }
+
     return(trainClassList)
 
   }
@@ -278,12 +280,12 @@ train_scClassifySingle <- function(exprsMat_train,
 
   if (parallel) {
     hierarchyKNNRes <- pbmcapply::pbmclapply(1:length(selectFeatures), function(ft) hierarchyKNNcor(exprsMat_train,
-                                                                             cellTypes_train,
-                                                                             cutree_list,
-                                                                             feature = selectFeatures[ft],
-                                                                             topN = topN,
-                                                                             pSig = pSig,
-                                                                             verbose = verbose), mc.cores = ncores)
+                                                                                                    cellTypes_train,
+                                                                                                    cutree_list,
+                                                                                                    feature = selectFeatures[ft],
+                                                                                                    topN = topN,
+                                                                                                    pSig = pSig,
+                                                                                                    verbose = verbose), mc.cores = ncores)
     names(hierarchyKNNRes) <- selectFeatures
   }else{
     hierarchyKNNRes <- list()
@@ -317,14 +319,15 @@ train_scClassifySingle <- function(exprsMat_train,
     }
 
     selfTrainRes <- predict_scClassify(exprsMat_test = exprsMat_train,
-                                          trainRes  = trainRes,
-                                          cellTypes_test = cellTypes_train,
-                                          parallel = parallel,
-                                          ncores = ncores,
-                                          verbose = verbose,
-                                          ...)
+                                       trainRes  = trainRes,
+                                       cellTypes_test = cellTypes_train,
+                                       parallel = parallel,
+                                       ncores = ncores,
+                                       verbose = verbose,
+                                       features = selectFeatures,
+                                       ...)
     trainRes$selfTrainRes <- selfTrainRes
-    trainRes$modelWeights <- getTrainWeights(selfTrainRes)
+    trainRes$modelweights <- getTrainWeights(selfTrainRes)
   }
 
 
@@ -420,11 +423,11 @@ hierarchyKNNcor <- function(exprsMat,
         if (length(unique(trainClass)) != 1) {
 
           hvg[[j]] <- featureSelection(exprsMat[,trainIdx],
-                                        trainClass,
-                                        feature = feature,
-                                        topN = topN,
-                                        pSig = pSig
-                                        )
+                                       trainClass,
+                                       feature = feature,
+                                       topN = topN,
+                                       pSig = pSig
+          )
           # if (verbose) {
           #   print(hvg[[j]])
           # }
