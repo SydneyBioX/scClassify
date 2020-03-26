@@ -213,6 +213,7 @@
   <span class='kw'>similarity</span> <span class='kw'>=</span> <span class='st'>"pearson"</span>,
   <span class='kw'>cutoff_method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"dynamic"</span>, <span class='st'>"static"</span>),
   <span class='kw'>weighted_ensemble</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>weights</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>weighted_jointClassification</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>cellType_tree</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='fl'>10</span>,
@@ -275,6 +276,10 @@ This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kend
       <th>weighted_ensemble</th>
       <td><p>A logical input indicates in ensemble learning, whether the results is combined by a
 weighted score for each base classifier.</p></td>
+    </tr>
+    <tr>
+      <th>weights</th>
+      <td><p>A vector indicates the weights for ensemble</p></td>
     </tr>
     <tr>
       <th>weighted_jointClassification</th>

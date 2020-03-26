@@ -21,6 +21,7 @@
 #' @author Yingxin Lin
 #'
 #' @importFrom stats na.omit
+#' @importFrom methods is
 #' @export
 
 
@@ -35,9 +36,9 @@ train_scClassify <- function(exprsMat_train,
                              pSig = 0.05,
                              cellType_tree = NULL,
                              weightsCal = FALSE,
-                             parallel = F,
+                             parallel= FALSE,
                              ncores = 1,
-                             verbose = T,
+                             verbose= TRUE,
                              returnList = TRUE,
                              ...){
 
@@ -52,16 +53,21 @@ train_scClassify <- function(exprsMat_train,
 
   # Matching the argument of feature selection method
   # TODO: 1. Allow user to provide their own markers
-  selectFeatures <- match.arg(selectFeatures, c("limma", "DV", "DD", "chisq", "BI"), several.ok = TRUE)
+  selectFeatures <- match.arg(selectFeatures,
+                              c("limma", "DV", "DD", "chisq", "BI"),
+                              several.ok = TRUE)
 
 
-  if (class(exprsMat_train) == "list") {
-    if (sum(unlist(lapply(cellTypes_train, length)) != unlist(lapply(exprsMat_train, ncol))) != 0) {
-      stop("Length of training cell types does not match with number of column of training expression matrix")
+  if (is(exprsMat_train) %in% "list") {
+    if (sum(unlist(lapply(cellTypes_train, length)) !=
+            unlist(lapply(exprsMat_train, ncol))) != 0) {
+      stop("Length of training cell types does not match with
+           number of column of training expression matrix")
     }
   }else {
     if (length(cellTypes_train) != ncol(exprsMat_train)) {
-      stop("Length of training cell types does not match with number of column of training expression matrix")
+      stop("Length of training cell types does not match with
+           number of column of training expression matrix")
     }
   }
 
@@ -69,7 +75,7 @@ train_scClassify <- function(exprsMat_train,
 
 
   # To rename the train list if name is null (only when there are multiple training datasets)
-  if (class(exprsMat_train) == "list") {
+  if (is(exprsMat_train) %in% "list") {
     if (is.null(names(exprsMat_train))) {
       names(exprsMat_train) <- names(cellTypes_train) <- paste("TrainData",
                                                                seq_len(length(exprsMat_train)),
@@ -83,7 +89,7 @@ train_scClassify <- function(exprsMat_train,
 
   # QC for the training data set
 
-  if (class(exprsMat_train) %in% c("matrix", "dgCMatrix")) {
+  if (is(exprsMat_train) %in% c("matrix", "dgCMatrix")) {
 
     zeros <- apply(exprsMat_train, 1, function(x) sum(x == 0)/length(x))
     minPctCell <- min(table(cellTypes_train)/length(cellTypes_train))
@@ -106,7 +112,7 @@ train_scClassify <- function(exprsMat_train,
   }
 
   ### train_scClassify
-  if (class(exprsMat_train) == "list") {
+  if (is(exprsMat_train) %in% "list") {
     trainRes <- list()
     for (train_list_idx in seq_len(length(exprsMat_train))) {
       trainRes[[train_list_idx]] <- train_scClassifySingle(exprsMat_train[[train_list_idx]],
@@ -151,7 +157,7 @@ train_scClassify <- function(exprsMat_train,
     return(trainRes)
 
   } else {
-    if (class(exprsMat_train) == "list") {
+    if (is(exprsMat_train) %in% "list") {
       trainClassList <- list()
       for (train_list_idx in 1:length(trainRes)) {
         trainClassList[[train_list_idx]] <- scClassifyTrainModel(
@@ -196,9 +202,9 @@ train_scClassifySingle <- function(exprsMat_train,
                                    pSig = 0.05,
                                    cellType_tree = NULL,
                                    weightsCal = FALSE,
-                                   parallel = F,
+                                   parallel= FALSE,
                                    ncores = 1,
-                                   verbose = T,
+                                   verbose= TRUE,
                                    ...){
 
   if (is.null(rownames(exprsMat_train))) {
@@ -210,7 +216,8 @@ train_scClassifySingle <- function(exprsMat_train,
   }
 
   if (length(cellTypes_train) != ncol(exprsMat_train)) {
-    stop("Length of training cell types does not match with number of column of training expression matrix")
+    stop("Length of training cell types does not match with
+         number of column of training expression matrix")
   }
 
   if (all(exprsMat_train %% 1 == 0)) {
@@ -224,7 +231,9 @@ train_scClassifySingle <- function(exprsMat_train,
 
   # Matching the argument of feature selection method
   # TODO: 1. Allow user to provide their own markers
-  selectFeatures <- match.arg(selectFeatures, c("limma", "DV", "DD", "chisq", "BI"), several.ok = TRUE)
+  selectFeatures <- match.arg(selectFeatures,
+                              c("limma", "DV", "DD", "chisq", "BI"),
+                              several.ok = TRUE)
 
 
   if (verbose) {
@@ -234,7 +243,8 @@ train_scClassifySingle <- function(exprsMat_train,
 
   # Select the features to construct tree
   tt <- doLimma(exprsMat_train, cellTypes_train)
-  de <- Reduce(union, lapply(tt, function(t) rownames(t)[1:max(min(50, sum(t$adj.P.Val < 0.001)), 30)]))
+  de <- Reduce(union, lapply(tt, function(t)
+    rownames(t)[1:max(min(50, sum(t$adj.P.Val < 0.001)), 30)]))
 
   if (verbose) {
     print(paste("Number of genes selected to construct HOPACH tree", length(de)))
@@ -243,8 +253,8 @@ train_scClassifySingle <- function(exprsMat_train,
 
   if (is.null(cellType_tree)) {
     # Calculate the centroid matrix for tree construction using selected features
-    centroidMat <- do.call(cbind, lapply(unique(cellTypes_train),
-                                         function(x) Matrix::rowMeans(as.matrix(exprsMat_train[de, cellTypes_train == x]))))
+    centroidMat <- do.call(cbind, lapply(unique(cellTypes_train), function(x)
+      Matrix::rowMeans(as.matrix(exprsMat_train[de, cellTypes_train == x]))))
 
     colnames(centroidMat) <- unique(cellTypes_train)
 
@@ -279,13 +289,16 @@ train_scClassifySingle <- function(exprsMat_train,
   #
 
   if (parallel) {
-    hierarchyKNNRes <- pbmcapply::pbmclapply(1:length(selectFeatures), function(ft) hierarchyKNNcor(exprsMat_train,
-                                                                                                    cellTypes_train,
-                                                                                                    cutree_list,
-                                                                                                    feature = selectFeatures[ft],
-                                                                                                    topN = topN,
-                                                                                                    pSig = pSig,
-                                                                                                    verbose = verbose), mc.cores = ncores)
+    hierarchyKNNRes <- pbmcapply::pbmclapply(1:length(selectFeatures),
+                                             function(ft)
+                                               hierarchyKNNcor(exprsMat_train,
+                                                               cellTypes_train,
+                                                               cutree_list,
+                                                               feature = selectFeatures[ft],
+                                                               topN = topN,
+                                                               pSig = pSig,
+                                                               verbose = verbose),
+                                             mc.cores = ncores)
     names(hierarchyKNNRes) <- selectFeatures
   }else{
     hierarchyKNNRes <- list()
@@ -342,7 +355,7 @@ train_scClassifySingle <- function(exprsMat_train,
 constructTree <- function(centroidMat,
                           tree = c("HOPACH", "HC"),
                           hopach_kmax = hopach_kmax,
-                          plot = T){
+                          plot= TRUE){
 
 
   tree <- match.arg(tree, c("HOPACH", "HC"), several.ok = FALSE)
@@ -372,7 +385,7 @@ constructTree <- function(centroidMat,
 
 cutree_iterative <- function(hc, depth = 1){
 
-  height_sort <- sort(hc$height, decreasing = T)
+  height_sort <- sort(hc$height, decreasing= TRUE)
   cutree_list <- list()
 
   for (i in 1:sum(height_sort >= height_sort[round(length(height_sort)*depth)])) {
@@ -400,7 +413,7 @@ hierarchyKNNcor <- function(exprsMat,
                             feature = c("limma", "DV", "DD", "chisq", "BI"),
                             topN = 50,
                             pSig = 0.001,
-                            verbose = T){
+                            verbose= TRUE){
   feature <- match.arg(feature, c("limma", "DV", "DD", "chisq", "BI"))
   numHierchy <- length(cutree_list)
   levelModel <- list()
@@ -432,7 +445,8 @@ hierarchyKNNcor <- function(exprsMat,
           #   print(hvg[[j]])
           # }
 
-          model[[j]] <- list(train = Matrix::t(exprsMat[na.omit(hvg[[j]]), trainIdx, drop = FALSE]),
+          model[[j]] <- list(train = Matrix::t(exprsMat[na.omit(hvg[[j]]),
+                                                        trainIdx, drop = FALSE]),
                              y = as.factor(trainClass))
 
         }else{

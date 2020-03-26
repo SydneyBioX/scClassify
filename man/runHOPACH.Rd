@@ -4,14 +4,16 @@
 \alias{runHOPACH}
 \title{Create HOPACH tree}
 \usage{
-runHOPACH(data, plot = T, kmax = 5)
+runHOPACH(data, plot = TRUE, kmax = 5)
 }
 \arguments{
-\item{data}{A matrix of average expression matrix (each row indicates the gene, each column indicates the cell type)}
+\item{data}{A matrix of average expression matrix
+(each row indicates the gene, each column indicates the cell type)}
 
 \item{plot}{Indicate whether plot or not}
 
-\item{kmax}{Integer between 1 and 9 specifying the maximum number of children at each node in the tree.}
+\item{kmax}{Integer between 1 and 9 specifying the maximum number of children
+at each node in the tree.}
 }
 \value{
 Return a \code{list} where

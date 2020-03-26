@@ -18,29 +18,39 @@ runSampleCal(
 )
 }
 \arguments{
-\item{exprsMat}{A matrix of expression matrix of pilot dataset (log-transformed, or normalised)}
+\item{exprsMat}{A matrix of expression matrix of pilot dataset
+(log-transformed, or normalised)}
 
 \item{cellTypes}{A vector of cell types of pilot dataset}
 
 \item{n_list}{A vector of integer indicates the sample size to run.}
 
-\item{num_repeat}{An integer indicates the number of run for each sample size will be repeated.}
+\item{num_repeat}{An integer indicates the number of run for
+each sample size will be repeated.}
 
-\item{level}{An integer indicates the accuracy rate is calculate based on the n-th level from top of cell type tree.
+\item{level}{An integer indicates the accuracy rate is calculate
+based on the n-th level from top of cell type tree.
 If it is NULL (by default), it will be the bottom of the cell type tree.
 It can not be larger than the total number of levels of the tree.}
 
-\item{cellType_tree}{A list indicates the cell type tree (optional), if it is NULL, the accuracy rate is calculate
+\item{cellType_tree}{A list indicates the cell type tree (optional),
+if it is NULL, the accuracy rate is calculate
 based on the provided cellTypes.}
 
-\item{ncores}{An integer indicates the number of cores that can be used to run the algorithm.}
+\item{ncores}{An integer indicates the number of cores that
+can be used to run the algorithm.}
 
-\item{subset_test}{A ogical input indicates whether we used a subset of data (fixed number for each sample size)
+\item{subset_test}{A ogical input indicates whether we used a subset of data
+(fixed number for each sample size)
 to test instead of all remaining data. By default, it is FALSE.}
 
 \item{num_test}{An integer indicates the size of the test data.}
 
 \item{...}{other parameter from scClassify}
+}
+\value{
+A matrix of accuracy matrix, where columns corresponding to different
+sample sizes, rows corresponding to the number of repetation.
 }
 \description{
 Run sample size calculation for pilot data for reference dataset

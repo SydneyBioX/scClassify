@@ -9,6 +9,9 @@ scClassifyTrainModelList(...)
 \arguments{
 \item{...}{scClassifyTrainModel objects}
 }
+\value{
+A scClassifyTrainModelList object
+}
 \description{
 The scClassifyTrainModelList class
 }

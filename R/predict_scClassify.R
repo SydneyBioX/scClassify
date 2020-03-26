@@ -210,6 +210,8 @@ predict_scClassify <- function(exprsMat_test,
 #' @return list of results
 #' @author Yingxin Lin
 #'
+#' @importFrom methods is
+#'
 #' @export
 
 predict_scClassifyJoint <- function(exprsMat_test,
@@ -236,7 +238,7 @@ predict_scClassifyJoint <- function(exprsMat_test,
   cutoff_method <- match.arg(cutoff_method, c("dynamic", "static"), several.ok = TRUE)
 
 
-  if (class(trainRes) != "scClassifyTrainModelList") {
+  if (!is(trainRes) %in% "scClassifyTrainModelList") {
     stop("trainRes needs to be a scClassifyTrainModelList object")
   }
 
@@ -288,7 +290,7 @@ predict_scClassifySingle <- function(exprsMat_test,
                                                     "cosine", "jaccard", "kendall",
                                                     "weighted_rank","manhattan"),
                                      cutoff_method = c("dynamic", "static"),
-                                     verbose = T){
+                                     verbose = TRUE){
 
 
   if (!is.null(cellTypes_test)) {
@@ -324,15 +326,16 @@ predict_scClassifySingle <- function(exprsMat_test,
   }
 
 
-  if (class(trainRes) == "scClassifyTrainModelList") {
-    stop("For a list of training model, please use predict_scClassifyJoint instead to get joint training results.")
+  if (is(trainRes) %in% "scClassifyTrainModelList") {
+    stop("For a list of training model,
+         please use predict_scClassifyJoint instead to get joint training results.")
   }
 
-  if (!class(trainRes) %in% c("scClassifyTrainModel", "list")) {
+  if (!is(trainRes) %in% c("scClassifyTrainModel", "list")) {
     stop("wrong trainRes input. Need to be either scClassifyTrainModel or list")
   }
 
-  if (class(trainRes) == "scClassifyTrainModel") {
+  if (is(trainRes) %in% "scClassifyTrainModel") {
 
     if (!features %in% trainRes@features) {
       stop("The selected features are not trained in the provided model!")
@@ -376,7 +379,7 @@ predict_scClassifySingle <- function(exprsMat_test,
         for (j in 1:length(levelModel[[i]])) {
 
           # If the model of level i-1, cells labeled as j is NOT "no model"
-          if (class(levelModel[[i]][[j]]) != "character") {
+          if (!is(levelModel[[i]][[j]]) %in% "character") {
 
             # Select the cells that are going to classified
             # (according to what they are classified in last level)
@@ -410,7 +413,7 @@ predict_scClassifySingle <- function(exprsMat_test,
                                     prob_threshold = prob_threshold,
                                     cor_threshold_static = cor_threshold_static,
                                     cor_threshold_high = cor_threshold_high,
-                                    topLevel = F,
+                                    topLevel = FALSE,
                                     verbose = verbose)
                 }
                 if (algorithm == "WKNN") {
@@ -421,7 +424,7 @@ predict_scClassifySingle <- function(exprsMat_test,
                                      prob_threshold = prob_threshold,
                                      cor_threshold_static = cor_threshold_static,
                                      cor_threshold_high = cor_threshold_high,
-                                     topLevel = F,
+                                     topLevel = FALSE,
                                      verbose = verbose)
                 }
 
@@ -433,7 +436,7 @@ predict_scClassifySingle <- function(exprsMat_test,
                                       prob_threshold = prob_threshold,
                                       cor_threshold_static = cor_threshold_static,
                                       cor_threshold_high = cor_threshold_high,
-                                      topLevel = F,
+                                      topLevel = FALSE,
                                       verbose = verbose)
                 }
 
@@ -557,18 +560,18 @@ calculateSimilarity <- function(exprsMat_train,
                                         "cosine", "jaccard", "kendall",
                                         "weighted_rank","manhattan"))
 
-  if (class(exprsMat_test) == "dgCMatrix" & class(exprsMat_train) != "dgCMatrix") {
+  if (is(exprsMat_test) %in% "dgCMatrix" & !is(exprsMat_train) %in% "dgCMatrix") {
     exprsMat_train <- methods::as(exprsMat_train, "dgCMatrix")
   }
 
-  if (class(exprsMat_test) != "dgCMatrix" & class(exprsMat_train) == "dgCMatrix") {
+  if (!is(exprsMat_test) %in% "dgCMatrix" & is(exprsMat_train) %in% "dgCMatrix") {
     exprsMat_test <- methods::as(exprsMat_test, "dgCMatrix")
   }
 
 
   if (similarity == "cosine") {
 
-    if (class(exprsMat_test) == "dgCMatrix" & class(exprsMat_train) == "dgCMatrix") {
+    if (is(exprsMat_test) %in% "dgCMatrix" & is(exprsMat_train) %in% "dgCMatrix") {
       corMat <- proxyC::simil(Matrix::t(exprsMat_train),
                               Matrix::t(exprsMat_test),
                               method = "cosine")
@@ -589,7 +592,7 @@ calculateSimilarity <- function(exprsMat_train,
 
   } else if (similarity == "jaccard") {
 
-    if (class(exprsMat_test) == "dgCMatrix" & class(exprsMat_train) == "dgCMatrix") {
+    if (is(exprsMat_test) %in% "dgCMatrix" & is(exprsMat_train) %in% "dgCMatrix") {
       corMat <- proxyC::simil(Matrix::t(exprsMat_train),
                               Matrix::t(exprsMat_test),
                               method = "jaccard")
@@ -607,13 +610,10 @@ calculateSimilarity <- function(exprsMat_train,
     corMat[is.na(corMat) | is.infinite(corMat)] <- -1
 
   }else if (similarity == "manhattan") {
-    if (class(exprsMat_test) == "dgCMatrix" & class(exprsMat_train) == "dgCMatrix") {
+    if (is(exprsMat_test) %in% "dgCMatrix" & is(exprsMat_train) %in% "dgCMatrix") {
       corMat <- 1 - as.matrix(proxy::dist(t(as.matrix(exprsMat_train)),
                                           t(as.matrix(exprsMat_test)),
                                           method = "Manhattan"))
-      # corMat <- 1 - proxyC::dist(Matrix::t(exprsMat_train),
-      #                         Matrix::t(exprsMat_test),
-      #                         method = "manhattan")
     } else {
       corMat <- 1 - as.matrix(proxy::dist(t(as.matrix(exprsMat_train)),
                                           t(as.matrix(exprsMat_test)),
@@ -628,7 +628,7 @@ calculateSimilarity <- function(exprsMat_train,
 
   }else if (similarity == "pearson") {
 
-    if (class(exprsMat_test) == "dgCMatrix" & class(exprsMat_train) == "dgCMatrix") {
+    if (is(exprsMat_test) %in% "dgCMatrix" & is(exprsMat_train) %in% "dgCMatrix") {
       corMat <- proxyC::simil(Matrix::t(exprsMat_train),
                               Matrix::t(exprsMat_test),
                               method = "correlation")
@@ -639,7 +639,7 @@ calculateSimilarity <- function(exprsMat_train,
 
   }else{
 
-    if (class(exprsMat_test) == "dgCMatrix" & class(exprsMat_train) == "dgCMatrix") {
+    if (is(exprsMat_test) %in% "dgCMatrix" & is(exprsMat_train) %in% "dgCMatrix") {
       corMat <- proxyC::simil(Matrix::t(exprsMat_train),
                               Matrix::t(exprsMat_test),
                               method = "correlation")
@@ -734,9 +734,6 @@ ClassifyError <- function(cellTypes_pred, cellTypes_test, cellTypes_train){
         }else if (grepl(cellTypes_test[i], cellTypes_pred[i])) {
           "intermediate"
         }
-        # } else if (length(strsplit(cellTypes_pred[i],"_")[[1]]) >= 2 | grepl("Node", cellTypes_pred[i])) {
-        #   "intermediate"
-        # }
         else{
           "misclassified"
         }

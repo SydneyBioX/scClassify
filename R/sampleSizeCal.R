@@ -1,35 +1,43 @@
 #' @title Run sample size calculation for pilot data for reference dataset
 #'
-#' @param exprsMat A matrix of expression matrix of pilot dataset (log-transformed, or normalised)
+#' @param exprsMat A matrix of expression matrix of pilot dataset
+#' (log-transformed, or normalised)
 #' @param cellTypes A vector of cell types of pilot dataset
 #' @param n_list A vector of integer indicates the sample size to run.
-#' @param num_repeat An integer indicates the number of run for each sample size will be repeated.
-#' @param ncores An integer indicates the number of cores that can be used to run the algorithm.
-#' @param subset_test A ogical input indicates whether we used a subset of data (fixed number for each sample size)
+#' @param num_repeat An integer indicates the number of run for
+#' each sample size will be repeated.
+#' @param ncores An integer indicates the number of cores that
+#' can be used to run the algorithm.
+#' @param subset_test A ogical input indicates whether we used a subset of data
+#' (fixed number for each sample size)
 #' to test instead of all remaining data. By default, it is FALSE.
 #' @param num_test An integer indicates the size of the test data.
-#' @param cellType_tree A list indicates the cell type tree (optional), if it is NULL, the accuracy rate is calculate
+#' @param cellType_tree A list indicates the cell type tree (optional),
+#' if it is NULL, the accuracy rate is calculate
 #' based on the provided cellTypes.
-#' @param level An integer indicates the accuracy rate is calculate based on the n-th level from top of cell type tree.
+#' @param level An integer indicates the accuracy rate is calculate
+#' based on the n-th level from top of cell type tree.
 #' If it is NULL (by default), it will be the bottom of the cell type tree.
 #' It can not be larger than the total number of levels of the tree.
 #' @param ... other parameter from scClassify
+#'
+#' @return A matrix of accuracy matrix, where columns corresponding to different
+#' sample sizes, rows corresponding to the number of repetation.
 #'
 #' @importFrom pbmcapply pbmclapply
 #' @export
 
 
 runSampleCal <- function(exprsMat,
-                          cellTypes,
-                          n_list = c(20, 40, 60, 80, 100, seq(200, 500, 100)),
-                          num_repeat = 20,
-                          level = NULL,
-                          cellType_tree = NULL,
-                          ncores = 1,
-                          subset_test = FALSE,
-                          num_test = NULL,
-
-                          ...) {
+                         cellTypes,
+                         n_list = c(20, 40, 60, 80, 100, seq(200, 500, 100)),
+                         num_repeat = 20,
+                         level = NULL,
+                         cellType_tree = NULL,
+                         ncores = 1,
+                         subset_test = FALSE,
+                         num_test = NULL,
+                         ...) {
 
 
 
@@ -82,10 +90,10 @@ runSampleCal <- function(exprsMat,
                             cellType_tree = cellType_tree_relabelled,
                             cutoff_method = "dynamic",
                             prob_threshold = 0.6
-                            )
+        )
 
-      table(l)/length(l)},
-      error = function(e){NULL})
+        table(l)/length(l)},
+        error = function(e){NULL})
     }, mc.cores = ncores))
     print(do.call(cbind, res_sub[[i]]))
     gc(reset = TRUE)
@@ -108,7 +116,7 @@ runSampleCal <- function(exprsMat,
 runSubSampling <- function(exprsMat,
                            cellTypes,
                            n = 50,
-                           subset_test = F,
+                           subset_test = FALSE,
                            num_test = 2000,
                            ...){
 
@@ -117,7 +125,8 @@ runSubSampling <- function(exprsMat,
   n_subset <- round(table(cellTypes)/length(cellTypes)*n)
   n_subset <- ifelse(n_subset < 3, 3, n_subset)
 
-  trainIdx <- unlist(lapply(1:length(n_subset), function(x) sample(which(cellTypes == names(n_subset)[x]), n_subset[x])))
+  trainIdx <- unlist(lapply(1:length(n_subset), function(x)
+    sample(which(cellTypes == names(n_subset)[x]), n_subset[x])))
 
   exprsMat_train <- exprsMat[,trainIdx]
   cellTypes_train <- cellTypes[trainIdx]
@@ -165,7 +174,9 @@ reLevelCellTypeTree <- function(cellType_tree, level) {
     #
     cellTypes_newTree[[i]] <- sapply(seq_len(length(newCellTypeNames)),
                                      function(j)
-                                       unique(cellType_tree[[i]][names(cellType_tree[[i]]) %in% unlist(strsplit(newCellTypeNames[j], "_"))])
+                                       unique(cellType_tree[[i]][names(cellType_tree[[i]]) %in%
+                                                                   unlist(strsplit(newCellTypeNames[j],
+                                                                                   "_"))])
     )
     names(cellTypes_newTree[[i]]) <- newCellTypeNames
 

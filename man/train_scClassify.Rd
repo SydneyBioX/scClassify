@@ -14,9 +14,9 @@ train_scClassify(
   pSig = 0.05,
   cellType_tree = NULL,
   weightsCal = FALSE,
-  parallel = F,
+  parallel = FALSE,
   ncores = 1,
-  verbose = T,
+  verbose = TRUE,
   returnList = TRUE,
   ...
 )

@@ -7,14 +7,14 @@
 learningCurve(
   accMat,
   n,
-  auto_initial = T,
+  auto_initial = TRUE,
   a = NULL,
   b = NULL,
   c = NULL,
   d_list = NULL,
   fitmodel = c("nls", "nls_mix", "gam"),
-  plot = T,
-  verbose = T
+  plot = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{

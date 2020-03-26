@@ -87,6 +87,10 @@ children at each node in the HOPACH tree.}
 
 \item{verbose}{A logical input indicates whether the intermediate steps will be printed}
 }
+\value{
+A list of the results, including testRes storing the results of the testing information,
+and trainRes storing the training model inforamtion.
+}
 \description{
 Train and test scClassify model
 }

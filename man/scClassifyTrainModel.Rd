@@ -32,6 +32,9 @@ and the cell expression matrix that are used for training}
 
 \item{metaData}{A DataFrame stored meta data of training model}
 }
+\value{
+A scClassifyTrainMode object
+}
 \description{
 The scClassifyTrainModel class
 The scClassifyTrainModel class is designed to stored training model for scClassify

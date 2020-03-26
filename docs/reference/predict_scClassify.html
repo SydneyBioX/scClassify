@@ -215,6 +215,7 @@
   <span class='kw'>similarity</span> <span class='kw'>=</span> <span class='st'>"pearson"</span>,
   <span class='kw'>cutoff_method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"dynamic"</span>, <span class='st'>"static"</span>),
   <span class='kw'>weighted_ensemble</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>weights</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>ncores</span> <span class='kw'>=</span> <span class='fl'>1</span>,
   <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
@@ -274,6 +275,10 @@ This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kend
       <th>weighted_ensemble</th>
       <td><p>A logical input indicates in ensemble learning, whether the results is combined by a
 weighted score for each base classifier.</p></td>
+    </tr>
+    <tr>
+      <th>weights</th>
+      <td><p>A vector indicates the weights for ensemble</p></td>
     </tr>
     <tr>
       <th>parallel</th>

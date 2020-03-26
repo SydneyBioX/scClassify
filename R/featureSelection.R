@@ -224,7 +224,7 @@ doBI <- function(exprsMat, cellTypes){
 
     bi <- unlist(bi)
     names(bi) <- rownames(exprsMat)
-    bi <- bi[order(bi, decreasing = T)]
+    bi <- bi[order(bi, decreasing = TRUE)]
     tt[[i]] <- bi
   }
 

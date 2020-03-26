@@ -12,7 +12,8 @@ alpha <- function(e) {
 
 
 getTrainWeights <- function(trainRes) {
-  errClass_train <- do.call(rbind, lapply(trainRes, function(x) table(x$classifyRes)/length(x$classifyRes)))
+  errClass_train <- do.call(rbind, lapply(trainRes, function(x)
+    table(x$classifyRes)/length(x$classifyRes)))
   weighted_train <- alpha(1 - (errClass_train[, 1] + errClass_train[, 2]))
   return(weighted_train)
 }

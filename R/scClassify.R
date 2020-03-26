@@ -32,10 +32,13 @@
 #' @param ncores An integer indicates the number of cores that are used
 #' @param verbose A logical input indicates whether the intermediate steps will be printed
 #'
+#' @return A list of the results, including testRes storing the results of the testing information,
+#' and trainRes storing the training model inforamtion.
 #'
 #' @author Yingxin Lin
 #' @importFrom pbmcapply pbmclapply
 #' @importFrom S4Vectors DataFrame
+#' @importFrom methods is
 #' @export
 
 
@@ -71,27 +74,45 @@ scClassify <- function(exprsMat_train = NULL,
   }
 
   if (!is.null(cellTypes_test)) {
-    if (class(cellTypes_test) == "character") {
+    if (is(cellTypes_test) %in% "character") {
       if (length(cellTypes_test) != ncol(exprsMat_test)) {
-        stop("Length of testing cell types does not match with number of column of testing expression matrix")
+        stop("Length of testing cell types does not match
+             with number of column of testing expression matrix")
       }
     }
 
-    if (class(cellTypes_test) == "list") {
-      if (sum(unlist(lapply(cellTypes_test, length)) != unlist(lapply(exprsMat_test, ncol))) != 0) {
-        stop("Length of testing cell types does not match with number of column of testing expression matrix")
+    if (is(cellTypes_test) %in% "list") {
+      if (sum(unlist(lapply(cellTypes_test, length)) !=
+              unlist(lapply(exprsMat_test, ncol))) != 0) {
+        stop("Length of testing cell types does not match
+             with number of column of testing expression matrix")
       }
     }
 
   }
 
-  if (class(exprsMat_train) == "list") {
-    if (sum(unlist(lapply(cellTypes_train, length)) != unlist(lapply(exprsMat_train, ncol))) != 0) {
-      stop("Length of training cell types does not match with number of column of training expression matrix")
+  if (is(exprsMat_train) %in% "list") {
+    if (sum(unlist(lapply(cellTypes_train, length)) !=
+            unlist(lapply(exprsMat_train, ncol))) != 0) {
+      stop("Length of training cell types does not match with
+           number of column of training expression matrix")
     }
   }else {
     if (length(cellTypes_train) != ncol(exprsMat_train)) {
-      stop("Length of training cell types does not match with number of column of training expression matrix")
+      stop("Length of training cell types does not match with
+           number of column of training expression matrix")
+    }
+  }
+
+  if (is(exprsMat_train) %in% "list") {
+    if (any(lapply(cellTypes_train, function(x) any(table(x) == 1)))) {
+      stop("There is cell type with only one cell,
+           please check cellTypes_train")
+    }
+  }else {
+    if (any(table(cellTypes_train) == 1)) {
+      stop("There is cell type with only one cell,
+           please check cellTypes_train")
     }
   }
 
@@ -113,16 +134,6 @@ scClassify <- function(exprsMat_train = NULL,
   cutoff_method <- match.arg(cutoff_method, c("dynamic", "static"))
 
 
-  # To rename the train list if name is null (only when there are multiple training datasets)
-  # if (class(exprsMat_train) == "list") {
-  #   if (is.null(names(exprsMat_train))) {
-  #     names(exprsMat_train) <- names(cellTypes_train) <- paste("TrainData", seq_len(length(exprsMat_train)), sep = "_")
-  #   } else if (sum(names(exprsMat_train) == "") != 0) {
-  #     names(exprsMat_train)[names(exprsMat_train) == ""] <-
-  #       names(cellTypes_train)[names(cellTypes_train) == ""] <-
-  #       paste("TrainData", which(names(exprsMat_train) == ""), sep = "_")
-  #   }
-  # }
 
   # To check if need to run weighted ensemble learning
 
@@ -156,7 +167,9 @@ scClassify <- function(exprsMat_train = NULL,
 
   # To check if need to run weighted joint classification
 
-  if (class(exprsMat_train) == "list" & length(exprsMat_train) > 1 & weighted_jointClassification) {
+  if (is(exprsMat_train) %in% "list" &
+      length(exprsMat_train) > 1 &
+      weighted_jointClassification) {
     cat("Performing weighted joint classification \n")
     weighted_jointClassification <- TRUE
   } else {
@@ -223,7 +236,7 @@ scClassify <- function(exprsMat_train = NULL,
     cat("=====================  Start classifying on test dataset  ========================== \n")
   }
 
-  if (class(exprsMat_test) == "list") {
+  if (is(exprsMat_test) %in% "list") {
     testRes <- list()
 
     for (testDataset_idx in 1:length(exprsMat_test)) {
@@ -233,20 +246,7 @@ scClassify <- function(exprsMat_train = NULL,
         print(names(exprsMat_test)[testDataset_idx])
       }
 
-      #
-      # predictRes <- predict_scClassifyMulti(exprsMat_test = exprsMat_test[[testDataset_idx]],
-      #                                       trainRes  = trainRes,
-      #                                       cellTypes_test = cellTypes_test[[testDataset_idx]],
-      #                                       k = k,
-      #                                       prob_threshold = prob_threshold,
-      #                                       cor_threshold_static = cor_threshold_static,
-      #                                       cor_threshold_high = cor_threshold_high,
-      #                                       ensemble_methods = ensemble_methods,
-      #                                       cutoff_method = cutoff_method,
-      #                                       parallel = parallel,
-      #                                       verbose = verbose)
-      #
-      if (class(exprsMat_train) == "list") {
+      if (is(exprsMat_train) %in% "list") {
         # for the case there are multiple training datasets
         #
         predictRes <- list()
@@ -276,12 +276,6 @@ scClassify <- function(exprsMat_train = NULL,
                                                              ncores = ncores,
                                                              verbose = verbose)
 
-          # if (ensemble) {
-          #   ensembleRes <- getEnsembleRes(predictRes[[train_list_idx]],
-          #                                 trainRes[[train_list_idx]]$modelweights,
-          #                                 exclude = NULL, weighted_ensemble = weighted_ensemble)
-          #   predictRes[[train_list_idx]]$ensembleRes <- ensembleRes
-          # }
         }
         names(predictRes) <- paste("Trained_by", names(trainRes), sep = "_")
       }else {
@@ -302,12 +296,6 @@ scClassify <- function(exprsMat_train = NULL,
                                          ncores = ncores,
                                          verbose = verbose)
 
-        # if (ensemble) {
-        #   ensembleRes <- getEnsembleRes(predictRes,
-        #                                 trainRes$modelweights,
-        #                                 exclude = NULL, weighted_ensemble = weighted_ensemble)
-        #   predictRes$ensembleRes <- ensembleRes
-        # }
 
       }
 
@@ -317,7 +305,7 @@ scClassify <- function(exprsMat_train = NULL,
     names(testRes) <- names(exprsMat_test)
   }else{
     # else only one dataset as a matrix in the test
-    if (class(exprsMat_train) == "list") {
+    if (is(exprsMat_train) %in% "list") {
       # for the case there are multiple training datasets
       #
       testRes <- list()
@@ -343,12 +331,6 @@ scClassify <- function(exprsMat_train = NULL,
                                                         parallel = parallel,
                                                         ncores = ncores,
                                                         verbose = verbose)
-        # if (ensemble) {
-        #   ensembleRes <- getEnsembleRes(testRes[[train_list_idx]],
-        #                                 trainRes[[train_list_idx]]$selfTrainRes,
-        #                                 exclude = NULL, weighted_ensemble = weighted_ensemble)
-        #   testRes[[train_list_idx]]$ensembleRes <- ensembleRes
-        # }
 
       }
       names(testRes) <- paste("Trained_by", names(trainRes), sep = "_")
@@ -369,13 +351,6 @@ scClassify <- function(exprsMat_train = NULL,
                                        parallel = parallel,
                                        ncores = ncores,
                                        verbose = verbose)
-      # if (ensemble) {
-      #   ensembleRes <- getEnsembleRes(predictRes,
-      #                                 trainRes$selfTrainRes,
-      #                                 exclude = NULL,
-      #                                 weighted_ensemble = weighted_ensemble)
-      #   predictRes$ensembleRes <- ensembleRes
-      # }
       testRes <- list(test = predictRes)
     }
 
@@ -389,7 +364,7 @@ scClassify <- function(exprsMat_train = NULL,
     return(list(testRes = testRes, trainRes = trainRes))
   } else {
 
-    if (class(exprsMat_train) == "list") {
+    if (is(exprsMat_train) %in% "list") {
       trainClassList <- list()
       for (train_list_idx in 1:length(trainRes)) {
         trainClassList[[train_list_idx]] <- scClassifyTrainModel(

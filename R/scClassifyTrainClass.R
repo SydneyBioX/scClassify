@@ -40,6 +40,8 @@ setClass("scClassifyTrainModel",
 #' @param modelweights A vector of numeric indicates the weights of each model
 #' @param metaData A DataFrame stored meta data of training model
 #'
+#' @return A scClassifyTrainMode object
+#'
 #' @author Yingxin Lin
 #'
 #' @docType class
@@ -98,6 +100,8 @@ setClass("scClassifyTrainModelList",
 #' The scClassifyTrainModelList class
 #'
 #' @param ... scClassifyTrainModel objects
+#'
+#' @return A scClassifyTrainModelList object
 #'
 #' @importFrom S4Vectors SimpleList
 #' @export

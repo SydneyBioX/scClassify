@@ -11,6 +11,9 @@ plotCellTypeTree(cutree_list, group_level = NULL)
 
 \item{group_level}{Indicate whether plot or not}
 }
+\value{
+A ggplot object visualising the HOPACH tree
+}
 \description{
 To plot cell type tree
 }

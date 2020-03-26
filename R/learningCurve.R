@@ -28,37 +28,33 @@
 #' @importFrom mgcv gam
 #' @export
 
-learningCurve <- function(accMat, n, auto_initial = T,
+learningCurve <- function(accMat, n, auto_initial = TRUE,
                           a = NULL, b = NULL, c = NULL, d_list = NULL,
                           fitmodel = c("nls", "nls_mix", "gam"),
-                          plot = T, verbose = T){
+                          plot = TRUE, verbose = TRUE){
 
   ## TODO: to make several ok TRUE
   fitmodel <- match.arg(fitmodel, c("nls", "nls_mix", "gam"), several.ok = FALSE)
 
 
 
-  if (class(accMat) %in% c("matrix", "data.frame")) {
+  if (is(accMat) %in% c("matrix", "data.frame")) {
     if (ncol(accMat) != length(n)) {
       stop("Number of column doesn't match with the length of n")
     }
     dat <- data.frame(y = colMeans(accMat),
                       y_25 = apply(accMat, 2, function(x) quantile(x, 0.25)),
                       y_75 = apply(accMat, 2, function(x) quantile(x, 0.75))
-                      # y_05 = apply(accMat, 2, function(x) quantile(x, 0.05)),
-                      # y_95 = apply(accMat, 2, function(x) quantile(x, 0.95))
     )
   }
 
-  if (class(accMat) == "list") {
+  if (is(accMat) %in% "list") {
     if (length(accMat) != length(n)) {
       stop("Number of column doesn't match with the length of n")
     }
     dat <- data.frame(y = unlist(lapply(accMat, mean)),
                       y_25 = unlist(lapply(accMat, function(x) quantile(x, 0.25))),
                       y_75 = unlist(lapply(accMat, function(x) quantile(x, 0.75))))
-                      # y_05 = unlist(lapply(accMat, function(x) quantile(x, 0.05))),
-                      # y_95 = unlist(lapply(accMat, function(x) quantile(x, 0.95))))
   }
 
 
@@ -68,8 +64,8 @@ learningCurve <- function(accMat, n, auto_initial = T,
   for (i in seq(ncol(dat))) {
     if (fitmodel == "nls_mix") {
       model[[i]] <- fitLC_mixture(dat[,i], n,
-                           b = b, d_list = d_list,
-                          verbose = verbose)
+                                  b = b, d_list = d_list,
+                                  verbose = verbose)
 
       # if (i == 1) {
       #   d_list <- model[[i]]$para["d"]
@@ -106,25 +102,24 @@ learningCurve <- function(accMat, n, auto_initial = T,
   new_n <- data.frame(n = seq(min(n), max(n), by = 0.1))
   fit <- lapply(model, function(x) predict(x, newdata = new_n))
 
-  # names(model) <- names(fit) <- c("mean", "quantile_25", "quantile_75", "quantile_05", "quantile_95")
   names(model) <- names(fit) <- c("mean", "quantile_25", "quantile_75")
   fit[["n"]] <- new_n$n
   dat_fit <- data.frame(do.call(cbind, fit))
 
   if (plot) {
 
-    # cols <- c("Mean" = "#c8133b","Quantile25/75" = "#ea8783" ,"Quantile05/95" = "#feb5a2")
+
     cols <- c("Mean" = "#c8133b","Quantile25/75" = "#ea8783")
     g <-  ggplot2::ggplot(dat, ggplot2::aes(x = n, y = y))  +
       xlab("N") + ylab("Accuracy Rate") +
       ggplot2::geom_point(alpha = 0.7) +
-      ggplot2::geom_line(data = dat_fit, aes(x = n, y = mean, color = "Mean"), linetype = "solid", size = 1) +
-      ggplot2::geom_line(data = dat_fit, aes(x = n, y = quantile_25,  color = "Quantile25/75"), linetype = "dashed") +
-      ggplot2::geom_line(data = dat_fit, aes(x = n, y = quantile_75,  color = "Quantile25/75"), linetype = "dashed") +
-      # ggplot2::geom_line(data = dat_fit, aes(x = n, y = quantile_05,  color = "Quantile05/95"), linetype = "dotted") +
-      # ggplot2::geom_line(data = dat_fit, aes(x = n, y = quantile_95,  color = "Quantile05/95"), linetype = "dotted") +
+      ggplot2::geom_line(data = dat_fit, aes(x = n, y = mean, color = "Mean"),
+                         linetype = "solid", size = 1) +
+      ggplot2::geom_line(data = dat_fit, aes(x = n, y = quantile_25,
+                                             color = "Quantile25/75"), linetype = "dashed") +
+      ggplot2::geom_line(data = dat_fit, aes(x = n, y = quantile_75,
+                                             color = "Quantile25/75"), linetype = "dashed") +
       ggplot2::scale_color_manual(values = cols) +
-      # scale_x_continuous(trans = scales::log_trans()) +
       ggplot2::theme_bw() +
       ggplot2::theme(legend.position = "bottom")
 
@@ -148,8 +143,8 @@ init_fit <- function(acc, n){
 
 # Function to fit the learning curve by inverse power function
 
-fitLC <- function(acc, n, auto_initial = T,
-                  a = NULL, b = NULL, c = NULL, verbose = T,
+fitLC <- function(acc, n, auto_initial = TRUE,
+                  a = NULL, b = NULL, c = NULL, verbose = TRUE,
                   b_max = NULL){
   dat_train <- data.frame(n = n, acc = acc)
 
@@ -165,27 +160,28 @@ fitLC <- function(acc, n, auto_initial = T,
     init <- init_fit(acc, n)
 
     learning_curve <-  try({minpack.lm::nlsLM(acc ~ I(1 / n^(c) * a) + b,
-                                  data = dat_train,
-                                  # start = list(a = init$a, c = init$c, b = b),
-                                  start = list(a = init$a, c = init$c, b = b),
-                                  upper = c(10, Inf, b_max),
-                                  lower = c(-max(max(dat_train$acc) + 0.01, 1)*(10^init$c), -Inf, 0)
-                                  )
-      }, silent = T)
+                                              data = dat_train,
+                                              # start = list(a = init$a, c = init$c, b = b),
+                                              start = list(a = init$a, c = init$c, b = b),
+                                              upper = c(10, Inf, b_max),
+                                              lower = c(-max(max(dat_train$acc) + 0.01,
+                                                             1)*(10^init$c), -Inf, 0)
+    )
+    }, silent = TRUE)
 
 
   }else if (!is.null(a) & !is.null(b) & !is.null(c)) {
     # warnings("fails in fit 1")
     # For the case that user supplies starting point
     learning_curve <- stats::nls(acc ~ I(1 / n^(c) * a) + b,
-                          data = dat_train,
-                          start = list(a = a, c = c, b = b))
+                                 data = dat_train,
+                                 start = list(a = a, c = c, b = b))
   }else{
     # this starting point may not work all the time
     # warnings("fails in fit 2")
     learning_curve <- stats::nls(acc ~ I(1 / n^(c) * a) + b,
-                          data = dat_train,
-                          start = list(a = -10, c = 1, b = 1))
+                                 data = dat_train,
+                                 start = list(a = -10, c = 1, b = 1))
   }
 
   para <- coef(learning_curve)
@@ -205,8 +201,8 @@ fitLC <- function(acc, n, auto_initial = T,
 
 
 fitLC_mixture <- function(acc, n,  b = NULL,
-                  d_list = NULL,
-                  verbose = T){
+                          d_list = NULL,
+                          verbose = TRUE){
   dat_train <- data.frame(n = n, acc = acc)
 
   if (is.null(b)) {
@@ -222,28 +218,19 @@ fitLC_mixture <- function(acc, n,  b = NULL,
   rss <- c()
   for (i in 1:length(d_list)) {
     d <- d_list[i]
-    # learning_curve <-  minpack.lm::nlsLM(acc ~ H1(n - d) * I(1 / n^(c) * a) +
-    #                                        H(d - n)  * I(1 / n^(c1) * a*d^(c1 - c))  + b,
-    #                                      data = dat_train,
-    #                                      # start = list(a = init$a, c = init$c, b = b),
-    #                                      start = list(a = init$a, c = init$c,
-    #                                                   b = b,
-    #                                                   c1 = init$c),
-    #                                      upper = c(Inf, Inf, 1, Inf),
-    #                                      lower = c(-Inf, -Inf, 0, -Inf),
-    #                                      control = list(maxiter = 1000))
     learning_curve <-  try({minpack.lm::nlsLM(acc ~ H1(d - n) * I(1 / n^(c) * a) +
-                                           H(n - d)  * I(1 / n^(c1) * a*d^(c1 - c))  + b,
-                                         data = dat_train,
-                                         # start = list(a = init$a, c = init$c, b = b),
-                                         start = list(a = init$a, c = init$c,
-                                                      b = b,
-                                                      c1 = init$c),
-                                         upper = c(Inf, Inf, 1, Inf),
-                                         lower = c(-Inf, -Inf, 0, -Inf),
-                                         control = list(maxiter = 1000))}, silent = T)
+                                                H(n - d)  * I(1 / n^(c1) * a*d^(c1 - c))  + b,
+                                              data = dat_train,
+                                              # start = list(a = init$a, c = init$c, b = b),
+                                              start = list(a = init$a, c = init$c,
+                                                           b = b,
+                                                           c1 = init$c),
+                                              upper = c(Inf, Inf, 1, Inf),
+                                              lower = c(-Inf, -Inf, 0, -Inf),
+                                              control = list(maxiter = 1000))},
+                           silent = TRUE)
 
-    if (class(learning_curve) != "try-error") {
+    if (!is(learning_curve) %in% "try-error") {
       rss <- c(rss, summary(learning_curve)$sigma)
     }else{
       rss <- c(rss, Inf)
