@@ -1154,7 +1154,7 @@ hopach <- function(data, dmat=NULL, d="cosangle", clusters="best", K=15,
     dmat <- distancematrix(data, d)
   }else if ( is.matrix(dmat) ) {
     dmat <- as(dmat, "hdist")
-  }else if ( is(dmat)  %in%  "dist" ) {
+  }else if ( "dist" %in% is(dmat)) {
     dmat <- hdist(Data = as.numeric(dmat), Size = attr(dmat, "Size"), Labels = (1:(attr(dmat, "Size"))), Call = as.character(attr(dmat, "call"))[3])
   }else if (!is.hdist(dmat)) {
     stop("Distance matrix could not be created into hdist object.")

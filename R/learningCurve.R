@@ -38,7 +38,7 @@ learningCurve <- function(accMat, n, auto_initial = TRUE,
 
 
 
-  if (is(accMat) %in% c("matrix", "data.frame")) {
+  if (any(c("matrix", "data.frame") %in% is(accMat))) {
     if (ncol(accMat) != length(n)) {
       stop("Number of column doesn't match with the length of n")
     }
@@ -48,7 +48,7 @@ learningCurve <- function(accMat, n, auto_initial = TRUE,
     )
   }
 
-  if (is(accMat) %in% "list") {
+  if ( "list" %in% is(accMat)) {
     if (length(accMat) != length(n)) {
       stop("Number of column doesn't match with the length of n")
     }
@@ -230,7 +230,7 @@ fitLC_mixture <- function(acc, n,  b = NULL,
                                               control = list(maxiter = 1000))},
                            silent = TRUE)
 
-    if (!is(learning_curve) %in% "try-error") {
+    if (!"try-error" %in% is(learning_curve)) {
       rss <- c(rss, summary(learning_curve)$sigma)
     }else{
       rss <- c(rss, Inf)

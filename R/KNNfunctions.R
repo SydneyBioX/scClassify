@@ -83,7 +83,7 @@ KNNcor <- function(corMat,
                                                     ECM = TRUE, verb = verbose),
                               silent = TRUE))
 
-          if (!is(mixmdl) %in% "try-error") {
+          if (!"try-error" %in% is(mixmdl)) {
             if (suppressWarnings(min(unique(mixmdl$rho)) == 0)) {
               quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = TRUE, maxrestarts = 100,
                                                                    k = length(unique_y), maxit = 2000,
@@ -101,7 +101,7 @@ KNNcor <- function(corMat,
         # Caculate the threshold for this branch
         if (dip_test$p.value > 0.01) {
           cor_threshold_tmp = c(cor_threshold_tmp, 0)
-        }else if (is(mixmdl) %in% "try-error") {
+        }else if ("try-error" %in% is(mixmdl)) {
           cor_threshold_tmp = c(cor_threshold_tmp, 0)
         }else{
           # plot(mixmdl,which = 2)
@@ -169,7 +169,7 @@ KNNcor <- function(corMat,
                                                     ECM = TRUE, verb = verbose),
                               silent = TRUE))
 
-          if (!is(mixmdl) %in% "try-error" ) {
+          if (!"try-error" %in% is(mixmdl) ) {
             if (suppressWarnings(min(unique(mixmdl$rho)) == 0)) {
               quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = TRUE, maxrestarts = 100,
                                                                    k = length(unique_y), maxit = 2000,
@@ -187,7 +187,7 @@ KNNcor <- function(corMat,
         # Caculate the threshold for this branch
         if (dip_test$p.value > 0.01) {
           cor_threshold_tmp = c(cor_threshold_tmp, 0)
-        }else if (is(mixmdl) %in% "try-error") {
+        }else if ("try-error" %in% is(mixmdl)) {
           cor_threshold_tmp = c(cor_threshold_tmp, 0)
         }else{
           # plot(mixmdl,which = 2)
@@ -321,7 +321,7 @@ WKNNcor <- function(corMat,
                                                     ECM = TRUE, verb = verbose),
                               silent = TRUE))
 
-          if (!is(mixmdl) %in% "try-error" ) {
+          if (!"try-error" %in% is(mixmdl) ) {
             if (suppressWarnings(min(unique(mixmdl$rho)) == 0)) {
               quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = TRUE, maxrestarts = 100,
                                                                    k = length(unique_y), maxit = 2000,
@@ -339,7 +339,7 @@ WKNNcor <- function(corMat,
         # Caculate the threshold for this branch
         if (dip_test$p.value > 0.01) {
           cor_threshold_tmp = c(cor_threshold_tmp, 0)
-        }else if (is(mixmdl) %in% "try-error") {
+        }else if ("try-error" %in% is(mixmdl)) {
           cor_threshold_tmp = c(cor_threshold_tmp, 0)
         }else{
           # plot(mixmdl,which = 2)
@@ -420,7 +420,7 @@ WKNNcor <- function(corMat,
       cor_threshold_tmp <- c()
       for (l in 1:length(unique_y)) {
 
-        if (is(corMat) %in% "dgCMatrix") {
+        if ("dgCMatrix" %in% is(corMat)) {
           corMat_vec <- corMat@x
         } else {
           corMat_vec <- c(as.matrix(corMat[subLevelModel$y == unique_y[l],]))
@@ -443,7 +443,7 @@ WKNNcor <- function(corMat,
                                                     ECM = TRUE, verb = verbose),
                               silent = TRUE))
 
-          if (!is(mixmdl) %in% "try-error" ) {
+          if (!"try-error" %in% is(mixmdl)) {
             if (suppressWarnings(min(unique(mixmdl$rho)) == 0)) {
               quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = TRUE, maxrestarts = 100,
                                                                    k = length(unique_y), maxit = 2000,
@@ -461,7 +461,7 @@ WKNNcor <- function(corMat,
         # Caculate the threshold for this branch
         if (dip_test$p.value > 0.01) {
           cor_threshold_tmp = c(cor_threshold_tmp, 0)
-        }else if (is(mixmdl) %in% "try-error") {
+        }else if ("try-error" %in% is(mixmdl)) {
           cor_threshold_tmp = c(cor_threshold_tmp, 0)
         }else{
           # plot(mixmdl,which = 2)
@@ -629,7 +629,7 @@ DWKNNcor <- function(corMat,
                                                     ECM = TRUE, verb = verbose),
                               silent = TRUE))
 
-          if (!is(mixmdl) %in% "try-error" ) {
+          if (!"try-error" %in% is(mixmdl) ) {
             if (suppressWarnings(min(unique(mixmdl$rho)) == 0)) {
               quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = TRUE, maxrestarts = 100,
                                                                    k = length(unique_y), maxit = 2000,
@@ -647,7 +647,7 @@ DWKNNcor <- function(corMat,
         # Caculate the threshold for this branch
         if (dip_test$p.value > 0.01) {
           cor_threshold_tmp = c(cor_threshold_tmp, 0)
-        }else if (is(mixmdl) %in% "try-error") {
+        }else if ("try-error" %in% is(mixmdl)) {
           cor_threshold_tmp = c(cor_threshold_tmp, 0)
         }else{
           # plot(mixmdl,which = 2)
@@ -737,7 +737,7 @@ DWKNNcor <- function(corMat,
                                                     ECM = TRUE, verb = verbose),
                               silent = TRUE))
 
-          if (!is(mixmdl) %in% "try-error" ) {
+          if (!"try-error" %in% is(mixmdl) ) {
             if (suppressWarnings(min(unique(mixmdl$rho)) == 0)) {
               quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = TRUE, maxrestarts = 100,
                                                                    k = length(unique_y), maxit = 2000,
@@ -755,7 +755,7 @@ DWKNNcor <- function(corMat,
         # Caculate the threshold for this branch
         if (dip_test$p.value > 0.01) {
           cor_threshold_tmp = c(cor_threshold_tmp, 0)
-        }else if (is(mixmdl) %in% "try-error") {
+        }else if ("try-error" %in% is(mixmdl)) {
           cor_threshold_tmp = c(cor_threshold_tmp, 0)
         }else{
           # plot(mixmdl,which = 2)
@@ -867,7 +867,7 @@ getThreshold <- function(mixmdl, verbose = FALSE){
                 silent = TRUE)
 
 
-    if (!is(root) %in% "try-error") {
+    if (!"try-error" %in%  is(root)) {
       # if (verbose) {
       #   abline(v = root$root, col = "red")
       #   abline(v = mixmdl$mu[idx1] + qnorm(0.99) * mixmdl$sigma[idx1], col = "blue")

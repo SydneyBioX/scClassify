@@ -58,7 +58,7 @@ train_scClassify <- function(exprsMat_train,
                               several.ok = TRUE)
 
 
-  if (is(exprsMat_train) %in% "list") {
+  if ("list" %in% is(exprsMat_train)) {
     if (sum(unlist(lapply(cellTypes_train, length)) !=
             unlist(lapply(exprsMat_train, ncol))) != 0) {
       stop("Length of training cell types does not match with
@@ -75,7 +75,7 @@ train_scClassify <- function(exprsMat_train,
 
 
   # To rename the train list if name is null (only when there are multiple training datasets)
-  if (is(exprsMat_train) %in% "list") {
+  if ( "list" %in% is(exprsMat_train)) {
     if (is.null(names(exprsMat_train))) {
       names(exprsMat_train) <- names(cellTypes_train) <- paste("TrainData",
                                                                seq_len(length(exprsMat_train)),
@@ -89,7 +89,7 @@ train_scClassify <- function(exprsMat_train,
 
   # QC for the training data set
 
-  if (is(exprsMat_train) %in% c("matrix", "dgCMatrix")) {
+  if (any(c("matrix", "dgCMatrix") %in% is(exprsMat_train))) {
 
     zeros <- apply(exprsMat_train, 1, function(x) sum(x == 0)/length(x))
     minPctCell <- min(table(cellTypes_train)/length(cellTypes_train))
@@ -112,7 +112,7 @@ train_scClassify <- function(exprsMat_train,
   }
 
   ### train_scClassify
-  if (is(exprsMat_train) %in% "list") {
+  if ("list" %in% is(exprsMat_train)) {
     trainRes <- list()
     for (train_list_idx in seq_len(length(exprsMat_train))) {
       trainRes[[train_list_idx]] <- train_scClassifySingle(exprsMat_train[[train_list_idx]],
@@ -157,7 +157,7 @@ train_scClassify <- function(exprsMat_train,
     return(trainRes)
 
   } else {
-    if (is(exprsMat_train) %in% "list") {
+    if ("list" %in% is(exprsMat_train)) {
       trainClassList <- list()
       for (train_list_idx in 1:length(trainRes)) {
         trainClassList[[train_list_idx]] <- scClassifyTrainModel(

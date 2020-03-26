@@ -74,14 +74,14 @@ scClassify <- function(exprsMat_train = NULL,
   }
 
   if (!is.null(cellTypes_test)) {
-    if (is(cellTypes_test) %in% "character") {
+    if ("character" %in% is(cellTypes_test)) {
       if (length(cellTypes_test) != ncol(exprsMat_test)) {
         stop("Length of testing cell types does not match
              with number of column of testing expression matrix")
       }
     }
 
-    if (is(cellTypes_test) %in% "list") {
+    if ("list" %in% is(cellTypes_test)) {
       if (sum(unlist(lapply(cellTypes_test, length)) !=
               unlist(lapply(exprsMat_test, ncol))) != 0) {
         stop("Length of testing cell types does not match
@@ -91,7 +91,7 @@ scClassify <- function(exprsMat_train = NULL,
 
   }
 
-  if (is(exprsMat_train) %in% "list") {
+  if ("list" %in% is(exprsMat_train) ) {
     if (sum(unlist(lapply(cellTypes_train, length)) !=
             unlist(lapply(exprsMat_train, ncol))) != 0) {
       stop("Length of training cell types does not match with
@@ -104,7 +104,7 @@ scClassify <- function(exprsMat_train = NULL,
     }
   }
 
-  if (is(exprsMat_train) %in% "list") {
+  if ("list" %in% is(exprsMat_train)) {
     if (any(lapply(cellTypes_train, function(x) any(table(x) == 1)))) {
       stop("There is cell type with only one cell,
            please check cellTypes_train")
@@ -167,7 +167,7 @@ scClassify <- function(exprsMat_train = NULL,
 
   # To check if need to run weighted joint classification
 
-  if (is(exprsMat_train) %in% "list" &
+  if ("list" %in% is(exprsMat_train) &
       length(exprsMat_train) > 1 &
       weighted_jointClassification) {
     cat("Performing weighted joint classification \n")
@@ -236,7 +236,7 @@ scClassify <- function(exprsMat_train = NULL,
     cat("=====================  Start classifying on test dataset  ========================== \n")
   }
 
-  if (is(exprsMat_test) %in% "list") {
+  if ("list" %in% is(exprsMat_test)) {
     testRes <- list()
 
     for (testDataset_idx in 1:length(exprsMat_test)) {
@@ -246,7 +246,7 @@ scClassify <- function(exprsMat_train = NULL,
         print(names(exprsMat_test)[testDataset_idx])
       }
 
-      if (is(exprsMat_train) %in% "list") {
+      if ("list" %in% is(exprsMat_train)) {
         # for the case there are multiple training datasets
         #
         predictRes <- list()
@@ -305,7 +305,7 @@ scClassify <- function(exprsMat_train = NULL,
     names(testRes) <- names(exprsMat_test)
   }else{
     # else only one dataset as a matrix in the test
-    if (is(exprsMat_train) %in% "list") {
+    if ("list" %in% is(exprsMat_train)) {
       # for the case there are multiple training datasets
       #
       testRes <- list()
@@ -364,7 +364,7 @@ scClassify <- function(exprsMat_train = NULL,
     return(list(testRes = testRes, trainRes = trainRes))
   } else {
 
-    if (is(exprsMat_train) %in% "list") {
+    if ("list" %in% is(exprsMat_train)) {
       trainClassList <- list()
       for (train_list_idx in 1:length(trainRes)) {
         trainClassList[[train_list_idx]] <- scClassifyTrainModel(
