@@ -1,0 +1,52 @@
+---
+title: "Joint Human Pancreas Pretrained Model"
+output:
+  html_document:
+    theme: flatly
+    number_sections: yes
+    toc: yes
+    fig_height: 8
+    fig_width: 8
+    toc_float:
+      collapsed: true
+      smooth_scroll: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r echo = FALSE}
+library(ggplot2)
+library(ggthemes)
+library(scClassify)
+library(plotly)
+```
+
+
+# Train Model
+
+```{r}
+jointPBMC <- readRDS("jointPBMCClass.rds")
+```
+
+
+```{r}
+jointPBMC
+```
+
+
+Cell type composition:
+
+```{r}
+tab <- lapply(jointPBMC@listData, function(x) table(x@cellTypeTrain))
+common_cellTypes <- Reduce(union, lapply(tab, names))
+tab_cellTypes <- do.call(cbind, lapply(tab, function(x) {
+  tmp <- rep(0, length(common_cellTypes))
+  names(tmp) <- common_cellTypes
+  tmp[names(x)] <- x
+  tmp
+}))
+
+knitr::kable(tab_cellTypes)
+```

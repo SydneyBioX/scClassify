@@ -274,12 +274,23 @@ predict_scClassifySingle <- function(exprsMat_test,
     stop("colnames of exprsMat_test is NULL or not unique")
   }
 
+  if (all(exprsMat_test %% 1 == 0)) {
+    warning("exprsMat_test looks like a count matrix
+            (scClassify requires a log-transformed normalised input)")
+  }
+
   # check input
   algorithm <- match.arg(algorithm, c("WKNN", "KNN", "DWKNN"))
   similarity <- match.arg(similarity, c("pearson",  "spearman",
                                         "cosine", "jaccard", "kendall",
                                         "weighted_rank","manhattan"))
   cutoff_method <- match.arg(cutoff_method, c("dynamic", "static"))
+
+
+  if (ncol(exprsMat_test) < 100 & cutoff_method == "dynamic") {
+    warning("Number of cells in test data is small. The cutoff method is changed to static.")
+    cutoff_method <- "static"
+  }
 
 
   if (class(trainRes) == "scClassifyTrainModelList") {
@@ -323,7 +334,6 @@ predict_scClassifySingle <- function(exprsMat_test,
 
   # For each level
   for (i in 1:length(levelModel)) {
-    # print(i)
     # If this level is not NULL (Not Level1)
     if (!is.null(levelModel[[i]])) {
 

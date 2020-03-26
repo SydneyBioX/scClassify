@@ -6,8 +6,15 @@
 \title{The scClassifyTrainModel class
 The scClassifyTrainModel class is designed to stored training model for scClassify}
 \usage{
-scClassifyTrainModel(name, cellTypeTree, cellTypeTrain, features, model,
-  modelweights, metaData)
+scClassifyTrainModel(
+  name,
+  cellTypeTree,
+  cellTypeTrain,
+  features,
+  model,
+  modelweights,
+  metaData
+)
 }
 \arguments{
 \item{name}{Name of the training dataset}

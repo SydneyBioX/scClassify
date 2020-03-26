@@ -1,0 +1,76 @@
+---
+title: "Tabula Muris"
+author: "Yingxin Lin"
+output:
+  html_document:
+    theme: flatly
+    number_sections: yes
+    toc: yes
+    fig_height: 8
+    fig_width: 8
+    toc_float:
+      collapsed: true
+      smooth_scroll: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+```
+
+```{r echo = FALSE}
+library(ggplot2)
+library(ggthemes)
+library(scClassify)
+library(plotly)
+```
+
+
+# Train Model
+
+```{r}
+trainTMresClass <- readRDS("trainTMresClass.rds")
+```
+
+
+```{r}
+trainTMresClass
+```
+
+
+Cell type composition:
+
+```{r}
+knitr::kable((table(trainTMresClass@cellTypeTrain)), 
+             col.names = c("Cell Tpye", "Freq"), align = "c", format = "markdown")
+```
+
+
+
+# Visualisation
+
+## tSNE
+```{r fig.height = 6, fig.width = 9}
+
+g <- ggplot(data.frame(trainTMresClass@metaData), 
+       aes(x = tSNE1, y = tSNE2, color = trainTMresClass@cellTypeTrain)) +
+  geom_point() +
+  scale_colour_hue() +
+  theme_bw() +
+  theme(legend.position = "bottom",
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.border = element_rect(colour = "black", fill = NA, 
+                                    size = 1.2)) +
+  labs(title = "TM et al.")
+ggplotly(g)
+```
+
+
+## Cell Type Tree
+
+```{r}
+plotCellTypeTree(trainTMresClass@cellTypeTree, group_level = 6)
+```
+
+## Reference
+
+Schaum, N. et al., 2018. Single-cell transcriptomics of 20 mouse organs creates a Tabula Muris. Nature.

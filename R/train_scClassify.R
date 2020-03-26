@@ -71,7 +71,9 @@ train_scClassify <- function(exprsMat_train,
   # To rename the train list if name is null (only when there are multiple training datasets)
   if (class(exprsMat_train) == "list") {
     if (is.null(names(exprsMat_train))) {
-      names(exprsMat_train) <- names(cellTypes_train) <- paste("TrainData", seq_len(length(exprsMat_train)), sep = "_")
+      names(exprsMat_train) <- names(cellTypes_train) <- paste("TrainData",
+                                                               seq_len(length(exprsMat_train)),
+                                                               sep = "_")
     } else if (sum(names(exprsMat_train) == "") != 0) {
       names(exprsMat_train)[names(exprsMat_train) == ""] <-
         names(cellTypes_train)[names(cellTypes_train) == ""] <-
@@ -92,7 +94,8 @@ train_scClassify <- function(exprsMat_train,
     }
   } else {
     for (train_list_idx in seq_len(length(exprsMat_train))) {
-      zeros <- apply(exprsMat_train[[train_list_idx]], 1, function(x) sum(x == 0)/length(x))
+      zeros <- apply(exprsMat_train[[train_list_idx]], 1,
+                     function(x) sum(x == 0)/length(x))
       minPctCell <- min(table(cellTypes_train[[train_list_idx]])/length(cellTypes_train[[train_list_idx]]))
       exprsMat_train[[train_list_idx]] <- exprsMat_train[[train_list_idx]][zeros <= max(1 - minPctCell, 0.95), ]
     }
@@ -115,7 +118,8 @@ train_scClassify <- function(exprsMat_train,
                                                            pSig = pSig,
                                                            weightsCal = weightsCal,
                                                            parallel = parallel,
-                                                           ncores = min(ncores, length(selectFeatures)),
+                                                           ncores = min(ncores,
+                                                                        length(selectFeatures)),
                                                            verbose = verbose,
                                                            ...)
     }
@@ -205,6 +209,11 @@ train_scClassifySingle <- function(exprsMat_train,
 
   if (length(cellTypes_train) != ncol(exprsMat_train)) {
     stop("Length of training cell types does not match with number of column of training expression matrix")
+  }
+
+  if (all(exprsMat_train %% 1 == 0)) {
+    warning("exprsMat_train looks like a count matrix
+            (scClassify requires a log-transformed normalised input)")
   }
 
   # Matching the argument of the tree construction method

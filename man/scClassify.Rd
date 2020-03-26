@@ -4,15 +4,31 @@
 \alias{scClassify}
 \title{Train and test scClassify model}
 \usage{
-scClassify(exprsMat_train = NULL, cellTypes_train = NULL,
-  exprsMat_test = NULL, cellTypes_test = NULL, tree = "HOPACH",
-  algorithm = "WKNN", selectFeatures = "limma",
-  similarity = "pearson", cutoff_method = c("dynamic", "static"),
-  weighted_ensemble = FALSE, weighted_jointClassification = TRUE,
-  cellType_tree = NULL, k = 10, topN = 50, hopach_kmax = 5,
-  pSig = 0.01, prob_threshold = 0.7, cor_threshold_static = 0.5,
-  cor_threshold_high = 0.7, returnList = TRUE, parallel = FALSE,
-  ncores = 1, verbose = FALSE)
+scClassify(
+  exprsMat_train = NULL,
+  cellTypes_train = NULL,
+  exprsMat_test = NULL,
+  cellTypes_test = NULL,
+  tree = "HOPACH",
+  algorithm = "WKNN",
+  selectFeatures = "limma",
+  similarity = "pearson",
+  cutoff_method = c("dynamic", "static"),
+  weighted_ensemble = FALSE,
+  weighted_jointClassification = TRUE,
+  cellType_tree = NULL,
+  k = 10,
+  topN = 50,
+  hopach_kmax = 5,
+  pSig = 0.01,
+  prob_threshold = 0.7,
+  cor_threshold_static = 0.5,
+  cor_threshold_high = 0.7,
+  returnList = TRUE,
+  parallel = FALSE,
+  ncores = 1,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{exprsMat_train}{A matrix of expression matrix of reference dataset}

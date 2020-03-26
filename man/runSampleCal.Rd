@@ -4,10 +4,18 @@
 \alias{runSampleCal}
 \title{Run sample size calculation for pilot data for reference dataset}
 \usage{
-runSampleCal(exprsMat, cellTypes, n_list = c(20, 40, 60, 80, 100,
-  seq(200, 500, 100)), num_repeat = 20, level = NULL,
-  cellType_tree = NULL, ncores = 1, subset_test = FALSE,
-  num_test = NULL, ...)
+runSampleCal(
+  exprsMat,
+  cellTypes,
+  n_list = c(20, 40, 60, 80, 100, seq(200, 500, 100)),
+  num_repeat = 20,
+  level = NULL,
+  cellType_tree = NULL,
+  ncores = 1,
+  subset_test = FALSE,
+  num_test = NULL,
+  ...
+)
 }
 \arguments{
 \item{exprsMat}{A matrix of expression matrix of pilot dataset (log-transformed, or normalised)}

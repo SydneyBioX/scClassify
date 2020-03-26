@@ -310,6 +310,7 @@ WKNNcor <- function(corMat,
 
         # Fitting the mixture model if it is not unimodal distribution.
         corMat_vec <- corMat_vec[sort(sample(length(corMat_vec), max(round(length(corMat_vec)*0.001), min(200000, length(corMat_vec)))))]
+        
         corMat_vec <- corMat_vec[corMat_vec != min(corMat)]
         suppressMessages(dip_test <- diptest::dip.test(corMat_vec, B = 10000))
         if (dip_test$p.value <= 0.01) {
@@ -420,15 +421,22 @@ WKNNcor <- function(corMat,
       cor_threshold_tmp <- c()
       for (l in 1:length(unique_y)) {
 
-        corMat_vec <- c(as.matrix(corMat[subLevelModel$y == unique_y[l],]))
+        if (class(corMat) == "dgCMatrix") {
+          corMat_vec <- corMat@x
+        } else {
+          corMat_vec <- c(as.matrix(corMat[subLevelModel$y == unique_y[l],]))
+        }
+        
 
         # Fitting the mixture model if it is not unimodal distribution.
-        corMat_vec <- corMat_vec[sort(sample(length(corMat_vec), max(round(length(corMat_vec)*0.001), min(200000, length(corMat_vec)))))]
+        #corMat_vec <- corMat_vec[sort(sample(length(corMat_vec), max(round(length(corMat_vec)*0.001), min(200000, length(corMat_vec)))))]
+        #print(length(corMat_vec))
+        corMat_vec <- corMat_vec[sort(sample(length(corMat_vec), min(10000, length(corMat_vec))))]
         corMat_vec <- corMat_vec[corMat_vec != min(corMat)]
         suppressMessages(dip_test <- diptest::dip.test(corMat_vec, B = 10000))
         if (dip_test$p.value <= 0.01) {
           quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = T, maxrestarts = 100,
-                                                    k = length(unique_y), maxit = 2000,
+                                                    k = length(unique_y), maxit = 1000,
                                                     mu = c(-0.5, rep(0.5, length(unique_y) - 2),  1),
                                                     lambda = c(1/length(unique_y)),
                                                     sigma = rep(0.2, length(unique_y)),
@@ -476,7 +484,8 @@ WKNNcor <- function(corMat,
       topKNN <- ifelse(topKNN_cor >= topKNN_threshold, topKNN, -1)
 
       topKNN_weight <- apply(topKNN_cor, 2, function(x){
-        x <- stats::na.omit(x) # add 20190613
+        #x <- stats::na.omit(x) # add 20190613
+        x[is.na(x)] <- 0
         if (x[1] == x[length(x)]) {
           rep(1, length(x))
         }else{
@@ -497,7 +506,6 @@ WKNNcor <- function(corMat,
       #   print(summary(unlist(votes)))
       #   graphics::hist(unlist(votes), main = "Votes", breaks = 100)
       # }
-
 
 
 
@@ -558,7 +566,8 @@ DWKNNcor <- function(corMat,
 
 
     topKNN_weight <- apply(topKNN_cor, 2, function(x){
-      x <- stats::na.omit(x) # add in 20190613
+      #x <- stats::na.omit(x) # add in 20190613
+      x[is.na(x)] <- 0
       if (x[1] == x[length(x)]) {
         rep(1, length(x))
       }else{
@@ -661,7 +670,8 @@ DWKNNcor <- function(corMat,
       topKNN <- ifelse(topKNN_cor >= topKNN_threshold, topKNN, min(corMat))
 
       topKNN_weight <- apply(topKNN_cor, 2, function(x){
-        x <- stats::na.omit(x) # add in 20190613
+        #x <- stats::na.omit(x) # add in 20190613
+        x[is.na(x)] <- 0
         if (x[1] == x[length(x)]) {
           rep(1, length(x))
         }else{
@@ -769,7 +779,8 @@ DWKNNcor <- function(corMat,
       topKNN <- ifelse(topKNN_cor >= topKNN_threshold, topKNN, -1)
 
       topKNN_weight <- apply(topKNN_cor, 2, function(x){
-        x <- stats::na.omit(x) # add in 20190613
+        #x <- stats::na.omit(x) # add in 20190613
+        x[is.na(x)] <- 0
         if (x[1] == x[length(x)]) {
           rep(1, length(x))
         }else{

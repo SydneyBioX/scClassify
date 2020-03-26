@@ -28,7 +28,7 @@ We assume that you have *log-transformed* (size-factor normalized) matrices as q
 
 ```{r setup}
 library(scClassify)
-load("data/scClassify_example.rda")
+data("scClassify_example")
 wang_cellTypes <- scClassify_example$wang_cellTypes
 exprsMat_wang_subset <- scClassify_example$exprsMat_wang_subset
 exprsMat_wang_subset <- as(exprsMat_wang_subset, "dgCMatrix")
@@ -39,22 +39,22 @@ Here, we load our pretrained model using a subset of the Xin et al. human pancre
 First, let us check basic information relating to our pretrained model. 
 
 ```{r}
-load("data/trainClassExample.rda")
-trainClassExample
+data("trainClassExample_xin")
+trainClassExample_xin
 ```
 
 In this pretrained model, we have selected the genes based on Differential Expression using limma. To check the genes that are available in the pretrained model: 
 
 
 ```{r}
-trainClassExample@features
+trainClassExample_xin@features
 ```
 
 
 We can also visualise the cell type tree of the reference data.
 
 ```{r}
-plotCellTypeTree(trainClassExample@cellTypeTree)
+plotCellTypeTree(trainClassExample_xin@cellTypeTree)
 ```
 
 # Running scClassify
@@ -63,7 +63,7 @@ Next, we perform `predict_scClassify` with our pretrained model `trainRes = trai
 
 ```{r}
 pred_res <- predict_scClassify(exprsMat_test = exprsMat_wang_subset,
-                               trainRes = trainClassExample,
+                               trainRes = trainClassExample_xin,
                                cellTypes_test = wang_cellTypes,
                                algorithm = "WKNN",
                                features = c("limma"),

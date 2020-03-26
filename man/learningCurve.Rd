@@ -4,9 +4,18 @@
 \alias{learningCurve}
 \title{Fit learning curve for accuracy matrix}
 \usage{
-learningCurve(accMat, n, auto_initial = T, a = NULL, b = NULL,
-  c = NULL, d_list = NULL, fitmodel = c("nls", "nls_mix", "gam"),
-  plot = T, verbose = T)
+learningCurve(
+  accMat,
+  n,
+  auto_initial = T,
+  a = NULL,
+  b = NULL,
+  c = NULL,
+  d_list = NULL,
+  fitmodel = c("nls", "nls_mix", "gam"),
+  plot = T,
+  verbose = T
+)
 }
 \arguments{
 \item{accMat}{Matrix of accuracy rate where column indicate different sample size}

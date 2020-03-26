@@ -25,7 +25,7 @@ We assume that you have *log-transformed* (size-factor normalized) matrices wher
 
 ```{r setup}
 library("scClassify")
-load("data/scClassify_example.rda")
+data("scClassify_example")
 xin_cellTypes <- scClassify_example$xin_cellTypes
 exprsMat_xin_subset <- scClassify_example$exprsMat_xin_subset
 wang_cellTypes <- scClassify_example$wang_cellTypes

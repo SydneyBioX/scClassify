@@ -1,0 +1,134 @@
+---
+title: "Single Cell Sample Size Calculation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{sampleSizeCal}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This vignette will provide an example of how we can fit a learning curve based on classification accuracies derived from `scClassify`.
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  comment = "#>"
+)
+```
+
+
+Suppose we have a small pilot reference data, and we would like to use this reference data to build scClassify model. We can construct the learning curve to estimate the number of cells required in a reference dataset to accurately discriminate between two cell types at a given level in the cell type hierarchy.
+
+# Data
+
+Here, we illustrate the learning curve construction with a small example dataset with 4 cell types, with only 980 genes and 674 cells.
+
+
+
+```{r setup}
+library(scClassify)
+data("scClassify_example")
+xin_cellTypes <- scClassify_example$xin_cellTypes
+exprsMat_xin_subset <- scClassify_example$exprsMat_xin_subset
+
+exprsMat_xin_subset <- as(exprsMat_xin_subset, "dgCMatrix")
+```
+
+```{r}
+dim(exprsMat_xin_subset)
+table(xin_cellTypes)
+```
+
+We can first have a look at the cell type tree constructed by the whole data. The cell type tree has two levels of cell type labels:
+
++ **First level**: "gamma_delta_beta", "alpha"
++ **Second level**:  "gamma", "delta", "beta", "alpha"
+
+```{r}
+data("trainClassExample_xin")
+trainClassExample_xin
+plotCellTypeTree(trainClassExample_xin@cellTypeTree)
+```
+
+By default, `scClassify` will construct the learning curve on the basis of classification accuracies calculated at the bottom level (i.e., second level in the example).
+
+# Learning curve construction
+
+Next, we can get an accuracy matrix by running `runSampleCal` function, where the parameter `n_list` indicates a list of sample sizes (N) that you would like to subsample from the data as the training set, and `num_repeat` indicates the number of times to repeat this procedure for each `N`.
+
+For the purpose of illustration, here we set a short length of `n_list` and a small number of `num_repeat`. A longer `n_list` and a larger number of `num_repeat` is recommended for better learning curve fitting.
+
+```{r eval = TRUE, results='hide'}
+set.seed(2019)
+system.time(accMat <- runSampleCal(exprsMat_xin_subset, 
+                                   xin_cellTypes,
+                                   n_list = seq(20, 160, 20), 
+                                   num_repeat = 10, ncores = 1))
+```
+
+
+After we obtain an accuracy matrix, we can fit the learning curve by using the `learningCurve` function.
+
+```{r eval = TRUE, results='hide'}
+res <- learningCurve(accMat = accMat,
+                     n = as.numeric(colnames(accMat)))
+```
+
+Check the parameters estimated from the average accuracy rates.
+
+```{r}
+res$model$mean
+```
+
+
+```{r fig.width = 8, fig.height = 8}
+res$plot
+```
+
+
+
+
+Using `getN` function, we can also esimate a sample size for future experiments given the accuracy rate.
+
+```{r}
+getN(res, acc = 0.93)
+```
+
+
+
+# Constructing learning curves based on labels from higher level of the cell type tree
+
+We can input `cellType_tree` and specify the level of labels we would like to use to construct the learning curve. Here, we set `level = 1` to calculate the learning curve for **First level** cell type labels.
+
+
+
+```{r eval = TRUE, results='hide'}
+set.seed(2019)
+system.time(accMat_level1 <- runSampleCal(exprsMat_xin_subset, 
+                                          xin_cellTypes,
+                                          n_list = seq(20, 160, 20),
+                                          num_repeat = 10,
+                                          cellType_tree = trainClassExample@cellTypeTree,
+                                          level = 1,
+                                          ncores = 1))
+
+res_level1 <- learningCurve(accMat_level1,
+                            as.numeric(colnames(accMat_level1)))
+```
+
+
+
+```{r fig.width = 8, fig.height = 8}
+res_level1$plot
+```
+
+
+
+
+# Session Info
+
+```{r}
+sessionInfo()
+```
