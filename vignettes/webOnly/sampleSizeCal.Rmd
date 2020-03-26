@@ -110,7 +110,7 @@ system.time(accMat_level1 <- runSampleCal(exprsMat_xin_subset,
                                           xin_cellTypes,
                                           n_list = seq(20, 160, 20),
                                           num_repeat = 10,
-                                          cellType_tree = trainClassExample@cellTypeTree,
+                                          cellType_tree = trainClassExample_xin@cellTypeTree,
                                           level = 1,
                                           ncores = 1))
 

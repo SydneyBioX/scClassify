@@ -7,8 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Performing scClassify using pretrained model • scClassify</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Performing scClassify using pretrained model">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
@@ -30,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scClassify</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -150,6 +151,7 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -168,130 +170,130 @@
 <h1 class="hasAnchor">
 <a href="#setting-up-the-data" class="anchor"></a>Setting up the data</h1>
 <p>We assume that you have <em>log-transformed</em> (size-factor normalized) matrices as query datasets, where each row refers to a gene and each column a cell. For demonstration purposes, we will take a subset of single-cell pancreas datasets from one independent study (Wang et al.).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(scClassify)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="st">"data/scClassify_example.rda"</span>)
-wang_cellTypes &lt;-<span class="st"> </span>scClassify_example<span class="op">$</span>wang_cellTypes
-exprsMat_wang_subset &lt;-<span class="st"> </span>scClassify_example<span class="op">$</span>exprsMat_wang_subset
-exprsMat_wang_subset &lt;-<span class="st"> </span><span class="kw">as</span>(exprsMat_wang_subset, <span class="st">"dgCMatrix"</span>)</code></pre></div>
-<p>Here, we load our pretrained model using a subset of the Xin et al. human pancreas dataset as our reference data.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(scClassify)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"scClassify_example"</span>)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">wang_cellTypes &lt;-<span class="st"> </span>scClassify_example<span class="op">$</span>wang_cellTypes</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">exprsMat_wang_subset &lt;-<span class="st"> </span>scClassify_example<span class="op">$</span>exprsMat_wang_subset</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">exprsMat_wang_subset &lt;-<span class="st"> </span><span class="kw">as</span>(exprsMat_wang_subset, <span class="st">"dgCMatrix"</span>)</a></code></pre></div>
+<p>Here, we load our pretrained model using a subset of the Xin et al. human pancreas dataset as our reference data.</p>
 <p>First, let us check basic information relating to our pretrained model.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/load">load</a></span>(<span class="st">"data/trainClassExample.rda"</span>)
-trainClassExample
-<span class="co">#&gt; Class: scClassifyTrainModel </span>
-<span class="co">#&gt; Model name: training </span>
-<span class="co">#&gt; Feature selection methods: limma </span>
-<span class="co">#&gt; Number of cells in the training data: 674 </span>
-<span class="co">#&gt; Number of cell types in the training data: 4</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"trainClassExample_xin"</span>)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">trainClassExample_xin</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; Class: scClassifyTrainModel </span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; Model name: training </span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; Feature selection methods: limma </span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt; Number of cells in the training data: 674 </span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt; Number of cell types in the training data: 4</span></a></code></pre></div>
 <p>In this pretrained model, we have selected the genes based on Differential Expression using limma. To check the genes that are available in the pretrained model:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">trainClassExample<span class="op">@</span>features
-<span class="co">#&gt; [1] "limma"</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">trainClassExample_xin<span class="op">@</span>features</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; [1] "limma"</span></a></code></pre></div>
 <p>We can also visualise the cell type tree of the reference data.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotCellTypeTree.html">plotCellTypeTree</a></span>(trainClassExample<span class="op">@</span>cellTypeTree)</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="../reference/plotCellTypeTree.html">plotCellTypeTree</a></span>(trainClassExample_xin<span class="op">@</span>cellTypeTree)</a></code></pre></div>
 <p><img src="pretrainedModel_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 </div>
 <div id="running-scclassify" class="section level1">
 <h1 class="hasAnchor">
 <a href="#running-scclassify" class="anchor"></a>Running scClassify</h1>
 <p>Next, we perform <code>predict_scClassify</code> with our pretrained model <code>trainRes = trainClassExample</code> to predict the cell types of our query data matrix <code>exprsMat_wang_subset_sparse</code>. Here, we used <code>pearson</code> and <code>spearman</code> as similarity metrics.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pred_res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/predict_scClassify.html">predict_scClassify</a></span>(<span class="dt">exprsMat_test =</span> exprsMat_wang_subset,
-                               <span class="dt">trainRes =</span> trainClassExample,
-                               <span class="dt">cellTypes_test =</span> wang_cellTypes,
-                               <span class="dt">algorithm =</span> <span class="st">"WKNN"</span>,
-                               <span class="dt">features =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"limma"</span>),
-                               <span class="dt">similarity =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"pearson"</span>, <span class="st">"spearman"</span>),
-                               <span class="dt">prob_threshold =</span> <span class="fl">0.7</span>,
-                               <span class="dt">verbose =</span> <span class="ot">TRUE</span>)
-<span class="co">#&gt; Performing unweighted ensemble learning... </span>
-<span class="co">#&gt; Using parameters: </span>
-<span class="co">#&gt; similarity  algorithm   features </span>
-<span class="co">#&gt;  "pearson"     "WKNN"    "limma" </span>
-<span class="co">#&gt; [1] "Using dynamic correlation cutoff..."</span>
-<span class="co">#&gt; [1] "Using dynamic correlation cutoff..."</span>
-<span class="co">#&gt; classify_res</span>
-<span class="co">#&gt;                correct   correctly unassigned           intermediate </span>
-<span class="co">#&gt;            0.704590818            0.249500998            0.000000000 </span>
-<span class="co">#&gt; incorrectly unassigned         error assigned          misclassified </span>
-<span class="co">#&gt;            0.000000000            0.041916168            0.003992016 </span>
-<span class="co">#&gt; Using parameters: </span>
-<span class="co">#&gt; similarity  algorithm   features </span>
-<span class="co">#&gt; "spearman"     "WKNN"    "limma" </span>
-<span class="co">#&gt; [1] "Using dynamic correlation cutoff..."</span>
-<span class="co">#&gt; [1] "Using dynamic correlation cutoff..."</span>
-<span class="co">#&gt; classify_res</span>
-<span class="co">#&gt;                correct   correctly unassigned           intermediate </span>
-<span class="co">#&gt;            0.698602794            0.283433134            0.000000000 </span>
-<span class="co">#&gt; incorrectly unassigned         error assigned          misclassified </span>
-<span class="co">#&gt;            0.005988024            0.007984032            0.003992016</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">pred_res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/predict_scClassify.html">predict_scClassify</a></span>(<span class="dt">exprsMat_test =</span> exprsMat_wang_subset,</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">                               <span class="dt">trainRes =</span> trainClassExample_xin,</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">                               <span class="dt">cellTypes_test =</span> wang_cellTypes,</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">                               <span class="dt">algorithm =</span> <span class="st">"WKNN"</span>,</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">                               <span class="dt">features =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"limma"</span>),</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">                               <span class="dt">similarity =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"pearson"</span>, <span class="st">"spearman"</span>),</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">                               <span class="dt">prob_threshold =</span> <span class="fl">0.7</span>,</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">                               <span class="dt">verbose =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; Performing unweighted ensemble learning... </span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; Using parameters: </span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; similarity  algorithm   features </span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt;  "pearson"     "WKNN"    "limma" </span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; [1] "Using dynamic correlation cutoff..."</span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; [1] "Using dynamic correlation cutoff..."</span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; classify_res</span></a>
+<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt;                correct   correctly unassigned           intermediate </span></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt;            0.704590818            0.253493014            0.000000000 </span></a>
+<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt; incorrectly unassigned         error assigned          misclassified </span></a>
+<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#&gt;            0.000000000            0.037924152            0.003992016 </span></a>
+<a class="sourceLine" id="cb5-20" data-line-number="20"><span class="co">#&gt; Using parameters: </span></a>
+<a class="sourceLine" id="cb5-21" data-line-number="21"><span class="co">#&gt; similarity  algorithm   features </span></a>
+<a class="sourceLine" id="cb5-22" data-line-number="22"><span class="co">#&gt; "spearman"     "WKNN"    "limma" </span></a>
+<a class="sourceLine" id="cb5-23" data-line-number="23"><span class="co">#&gt; [1] "Using dynamic correlation cutoff..."</span></a>
+<a class="sourceLine" id="cb5-24" data-line-number="24"><span class="co">#&gt; [1] "Using dynamic correlation cutoff..."</span></a>
+<a class="sourceLine" id="cb5-25" data-line-number="25"><span class="co">#&gt; classify_res</span></a>
+<a class="sourceLine" id="cb5-26" data-line-number="26"><span class="co">#&gt;                correct   correctly unassigned           intermediate </span></a>
+<a class="sourceLine" id="cb5-27" data-line-number="27"><span class="co">#&gt;            0.702594810            0.013972056            0.000000000 </span></a>
+<a class="sourceLine" id="cb5-28" data-line-number="28"><span class="co">#&gt; incorrectly unassigned         error assigned          misclassified </span></a>
+<a class="sourceLine" id="cb5-29" data-line-number="29"><span class="co">#&gt;            0.001996008            0.277445110            0.003992016</span></a></code></pre></div>
 <p>Noted that the <code>cellType_test</code> is not a required input. For datasets with unknown labels, users can simply leave it as <code>cellType_test = NULL</code>.</p>
 <p>Prediction results for pearson as the similarity metric:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/table">table</a></span>(pred_res<span class="op">$</span>pearson_WKNN_limma<span class="op">$</span>predRes, wang_cellTypes)
-<span class="co">#&gt;                   wang_cellTypes</span>
-<span class="co">#&gt;                    acinar alpha beta delta ductal gamma stellate</span>
-<span class="co">#&gt;   alpha                 0   206    0     0      0     2        0</span>
-<span class="co">#&gt;   beta                  0     0  118     0      1     0        0</span>
-<span class="co">#&gt;   beta_delta_gamma      0     0    0     0     20     0        0</span>
-<span class="co">#&gt;   delta                 0     0    0    10      0     0        0</span>
-<span class="co">#&gt;   gamma                 0     0    0     0      0    19        0</span>
-<span class="co">#&gt;   unassigned            5     0    0     0     75     0       45</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/table.html">table</a></span>(pred_res<span class="op">$</span>pearson_WKNN_limma<span class="op">$</span>predRes, wang_cellTypes)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt;                   wang_cellTypes</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt;                    acinar alpha beta delta ductal gamma stellate</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt;   alpha                 0   206    0     0      0     2        0</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt;   beta                  0     0  118     0      1     0        0</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt;   beta_delta_gamma      0     0    0     0     18     0        0</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;   delta                 0     0    0    10      0     0        0</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;   gamma                 0     0    0     0      0    19        0</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;   unassigned            5     0    0     0     77     0       45</span></a></code></pre></div>
 <p>Prediction results for spearman as the similarity metric:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/table">table</a></span>(pred_res<span class="op">$</span>spearman_WKNN_limma<span class="op">$</span>predRes, wang_cellTypes)
-<span class="co">#&gt;                   wang_cellTypes</span>
-<span class="co">#&gt;                    acinar alpha beta delta ductal gamma stellate</span>
-<span class="co">#&gt;   alpha                 0   206    0     0      0     2        2</span>
-<span class="co">#&gt;   beta                  0     0  117     0      1     0        0</span>
-<span class="co">#&gt;   beta_delta_gamma      0     0    0     0      1     0        0</span>
-<span class="co">#&gt;   delta                 0     0    0    10      0     0        0</span>
-<span class="co">#&gt;   gamma                 0     0    0     0      0    17        0</span>
-<span class="co">#&gt;   unassigned            5     0    1     0     94     2       43</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/table.html">table</a></span>(pred_res<span class="op">$</span>spearman_WKNN_limma<span class="op">$</span>predRes, wang_cellTypes)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt;                   wang_cellTypes</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt;                    acinar alpha beta delta ductal gamma stellate</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt;   alpha                 0   206    0     0      0     2        2</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt;   beta                  2     0  118     0     29     0        6</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt;   beta_delta_gamma      1     0    0     0     66     0       31</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt;   delta                 0     0    0    10      0     0        2</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt;   gamma                 0     0    0     0      0    18        0</span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt;   unassigned            2     0    0     0      1     1        4</span></a></code></pre></div>
 </div>
 <div id="session-info" class="section level1">
 <h1 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session Info</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/sessionInfo">sessionInfo</a></span>()
-<span class="co">#&gt; R version 3.6.1 (2019-07-05)</span>
-<span class="co">#&gt; Platform: x86_64-apple-darwin15.6.0 (64-bit)</span>
-<span class="co">#&gt; Running under: macOS Mojave 10.14.6</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Matrix products: default</span>
-<span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib</span>
-<span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; locale:</span>
-<span class="co">#&gt; [1] en_AU.UTF-8/en_AU.UTF-8/en_AU.UTF-8/C/en_AU.UTF-8/en_AU.UTF-8</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; attached base packages:</span>
-<span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt; [1] scClassify_0.2.0</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; loaded via a namespace (and not attached):</span>
-<span class="co">#&gt;  [1] Biobase_2.44.0      viridis_0.5.1       mixtools_1.1.0     </span>
-<span class="co">#&gt;  [4] viridisLite_0.3.0   splines_3.6.1       ggraph_1.0.2       </span>
-<span class="co">#&gt;  [7] RcppParallel_4.4.3  assertthat_0.2.1    stats4_3.6.1       </span>
-<span class="co">#&gt; [10] yaml_2.2.0          ggrepel_0.8.1       pillar_1.4.2       </span>
-<span class="co">#&gt; [13] backports_1.1.5     lattice_0.20-38     glue_1.3.1         </span>
-<span class="co">#&gt; [16] limma_3.40.6        digest_0.6.21       polyclip_1.10-0    </span>
-<span class="co">#&gt; [19] colorspace_1.4-1    htmltools_0.3.6     Matrix_1.2-17      </span>
-<span class="co">#&gt; [22] plyr_1.8.4          pkgconfig_2.0.3     purrr_0.3.2        </span>
-<span class="co">#&gt; [25] scales_1.0.0        tweenr_1.0.1        hopach_2.44.0      </span>
-<span class="co">#&gt; [28] ggforce_0.3.1       tibble_2.1.3        proxy_0.4-23       </span>
-<span class="co">#&gt; [31] mgcv_1.8-28         farver_1.1.0        ggplot2_3.2.1      </span>
-<span class="co">#&gt; [34] BiocGenerics_0.31.6 lazyeval_0.2.2      survival_2.44-1.1  </span>
-<span class="co">#&gt; [37] magrittr_1.5        crayon_1.3.4        memoise_1.1.0      </span>
-<span class="co">#&gt; [40] evaluate_0.14       fs_1.3.1            nlme_3.1-141       </span>
-<span class="co">#&gt; [43] MASS_7.3-51.4       segmented_1.0-0     xml2_1.2.2         </span>
-<span class="co">#&gt; [46] tools_3.6.1         minpack.lm_1.2-1    stringr_1.4.0      </span>
-<span class="co">#&gt; [49] S4Vectors_0.23.25   munsell_0.5.0       cluster_2.1.0      </span>
-<span class="co">#&gt; [52] compiler_3.6.1      pkgdown_1.3.0       proxyC_0.1.5       </span>
-<span class="co">#&gt; [55] pbmcapply_1.5.0     rlang_0.4.0         grid_3.6.1         </span>
-<span class="co">#&gt; [58] rstudioapi_0.10     igraph_1.2.4.1      labeling_0.3       </span>
-<span class="co">#&gt; [61] rmarkdown_1.15      gtable_0.3.0        roxygen2_6.1.1     </span>
-<span class="co">#&gt; [64] R6_2.4.0            gridExtra_2.3       knitr_1.24         </span>
-<span class="co">#&gt; [67] dplyr_0.8.3         commonmark_1.7      rprojroot_1.3-2    </span>
-<span class="co">#&gt; [70] desc_1.2.0          stringi_1.4.3       parallel_3.6.1     </span>
-<span class="co">#&gt; [73] Rcpp_1.0.2          tidyselect_0.2.5    xfun_0.9           </span>
-<span class="co">#&gt; [76] diptest_0.75-7</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt; R version 3.6.1 (2019-07-05)</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; Platform: x86_64-apple-darwin15.6.0 (64-bit)</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; Running under: macOS Catalina 10.15.3</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; Matrix products: default</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt; locale:</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt; [1] en_AU.UTF-8/en_AU.UTF-8/en_AU.UTF-8/C/en_AU.UTF-8/en_AU.UTF-8</span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">#&gt; attached base packages:</span></a>
+<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></a>
+<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="co">#&gt; other attached packages:</span></a>
+<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="co">#&gt; [1] scClassify_0.2.1</span></a>
+<a class="sourceLine" id="cb8-18" data-line-number="18"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">#&gt; loaded via a namespace (and not attached):</span></a>
+<a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt;  [1] Biobase_2.46.0      viridis_0.5.1       mixtools_1.1.0     </span></a>
+<a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">#&gt;  [4] tidyr_1.0.0         tidygraph_1.1.2     viridisLite_0.3.0  </span></a>
+<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt;  [7] splines_3.6.1       ggraph_2.0.0        RcppParallel_4.4.4 </span></a>
+<a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt; [10] assertthat_0.2.1    stats4_3.6.1        yaml_2.2.0         </span></a>
+<a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">#&gt; [13] ggrepel_0.8.1       pillar_1.4.2        backports_1.1.5    </span></a>
+<a class="sourceLine" id="cb8-25" data-line-number="25"><span class="co">#&gt; [16] lattice_0.20-38     glue_1.3.1          limma_3.42.0       </span></a>
+<a class="sourceLine" id="cb8-26" data-line-number="26"><span class="co">#&gt; [19] digest_0.6.23       polyclip_1.10-0     colorspace_1.4-1   </span></a>
+<a class="sourceLine" id="cb8-27" data-line-number="27"><span class="co">#&gt; [22] htmltools_0.4.0     Matrix_1.2-18       pkgconfig_2.0.3    </span></a>
+<a class="sourceLine" id="cb8-28" data-line-number="28"><span class="co">#&gt; [25] purrr_0.3.3         scales_1.1.0        tweenr_1.0.1       </span></a>
+<a class="sourceLine" id="cb8-29" data-line-number="29"><span class="co">#&gt; [28] hopach_2.46.0       ggforce_0.3.1       tibble_2.1.3       </span></a>
+<a class="sourceLine" id="cb8-30" data-line-number="30"><span class="co">#&gt; [31] proxy_0.4-23        mgcv_1.8-28         farver_2.0.1       </span></a>
+<a class="sourceLine" id="cb8-31" data-line-number="31"><span class="co">#&gt; [34] ggplot2_3.2.1       BiocGenerics_0.32.0 lazyeval_0.2.2     </span></a>
+<a class="sourceLine" id="cb8-32" data-line-number="32"><span class="co">#&gt; [37] survival_3.1-8      magrittr_1.5        crayon_1.3.4       </span></a>
+<a class="sourceLine" id="cb8-33" data-line-number="33"><span class="co">#&gt; [40] memoise_1.1.0       evaluate_0.14       fs_1.3.1           </span></a>
+<a class="sourceLine" id="cb8-34" data-line-number="34"><span class="co">#&gt; [43] nlme_3.1-141        MASS_7.3-51.4       segmented_1.0-0    </span></a>
+<a class="sourceLine" id="cb8-35" data-line-number="35"><span class="co">#&gt; [46] tools_3.6.1         minpack.lm_1.2-1    lifecycle_0.1.0    </span></a>
+<a class="sourceLine" id="cb8-36" data-line-number="36"><span class="co">#&gt; [49] stringr_1.4.0       S4Vectors_0.23.25   munsell_0.5.0      </span></a>
+<a class="sourceLine" id="cb8-37" data-line-number="37"><span class="co">#&gt; [52] cluster_2.1.0       compiler_3.6.1      pkgdown_1.4.1      </span></a>
+<a class="sourceLine" id="cb8-38" data-line-number="38"><span class="co">#&gt; [55] proxyC_0.1.5        pbmcapply_1.5.0     rlang_0.4.2        </span></a>
+<a class="sourceLine" id="cb8-39" data-line-number="39"><span class="co">#&gt; [58] grid_3.6.1          rstudioapi_0.10     igraph_1.2.4.2     </span></a>
+<a class="sourceLine" id="cb8-40" data-line-number="40"><span class="co">#&gt; [61] labeling_0.3        rmarkdown_1.18      gtable_0.3.0       </span></a>
+<a class="sourceLine" id="cb8-41" data-line-number="41"><span class="co">#&gt; [64] graphlayouts_0.5.0  R6_2.4.1            gridExtra_2.3      </span></a>
+<a class="sourceLine" id="cb8-42" data-line-number="42"><span class="co">#&gt; [67] knitr_1.26          dplyr_0.8.3         zeallot_0.1.0      </span></a>
+<a class="sourceLine" id="cb8-43" data-line-number="43"><span class="co">#&gt; [70] rprojroot_1.3-2     desc_1.2.0          stringi_1.4.3      </span></a>
+<a class="sourceLine" id="cb8-44" data-line-number="44"><span class="co">#&gt; [73] parallel_3.6.1      Rcpp_1.0.3          vctrs_0.2.0        </span></a>
+<a class="sourceLine" id="cb8-45" data-line-number="45"><span class="co">#&gt; [76] diptest_0.75-7      tidyselect_0.2.5    xfun_0.11</span></a></code></pre></div>
 </div>
   </div>
 
@@ -311,17 +313,20 @@ trainClassExample
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by Yingxin Lin.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>
