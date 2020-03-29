@@ -94,6 +94,26 @@ and trainRes storing the training model inforamtion.
 \description{
 Train and test scClassify model
 }
+\examples{
+
+data("scClassify_example")
+xin_cellTypes <- scClassify_example$xin_cellTypes
+exprsMat_xin_subset <- scClassify_example$exprsMat_xin_subset
+wang_cellTypes <- scClassify_example$wang_cellTypes
+exprsMat_wang_subset <- scClassify_example$exprsMat_wang_subset
+
+scClassify_res <- scClassify(exprsMat_train = exprsMat_xin_subset,
+cellTypes_train = xin_cellTypes,
+exprsMat_test = list(wang = exprsMat_wang_subset),
+cellTypes_test = list(wang = wang_cellTypes),
+tree = "HOPACH",
+algorithm = "WKNN",
+selectFeatures = c("limma"),
+similarity = c("pearson"),
+returnList = FALSE,
+verbose = FALSE)
+
+}
 \author{
 Yingxin Lin
 }

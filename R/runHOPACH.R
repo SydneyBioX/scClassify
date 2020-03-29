@@ -20,6 +20,17 @@
 #' @importFrom graphics plot text
 #' @import statmod
 #'
+#' @examples
+#'
+#' data("scClassify_example")
+#' wang_cellTypes <- factor(scClassify_example$wang_cellTypes)
+#' exprsMat_wang_subset <- scClassify_example$exprsMat_wang_subset
+#' avgMat_wang <- apply(exprsMat_wang_subset, 1, function(x)
+#' aggregate(x, list(wang_cellTypes), mean)$x)
+#' rownames(avgMat_wang) <- levels(wang_cellTypes)
+#' res_hopach <- runHOPACH(avgMat_wang)
+#' res_hopach$plot
+#'
 #' @references van der Laan, M. J. and Pollard, K. S. (2003) ‘A new algorithm for hybrid hierarchical clustering with visualization and the bootstrap’, Journal of Statistical Planning and Inference. doi: 10.1016/S0378-3758(02)00388-9.
 #' @export
 
@@ -88,7 +99,10 @@ runHOPACH <- function(data, plot= TRUE, kmax = 5) {
 #' @importFrom ggraph geom_edge_diagonal geom_node_text geom_node_point ggraph
 #' @import igraph
 #'
+#' @examples
 #'
+#' data("trainClassExample_xin")
+#' plotCellTypeTree(trainClassExample_xin@cellTypeTree)
 #'
 #' @export
 

@@ -12,15 +12,33 @@
 #' @param algorithm A vector indicates the KNN method that are used, set as "WKNN" by default. This
 #' should be one or more of "WKNN", "KNN", "DWKNN".
 #' @param similarity A vector indicates the similarity measure that are used, set as "pearson" by default.
-#' This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kendall", "binomial", "weighted_rank","manhattan"
-#' @param cutoff_method A vector indicates the method to cutoff the correlation distribution. Set as "dynamic" by default.
-#' @param weighted_ensemble A logical input indicates in ensemble learning, whether the results is combined by a
+#' This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kendall", "binomial",
+#' "weighted_rank","manhattan"
+#' @param cutoff_method A vector indicates the method to cutoff the correlation distribution.
+#' Set as "dynamic" by default.
+#' @param weighted_ensemble A logical input indicates in ensemble learning,
+#' whether the results is combined by a
 #' weighted score for each base classifier.
 #' @param weights A vector indicates the weights for ensemble
 #' @param parallel A logical input indicates whether running in paralllel or not
 #' @param ncores An integer indicates the number of cores that are used
 #' @param verbose A logical input indicates whether the intermediate steps will be printed
 #' @return list of results
+#'
+#' @examples
+#' data("scClassify_example")
+#' wang_cellTypes <- scClassify_example$wang_cellTypes
+#' exprsMat_wang_subset <- scClassify_example$exprsMat_wang_subset
+#' data("trainClassExample_xin")
+#'
+#' pred_res <- predict_scClassify(exprsMat_test = exprsMat_wang_subset,
+#' trainRes = trainClassExample_xin,
+#' cellTypes_test = wang_cellTypes,
+#' algorithm = "WKNN",
+#' features = c("limma"),
+#' similarity = c("pearson", "spearman"),
+#' prob_threshold = 0.7,
+#' verbose = TRUE)
 #'
 #' @author Yingxin Lin
 #'
@@ -57,7 +75,8 @@ predict_scClassify <- function(exprsMat_test,
 
 
   if ("scClassifyTrainModelList" %in% is(trainRes)) {
-    stop("For a list of training model, please use predict_scClassifyJoint() instead to get joint training results.")
+    stop("For a list of training model,
+         please use predict_scClassifyJoint() instead to get joint training results.")
   }
 
   if (!any(c("scClassifyTrainModel", "list") %in% is(trainRes))) {
@@ -201,9 +220,12 @@ predict_scClassify <- function(exprsMat_test,
 #' This should be one or more of "limma", "DV", "DD", "chisq", "BI".
 #' @param algorithm A vector indicates the KNN method that are used, set as "WKNN" by default. This
 #' should be one or more of "WKNN", "KNN", "DWKNN".
-#' @param similarity A vector indicates the similarity measure that are used, set as "pearson" by default.
-#' This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kendall", "binomial", "weighted_rank","manhattan"
-#' @param cutoff_method A vector indicates the method to cutoff the correlation distribution. Set as "dynamic" by default.
+#' @param similarity A vector indicates the similarity measure that are used,
+#' set as "pearson" by default.
+#' This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kendall",
+#' "binomial", "weighted_rank","manhattan"
+#' @param cutoff_method A vector indicates the method to cutoff the correlation distribution.
+#' Set as "dynamic" by default.
 #' @param parallel A logical input indicates whether running in paralllel or not
 #' @param ncores An integer indicates the number of cores that are used
 #' @param verbose A logical input indicates whether the intermediate steps will be printed
@@ -456,7 +478,8 @@ predict_scClassifySingle <- function(exprsMat_test,
           else {
             predIdx <- which(pred[[i - 1]] == j)
             # check the label of current level based on the label of last level
-            pred_level[[j]] <- as.factor(rep(unique(cutree_list[[i]][cutree_list[[i - 1]] == j]), length(predIdx)))
+            pred_level[[j]] <- as.factor(rep(unique(cutree_list[[i]][cutree_list[[i - 1]] == j]),
+                                             length(predIdx)))
             names(pred_level[[j]]) <- colnames(exprsMat_test)[predIdx]
           }
         }
@@ -477,7 +500,8 @@ predict_scClassifySingle <- function(exprsMat_test,
 
         names(pred[[i]]) <- colnames(exprsMat_test)
         pred[[i]] <- as.numeric(as.character(pred[[i]]))
-        # there will be NA since they are unassigned from the last level, and therefore are not predicted in this level
+        # there will be NA since they are unassigned from the last level,
+        #and therefore are not predicted in this level
         pred[[i]][is.na(pred[[i]])] <- 0
         names(pred[[i]]) <- colnames(exprsMat_test)
 

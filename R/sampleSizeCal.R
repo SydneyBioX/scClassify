@@ -24,6 +24,18 @@
 #' @return A matrix of accuracy matrix, where columns corresponding to different
 #' sample sizes, rows corresponding to the number of repetation.
 #'
+#' @examples
+#' data("scClassify_example")
+#' xin_cellTypes <- scClassify_example$xin_cellTypes
+#' exprsMat_xin_subset <- scClassify_example$exprsMat_xin_subset
+#'
+#' exprsMat_xin_subset <- as(exprsMat_xin_subset, "dgCMatrix")
+#' set.seed(2019)
+#' accMat <- runSampleCal(exprsMat_xin_subset,
+#'                                    xin_cellTypes,
+#'                                    n_list = seq(20, 100, 20),
+#'                                    num_repeat = 5, ncores = 1)
+#'
 #' @importFrom pbmcapply pbmclapply
 #' @export
 
@@ -63,7 +75,7 @@ runSampleCal <- function(exprsMat,
     }
 
     cellTypes_ind <- cellType_tree[[level]][as.character(cellTypes)]
-    cellTypes_relabelled <- sapply(1:length(cellTypes_ind), function(i) {
+    cellTypes_relabelled <- sapply(seq_len(length(cellTypes_ind)), function(i) {
       paste(names(cellType_tree[[level]])[cellType_tree[[level]] %in% cellTypes_ind[i]],
             collapse = "_")
     })
@@ -81,9 +93,9 @@ runSampleCal <- function(exprsMat,
 
   res_sub <- list()
 
-  for (i in 1:length(n_list)) {
+  for (i in seq_len(length(n_list))) {
     print(paste("n=",n_list[i]))
-    system.time(res_sub[[i]] <- pbmcapply::pbmclapply(1:num_repeat, function(x) {
+    system.time(res_sub[[i]] <- pbmcapply::pbmclapply(seq_len(num_repeat), function(x) {
       tryCatch({
         l <- runSubSampling(exprsMat, cellTypes, n = n_list[[i]],
                             subset_test = subset_test, num_test = num_test,
@@ -125,7 +137,7 @@ runSubSampling <- function(exprsMat,
   n_subset <- round(table(cellTypes)/length(cellTypes)*n)
   n_subset <- ifelse(n_subset < 3, 3, n_subset)
 
-  trainIdx <- unlist(lapply(1:length(n_subset), function(x)
+  trainIdx <- unlist(lapply(seq_len(length(n_subset)), function(x)
     sample(which(cellTypes == names(n_subset)[x]), n_subset[x])))
 
   exprsMat_train <- exprsMat[,trainIdx]
@@ -134,7 +146,7 @@ runSubSampling <- function(exprsMat,
   print(table(cellTypes_train))
 
   if (subset_test) {
-    testIdx <- sample(c(1:ncol(exprsMat))[-trainIdx], num_test)
+    testIdx <- sample(seq_len(ncol(exprsMat))[-trainIdx], num_test)
     exprsMat_test <- exprsMat[, testIdx]
     cellTypes_test <- cellTypes[testIdx]
   }else{
@@ -165,10 +177,10 @@ reLevelCellTypeTree <- function(cellType_tree, level) {
     paste(names(cellType_tree[[level]])[cellType_tree[[level]] == i], collapse = "_")
   })
 
-  cellTypes_newTree[[level]] <- 1:max(cellType_tree[[level]])
+  cellTypes_newTree[[level]] <- seq_len(max(cellType_tree[[level]]))
   names(cellTypes_newTree[[level]]) <- newCellTypeNames
 
-  for (i in 1:(level - 1)) {
+  for (i in seq_len((level - 1))) {
 
     # cellTypes_newTree[[i]] <- cellType_tree[[i]]
     #

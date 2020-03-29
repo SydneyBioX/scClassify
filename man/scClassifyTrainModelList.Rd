@@ -15,3 +15,12 @@ A scClassifyTrainModelList object
 \description{
 The scClassifyTrainModelList class
 }
+\examples{
+
+data("trainClassExample_xin")
+data("trainClassExample_wang")
+trainClassExampleList <- scClassifyTrainModelList(trainClassExample_xin,
+trainClassExample_wang
+)
+
+}

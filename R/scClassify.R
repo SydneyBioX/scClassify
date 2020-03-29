@@ -36,6 +36,26 @@
 #' and trainRes storing the training model inforamtion.
 #'
 #' @author Yingxin Lin
+#'
+#' @examples
+#'
+#' data("scClassify_example")
+#' xin_cellTypes <- scClassify_example$xin_cellTypes
+#' exprsMat_xin_subset <- scClassify_example$exprsMat_xin_subset
+#' wang_cellTypes <- scClassify_example$wang_cellTypes
+#' exprsMat_wang_subset <- scClassify_example$exprsMat_wang_subset
+#'
+#' scClassify_res <- scClassify(exprsMat_train = exprsMat_xin_subset,
+#' cellTypes_train = xin_cellTypes,
+#' exprsMat_test = list(wang = exprsMat_wang_subset),
+#' cellTypes_test = list(wang = wang_cellTypes),
+#' tree = "HOPACH",
+#' algorithm = "WKNN",
+#' selectFeatures = c("limma"),
+#' similarity = c("pearson"),
+#' returnList = FALSE,
+#' verbose = FALSE)
+#'
 #' @importFrom pbmcapply pbmclapply
 #' @importFrom S4Vectors DataFrame
 #' @importFrom methods is
@@ -239,7 +259,7 @@ scClassify <- function(exprsMat_train = NULL,
   if ("list" %in% is(exprsMat_test)) {
     testRes <- list()
 
-    for (testDataset_idx in 1:length(exprsMat_test)) {
+    for (testDataset_idx in seq_len(length(exprsMat_test))) {
 
       if (verbose) {
         cat("Predicting: ")
@@ -366,7 +386,7 @@ scClassify <- function(exprsMat_train = NULL,
 
     if ("list" %in% is(exprsMat_train)) {
       trainClassList <- list()
-      for (train_list_idx in 1:length(trainRes)) {
+      for (train_list_idx in seq_len(length(trainRes))) {
         trainClassList[[train_list_idx]] <- scClassifyTrainModel(
           name = names(trainRes)[train_list_idx],
           cellTypeTree = trainRes[[train_list_idx]]$cutree_list,

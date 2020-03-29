@@ -20,6 +20,16 @@
 #' @return list of results
 #' @author Yingxin Lin
 #'
+#' @examples
+#' data("scClassify_example")
+#' xin_cellTypes <- scClassify_example$xin_cellTypes
+#' exprsMat_xin_subset <- scClassify_example$exprsMat_xin_subset
+#' trainClass <- train_scClassify(exprsMat_train = exprsMat_xin_subset,
+#' cellTypes_train = xin_cellTypes,
+#' selectFeatures = c("limma", "BI"),
+#' returnList = FALSE
+#' )
+#'
 #' @importFrom stats na.omit
 #' @importFrom methods is
 #' @export
@@ -159,7 +169,7 @@ train_scClassify <- function(exprsMat_train,
   } else {
     if ("list" %in% is(exprsMat_train)) {
       trainClassList <- list()
-      for (train_list_idx in 1:length(trainRes)) {
+      for (train_list_idx in seq_len(length(trainRes))) {
         trainClassList[[train_list_idx]] <- scClassifyTrainModel(
           name = names(trainRes)[train_list_idx],
           cellTypeTree = trainRes[[train_list_idx]]$cutree_list,
@@ -244,7 +254,7 @@ train_scClassifySingle <- function(exprsMat_train,
   # Select the features to construct tree
   tt <- doLimma(exprsMat_train, cellTypes_train)
   de <- Reduce(union, lapply(tt, function(t)
-    rownames(t)[1:max(min(50, sum(t$adj.P.Val < 0.001)), 30)]))
+    rownames(t)[seq_len(max(min(50, sum(t$adj.P.Val < 0.001)), 30))]))
 
   if (verbose) {
     print(paste("Number of genes selected to construct HOPACH tree", length(de)))
@@ -289,7 +299,7 @@ train_scClassifySingle <- function(exprsMat_train,
   #
 
   if (parallel) {
-    hierarchyKNNRes <- pbmcapply::pbmclapply(1:length(selectFeatures),
+    hierarchyKNNRes <- pbmcapply::pbmclapply(seq_len(length(selectFeatures)),
                                              function(ft)
                                                hierarchyKNNcor(exprsMat_train,
                                                                cellTypes_train,
@@ -302,7 +312,7 @@ train_scClassifySingle <- function(exprsMat_train,
     names(hierarchyKNNRes) <- selectFeatures
   }else{
     hierarchyKNNRes <- list()
-    for (ft in 1:length(selectFeatures)) {
+    for (ft in seq_len(length(selectFeatures))) {
 
       if (verbose) {
         print(paste("============ selecting features by:", selectFeatures[ft], "============"))
@@ -385,15 +395,15 @@ constructTree <- function(centroidMat,
 
 cutree_iterative <- function(hc, depth = 1){
 
-  height_sort <- sort(hc$height, decreasing= TRUE)
+  height_sort <- sort(hc$height, decreasing = TRUE)
   cutree_list <- list()
 
-  for (i in 1:sum(height_sort >= height_sort[round(length(height_sort)*depth)])) {
+  for (i in seq_len(sum(height_sort >= height_sort[round(length(height_sort)*depth)]))) {
     cutree_list[[i]] <- cutree(hc, h = height_sort[i])
   }
 
   # Last level is distinct number
-  cutree_list[[length(cutree_list) + 1]] <- 1:length(hc$labels)
+  cutree_list[[length(cutree_list) + 1]] <- seq_len(length(hc$labels))
   names(cutree_list[[length(cutree_list)]]) <- hc$labels
 
   return(cutree_list)
@@ -418,10 +428,7 @@ hierarchyKNNcor <- function(exprsMat,
   numHierchy <- length(cutree_list)
   levelModel <- list()
   levelHVG <- list()
-  for (i in 1:numHierchy) {
-    # print(paste ("Level", i))
-
-
+  for (i in seq_len(numHierchy)) {
     #Make sure not all same cluster
     if (length(unique(cutree_list[[i]])) != 1) {
 

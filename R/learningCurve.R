@@ -216,7 +216,7 @@ fitLC_mixture <- function(acc, n,  b = NULL,
   init <- init_fit(acc, n)
 
   rss <- c()
-  for (i in 1:length(d_list)) {
+  for (i in seq_len(length(d_list))) {
     d <- d_list[i]
     learning_curve <-  try({minpack.lm::nlsLM(acc ~ H1(d - n) * I(1 / n^(c) * a) +
                                                 H(n - d)  * I(1 / n^(c1) * a*d^(c1 - c))  + b,
@@ -271,6 +271,16 @@ fitLC_mixture <- function(acc, n,  b = NULL,
 #' @param res model results returned by \code{learning_curve} function
 #' @param acc accuracy that are quired
 #' @return sample size that are required
+#'
+#' @examples
+#' set.seed(2019)
+#' n <- seq(20, 10000, 100)
+#' accMat <- do.call(cbind, lapply(1:length(n), function(i){
+#' tmp_n <- rep(n[i], 50)
+#' y <- -2/(tmp_n^0.8) + 0.95 + rnorm(length(tmp_n), 0, 0.02)
+#' }))
+#' res <- learningCurve(accMat = accMat, n)
+#' N <- getN(res, acc = 0.9)
 #'
 #' @export
 

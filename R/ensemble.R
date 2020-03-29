@@ -92,7 +92,7 @@ getResByWeights <- function(res, weight) {
   } else {
 
 
-    mat <- sapply(1:length(resType), function(i){
+    mat <- sapply(seq_len(length(resType)), function(i){
       ifelse(res %in% resType[i], 1, 0) * weight
     })
     colnames(mat) <- resType

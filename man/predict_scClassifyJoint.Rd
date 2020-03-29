@@ -42,10 +42,13 @@ This should be one or more of "limma", "DV", "DD", "chisq", "BI".}
 \item{algorithm}{A vector indicates the KNN method that are used, set as "WKNN" by default. This
 should be one or more of "WKNN", "KNN", "DWKNN".}
 
-\item{similarity}{A vector indicates the similarity measure that are used, set as "pearson" by default.
-This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kendall", "binomial", "weighted_rank","manhattan"}
+\item{similarity}{A vector indicates the similarity measure that are used,
+set as "pearson" by default.
+This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kendall",
+"binomial", "weighted_rank","manhattan"}
 
-\item{cutoff_method}{A vector indicates the method to cutoff the correlation distribution. Set as "dynamic" by default.}
+\item{cutoff_method}{A vector indicates the method to cutoff the correlation distribution.
+Set as "dynamic" by default.}
 
 \item{parallel}{A logical input indicates whether running in paralllel or not}
 

@@ -103,6 +103,14 @@ setClass("scClassifyTrainModelList",
 #'
 #' @return A scClassifyTrainModelList object
 #'
+#' @examples
+#'
+#' data("trainClassExample_xin")
+#' data("trainClassExample_wang")
+#' trainClassExampleList <- scClassifyTrainModelList(trainClassExample_xin,
+#' trainClassExample_wang
+#' )
+#'
 #' @importFrom S4Vectors SimpleList
 #' @export
 

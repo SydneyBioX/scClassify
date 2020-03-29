@@ -45,11 +45,14 @@ This should be one or more of "limma", "DV", "DD", "chisq", "BI".}
 should be one or more of "WKNN", "KNN", "DWKNN".}
 
 \item{similarity}{A vector indicates the similarity measure that are used, set as "pearson" by default.
-This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kendall", "binomial", "weighted_rank","manhattan"}
+This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kendall", "binomial",
+"weighted_rank","manhattan"}
 
-\item{cutoff_method}{A vector indicates the method to cutoff the correlation distribution. Set as "dynamic" by default.}
+\item{cutoff_method}{A vector indicates the method to cutoff the correlation distribution.
+Set as "dynamic" by default.}
 
-\item{weighted_ensemble}{A logical input indicates in ensemble learning, whether the results is combined by a
+\item{weighted_ensemble}{A logical input indicates in ensemble learning,
+whether the results is combined by a
 weighted score for each base classifier.}
 
 \item{weights}{A vector indicates the weights for ensemble}
@@ -65,6 +68,22 @@ list of results
 }
 \description{
 Testing scClassify model
+}
+\examples{
+data("scClassify_example")
+wang_cellTypes <- scClassify_example$wang_cellTypes
+exprsMat_wang_subset <- scClassify_example$exprsMat_wang_subset
+data("trainClassExample_xin")
+
+pred_res <- predict_scClassify(exprsMat_test = exprsMat_wang_subset,
+trainRes = trainClassExample_xin,
+cellTypes_test = wang_cellTypes,
+algorithm = "WKNN",
+features = c("limma"),
+similarity = c("pearson", "spearman"),
+prob_threshold = 0.7,
+verbose = TRUE)
+
 }
 \author{
 Yingxin Lin

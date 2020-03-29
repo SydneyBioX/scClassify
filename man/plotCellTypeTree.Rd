@@ -17,3 +17,9 @@ A ggplot object visualising the HOPACH tree
 \description{
 To plot cell type tree
 }
+\examples{
+
+data("trainClassExample_xin")
+plotCellTypeTree(trainClassExample_xin@cellTypeTree)
+
+}

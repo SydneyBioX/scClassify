@@ -59,6 +59,17 @@ list of results
 \description{
 Training scClassify model
 }
+\examples{
+data("scClassify_example")
+xin_cellTypes <- scClassify_example$xin_cellTypes
+exprsMat_xin_subset <- scClassify_example$exprsMat_xin_subset
+trainClass <- train_scClassify(exprsMat_train = exprsMat_xin_subset,
+cellTypes_train = xin_cellTypes,
+selectFeatures = c("limma", "BI"),
+returnList = FALSE
+)
+
+}
 \author{
 Yingxin Lin
 }

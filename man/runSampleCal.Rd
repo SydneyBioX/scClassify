@@ -55,3 +55,16 @@ sample sizes, rows corresponding to the number of repetation.
 \description{
 Run sample size calculation for pilot data for reference dataset
 }
+\examples{
+data("scClassify_example")
+xin_cellTypes <- scClassify_example$xin_cellTypes
+exprsMat_xin_subset <- scClassify_example$exprsMat_xin_subset
+
+exprsMat_xin_subset <- as(exprsMat_xin_subset, "dgCMatrix")
+set.seed(2019)
+accMat <- runSampleCal(exprsMat_xin_subset,
+                                   xin_cellTypes,
+                                   n_list = seq(20, 100, 20),
+                                   num_repeat = 5, ncores = 1)
+
+}
