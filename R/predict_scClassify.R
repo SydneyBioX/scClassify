@@ -1,6 +1,7 @@
 #' Testing scClassify model
 #'
-#' @param exprsMat_test A list or a matrix indicates the expression matrices of the query datasets
+#' @param exprsMat_test A list or a matrix indicates the log-transformed expression matrices
+#' of the query datasets
 #' @param trainRes A `scClassifyTrainModel` or a `list` indicates scClassify trained model
 #' @param cellTypes_test A list or a vector indicates cell types of the qurey datasets (Optional).
 #' @param k An integer indicates the number of neighbour
@@ -9,8 +10,8 @@
 #' @param cor_threshold_high A numeric indicates the highest correlation threshold
 #' @param features A vector indicates the gene selection method, set as "limma" by default.
 #' This should be one or more of "limma", "DV", "DD", "chisq", "BI".
-#' @param algorithm A vector indicates the KNN method that are used, set as "WKNN" by default. This
-#' should be one or more of "WKNN", "KNN", "DWKNN".
+#' @param algorithm A vector indicates the KNN method that are used, set as "WKNN" by default.
+#' This should be one or more of "WKNN", "KNN", "DWKNN".
 #' @param similarity A vector indicates the similarity measure that are used, set as "pearson" by default.
 #' This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kendall", "binomial",
 #' "weighted_rank","manhattan"
@@ -321,7 +322,8 @@ predict_scClassifySingle <- function(exprsMat_test,
 
   if (!is.null(cellTypes_test)) {
     if (length(cellTypes_test) != ncol(exprsMat_test)) {
-      stop("Length of testing cell types does not match with number of column of testing expression matrix")
+      stop("Length of testing cell types does not match
+           with number of column of testing expression matrix")
     }
   }
 

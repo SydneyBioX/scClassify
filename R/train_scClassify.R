@@ -1,6 +1,6 @@
 #' Training scClassify model
 #'
-#' @param exprsMat_train A matrix of expression matrix of reference dataset
+#' @param exprsMat_train A matrix of log-transformed expression matrix of reference dataset
 #' @param cellTypes_train A vector of cell types of reference dataset
 #' @param tree A vector indicates the method to build hierarchical tree, set as "HOPACH" by default.
 #' This should be one of "HOPACH" and "HC" (using stats::hclust).
@@ -17,7 +17,8 @@
 #' from the \code{BiocParallel} package is used. Default is SerialParam().
 #' @param verbose A logical input indicates whether the intermediate steps will be printed
 #' @param returnList A logical input indicates whether the output will be class of list
-#' @param ... Other input for predict_scClassify for the case when weights calculation of the pretrained model is performed
+#' @param ... Other input for predict_scClassify for the case when weights calculation
+#' of the pretrained model is performed
 #' @return list of results
 #' @author Yingxin Lin
 #'

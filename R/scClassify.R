@@ -1,6 +1,6 @@
 #' @title Train and test scClassify model
 #'
-#' @param exprsMat_train A matrix of expression matrix of reference dataset
+#' @param exprsMat_train A matrix of log-transformed expression matrix of reference dataset
 #' @param cellTypes_train A vector of cell types of reference dataset
 #' @param exprsMat_test A list or a matrix indicates the expression matrices of the query datasets
 #' @param cellTypes_test A list or a vector indicates cell types of the query datasets (Optional).
@@ -8,17 +8,22 @@
 #' This should be one of "HOPACH" and "HC" (using hclust).
 #' @param selectFeatures A vector indicates the gene selection method, set as "limma" by default.
 #' This should be one or more of "limma", "DV", "DD", "chisq", "BI".
-#' @param algorithm A vector indicates the KNN method that are used, set as "WKNN" by default. This
-#' should be one or more of "WKNN", "KNN", "DWKNN".
+#' @param algorithm A vector indicates the KNN method that are used, set as
+#' "WKNN" by default. Thisshould be one or more of "WKNN", "KNN", "DWKNN".
 #' @param similarity A vector indicates the similarity measure that are used, set as "pearson" by default.
-#' This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kendall", "binomial", "weighted_rank","manhattan"
-#' @param cutoff_method A vector indicates the method to cutoff the correlation distribution. Set as "dynamic" by default.
-#' @param weighted_ensemble A logical input indicates in ensemble learning, whether the results is combined by a
+#' This should be one or more of "pearson",  "spearman", "cosine", "jaccard",
+#' "kendall", "binomial", "weighted_rank","manhattan"
+#' @param cutoff_method A vector indicates the method to cutoff the correlation distribution.
+#' Set as "dynamic" by default.
+#' @param weighted_ensemble A logical input indicates in ensemble learning,
+#' whether the results is combined by a
 #' weighted score for each base classifier.
 #' @param weights A vector indicates the weights for ensemble
-#' @param weighted_jointClassification A logical input indicates in joint classification using multiple training datasets,
+#' @param weighted_jointClassification A logical input indicates in joint classification
+#' using multiple training datasets,
 #' whether the results is combined by a weighted score for each training model.
-#' @param cellType_tree A list indicates the cell type tree provided by user. (By default, it is NULL) (Only for one training data input)
+#' @param cellType_tree A list indicates the cell type tree provided by user.
+#' (By default, it is NULL) (Only for one training data input)
 #' @param k An integer indicates the number of neighbour
 #' @param topN An integer indicates the top number of features that are selected
 #' @param hopach_kmax An integer between 1 and 9 specifying the maximum number of

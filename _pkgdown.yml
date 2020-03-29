@@ -14,6 +14,8 @@ navbar:
           href: articles/scClassify.html
         - text: Sample size learning
           href: articles/webOnly/sampleSizeCal.html
+        - text: Case study - Tabula Muris Heart
+          href: articles/webOnly/scClassify_TM_heart.html
     - text: Functions
       href: reference/index.html
     - text: Pretrained Models
