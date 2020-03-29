@@ -212,8 +212,9 @@
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">2019</span>)</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(accMat &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/runSampleCal.html">runSampleCal</a></span>(exprsMat_xin_subset, </a>
 <a class="sourceLine" id="cb4-3" data-line-number="3">                                   xin_cellTypes,</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">                                   <span class="dt">n_list =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">20</span>, <span class="dv">160</span>, <span class="dv">20</span>), </a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">                                   <span class="dt">num_repeat =</span> <span class="dv">10</span>, <span class="dt">BPPARAM =</span> BiocParallel<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html">SerialParam</a></span>()))</a></code></pre></div>
+<a class="sourceLine" id="cb4-4" data-line-number="4">                                   <span class="dt">n_list =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">80</span>, <span class="dv">400</span>, <span class="dv">20</span>), </a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">                                   <span class="dt">num_repeat =</span> <span class="dv">20</span>,</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">                                   <span class="dt">BPPARAM =</span> BiocParallel<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/BiocParallel/man/MulticoreParam-class.html">MulticoreParam</a></span>(<span class="dt">workers =</span> <span class="dv">4</span>)))</a></code></pre></div>
 <p>After we obtain an accuracy matrix, we can fit the learning curve by using the <code>learningCurve</code> function.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">res &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/learningCurve.html">learningCurve</a></span>(<span class="dt">accMat =</span> accMat,</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">                     <span class="dt">n =</span> <span class="kw"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(accMat)))</a></code></pre></div>
@@ -223,18 +224,18 @@
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt;   model: acc ~ I(1/n^(c) * a) + b</span></a>
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt;    data: dat_train</span></a>
 <a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt;                 a.(Intercept) c.log(max(acc) + 0.001 - acc) </span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt;                       -2.1709                        0.7204 </span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt;                       -2.2881                        0.7493 </span></a>
 <a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;                             b </span></a>
 <a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;                        1.0000 </span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;  residual sum-of-squares: 0.02473</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;  residual sum-of-squares: 0.0005011</span></a>
 <a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; Number of iterations to convergence: 29 </span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; Number of iterations to convergence: 7 </span></a>
 <a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; Achieved convergence tolerance: 1.49e-08</span></a></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">res<span class="op">$</span>plot</a></code></pre></div>
 <p><img src="sampleSizeCal_files/figure-html/unnamed-chunk-7-1.png" width="768"></p>
 <p>Using <code>getN</code> function, we can also estimate a sample size for future experiments given the accuracy rate.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../../reference/getN.html">getN</a></span>(res, <span class="dt">acc =</span> <span class="fl">0.93</span>)</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt; [1] 118</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../../reference/getN.html">getN</a></span>(res, <span class="dt">acc =</span> <span class="fl">0.95</span>)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt; [1] 164</span></a></code></pre></div>
 </div>
 <div id="constructing-learning-curves-based-on-labels-from-higher-level-of-the-cell-type-tree" class="section level1">
 <h1 class="hasAnchor">
@@ -243,14 +244,15 @@
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">2019</span>)</a>
 <a class="sourceLine" id="cb9-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(accMat_level1 &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/runSampleCal.html">runSampleCal</a></span>(exprsMat_xin_subset, </a>
 <a class="sourceLine" id="cb9-3" data-line-number="3">                                          xin_cellTypes,</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4">                                          <span class="dt">n_list =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">20</span>, <span class="dv">160</span>, <span class="dv">20</span>),</a>
-<a class="sourceLine" id="cb9-5" data-line-number="5">                                          <span class="dt">num_repeat =</span> <span class="dv">10</span>,</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">                                          <span class="dt">n_list =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">80</span>, <span class="dv">400</span>, <span class="dv">20</span>),</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">                                          <span class="dt">num_repeat =</span> <span class="dv">20</span>,</a>
 <a class="sourceLine" id="cb9-6" data-line-number="6">                                          <span class="dt">cellType_tree =</span> trainClassExample_xin<span class="op">@</span>cellTypeTree,</a>
 <a class="sourceLine" id="cb9-7" data-line-number="7">                                          <span class="dt">level =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb9-8" data-line-number="8">                                          <span class="dt">BPPARAM =</span> BiocParallel<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html">SerialParam</a></span>()))</a>
+<a class="sourceLine" id="cb9-8" data-line-number="8">                                          <span class="dt">BPPARAM =</span> BiocParallel<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/BiocParallel/man/MulticoreParam-class.html">MulticoreParam</a></span>(<span class="dt">workers =</span> <span class="dv">4</span>)))</a>
 <a class="sourceLine" id="cb9-9" data-line-number="9"></a>
 <a class="sourceLine" id="cb9-10" data-line-number="10">res_level1 &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/learningCurve.html">learningCurve</a></span>(accMat_level1,</a>
-<a class="sourceLine" id="cb9-11" data-line-number="11">                            <span class="kw"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(accMat_level1)))</a></code></pre></div>
+<a class="sourceLine" id="cb9-11" data-line-number="11">                            <span class="kw"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(accMat_level1)),</a>
+<a class="sourceLine" id="cb9-12" data-line-number="12">                            <span class="dt">fitmodel =</span> <span class="st">"nls"</span>)</a></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">res_level1<span class="op">$</span>plot</a></code></pre></div>
 <p><img src="sampleSizeCal_files/figure-html/unnamed-chunk-10-1.png" width="768"></p>
 </div>
@@ -301,8 +303,7 @@
 <a class="sourceLine" id="cb11-42" data-line-number="42"><span class="co">#&gt; [67] gridExtra_2.3       knitr_1.26          dplyr_0.8.3        </span></a>
 <a class="sourceLine" id="cb11-43" data-line-number="43"><span class="co">#&gt; [70] zeallot_0.1.0       rprojroot_1.3-2     desc_1.2.0         </span></a>
 <a class="sourceLine" id="cb11-44" data-line-number="44"><span class="co">#&gt; [73] stringi_1.4.3       parallel_3.6.1      Rcpp_1.0.3         </span></a>
-<a class="sourceLine" id="cb11-45" data-line-number="45"><span class="co">#&gt; [76] vctrs_0.2.0         diptest_0.75-7      tidyselect_0.2.5   </span></a>
-<a class="sourceLine" id="cb11-46" data-line-number="46"><span class="co">#&gt; [79] xfun_0.11</span></a></code></pre></div>
+<a class="sourceLine" id="cb11-45" data-line-number="45"><span class="co">#&gt; [76] vctrs_0.2.0         tidyselect_0.2.5    xfun_0.11</span></a></code></pre></div>
 </div>
   </div>
 

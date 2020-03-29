@@ -1,20 +1,16 @@
 ---
 title: "Single Cell Sample Size Calculation"
 output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{sampleSizeCal}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
-
+  
 This vignette will provide an example of how we can fit a learning curve based on classification accuracies derived from `scClassify`.
-
+  
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  warning = FALSE,
-  message = FALSE,
-  comment = "#>"
+collapse = TRUE,
+warning = FALSE,
+message = FALSE,
+comment = "#>"
 )
 ```
 
@@ -26,7 +22,6 @@ Suppose we have a small pilot reference data, and we would like to use this refe
 Here, we illustrate the learning curve construction with a small example dataset with 4 cell types, with only 980 genes and 674 cells.
 
 
-
 ```{r setup}
 library(scClassify)
 data("scClassify_example")
@@ -35,6 +30,7 @@ exprsMat_xin_subset <- scClassify_example$exprsMat_xin_subset
 
 exprsMat_xin_subset <- as(exprsMat_xin_subset, "dgCMatrix")
 ```
+
 
 ```{r}
 dim(exprsMat_xin_subset)
@@ -64,8 +60,9 @@ For the purpose of illustration, here we set a short length of `n_list` and a sm
 set.seed(2019)
 system.time(accMat <- runSampleCal(exprsMat_xin_subset, 
                                    xin_cellTypes,
-                                   n_list = seq(20, 160, 20), 
-                                   num_repeat = 10, BPPARAM = BiocParallel::SerialParam()))
+                                   n_list = seq(80, 400, 20), 
+                                   num_repeat = 20,
+                                   BPPARAM = BiocParallel::MulticoreParam(workers = 4)))
 ```
 
 
@@ -93,7 +90,7 @@ res$plot
 Using `getN` function, we can also estimate a sample size for future experiments given the accuracy rate.
 
 ```{r}
-getN(res, acc = 0.93)
+getN(res, acc = 0.95)
 ```
 
 
@@ -108,14 +105,15 @@ We can input `cellType_tree` and specify the level of labels we would like to us
 set.seed(2019)
 system.time(accMat_level1 <- runSampleCal(exprsMat_xin_subset, 
                                           xin_cellTypes,
-                                          n_list = seq(20, 160, 20),
-                                          num_repeat = 10,
+                                          n_list = seq(80, 400, 20),
+                                          num_repeat = 20,
                                           cellType_tree = trainClassExample_xin@cellTypeTree,
                                           level = 1,
-                                          BPPARAM = BiocParallel::SerialParam()))
+                                          BPPARAM = BiocParallel::MulticoreParam(workers = 4)))
 
 res_level1 <- learningCurve(accMat_level1,
-                            as.numeric(colnames(accMat_level1)))
+                            as.numeric(colnames(accMat_level1)),
+                            fitmodel = "nls")
 ```
 
 
