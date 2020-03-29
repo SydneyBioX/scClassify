@@ -13,7 +13,8 @@
 #' @param cellType_tree A list indicates the cell type tree provided by user. (By default, it is NULL)
 #' @param weightsCal A logical input indicates whether we need to calculate the weights for the model.
 #' @param parallel A logical input indicates whether the algorihms will run in parallel
-#' @param ncores An integer indicates the number of cores that are used
+#' @param BPPARAM  A \code{BiocParallelParam} class object
+#' from the \code{BiocParallel} package is used. Default is SerialParam().
 #' @param verbose A logical input indicates whether the intermediate steps will be printed
 #' @param returnList A logical input indicates whether the output will be class of list
 #' @param ... Other input for predict_scClassify for the case when weights calculation of the pretrained model is performed
@@ -32,6 +33,7 @@
 #'
 #' @importFrom stats na.omit
 #' @importFrom methods is
+#' @importFrom BiocParallel SerialParam
 #' @export
 
 
@@ -47,7 +49,7 @@ train_scClassify <- function(exprsMat_train,
                              cellType_tree = NULL,
                              weightsCal = FALSE,
                              parallel= FALSE,
-                             ncores = 1,
+                             BPPARAM = BiocParallel::SerialParam(),
                              verbose= TRUE,
                              returnList = TRUE,
                              ...){
@@ -134,8 +136,7 @@ train_scClassify <- function(exprsMat_train,
                                                            pSig = pSig,
                                                            weightsCal = weightsCal,
                                                            parallel = parallel,
-                                                           ncores = min(ncores,
-                                                                        length(selectFeatures)),
+                                                           BPPARAM = BPPARAM,
                                                            verbose = verbose,
                                                            ...)
     }
@@ -152,7 +153,7 @@ train_scClassify <- function(exprsMat_train,
                                        cellType_tree = cellType_tree,
                                        weightsCal = weightsCal,
                                        parallel = parallel,
-                                       ncores = min(ncores, length(selectFeatures)),
+                                       BPPARAM = BPPARAM,
                                        verbose = verbose,
                                        ...)
   }
@@ -202,6 +203,7 @@ train_scClassify <- function(exprsMat_train,
 
 
 
+#' @importFrom BiocParallel SerialParam bplapply
 
 train_scClassifySingle <- function(exprsMat_train,
                                    cellTypes_train,
@@ -213,7 +215,7 @@ train_scClassifySingle <- function(exprsMat_train,
                                    cellType_tree = NULL,
                                    weightsCal = FALSE,
                                    parallel= FALSE,
-                                   ncores = 1,
+                                   BPPARAM = BiocParallel::SerialParam(),
                                    verbose= TRUE,
                                    ...){
 
@@ -299,16 +301,16 @@ train_scClassifySingle <- function(exprsMat_train,
   #
 
   if (parallel) {
-    hierarchyKNNRes <- pbmcapply::pbmclapply(seq_len(length(selectFeatures)),
-                                             function(ft)
-                                               hierarchyKNNcor(exprsMat_train,
-                                                               cellTypes_train,
-                                                               cutree_list,
-                                                               feature = selectFeatures[ft],
-                                                               topN = topN,
-                                                               pSig = pSig,
-                                                               verbose = verbose),
-                                             mc.cores = ncores)
+    hierarchyKNNRes <- BiocParallel::bplapply(seq_len(length(selectFeatures)),
+                                              function(ft)
+                                                hierarchyKNNcor(exprsMat_train,
+                                                                cellTypes_train,
+                                                                cutree_list,
+                                                                feature = selectFeatures[ft],
+                                                                topN = topN,
+                                                                pSig = pSig,
+                                                                verbose = verbose),
+                                              BPPARAM = BPPARAM)
     names(hierarchyKNNRes) <- selectFeatures
   }else{
     hierarchyKNNRes <- list()
@@ -345,7 +347,7 @@ train_scClassifySingle <- function(exprsMat_train,
                                        trainRes  = trainRes,
                                        cellTypes_test = cellTypes_train,
                                        parallel = parallel,
-                                       ncores = ncores,
+                                       BPPARAM = BPPARAM,
                                        verbose = verbose,
                                        features = selectFeatures,
                                        ...)

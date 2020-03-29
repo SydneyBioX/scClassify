@@ -38,7 +38,9 @@ res_hopach$plot
 
 }
 \references{
-van der Laan, M. J. and Pollard, K. S. (2003) ‘A new algorithm for hybrid hierarchical clustering with visualization and the bootstrap’, Journal of Statistical Planning and Inference. doi: 10.1016/S0378-3758(02)00388-9.
+van der Laan, M. J. and Pollard, K. S. (2003)
+‘A new algorithm for hybrid hierarchical clustering with visualization and the bootstrap’,
+Journal of Statistical Planning and Inference. doi: 10.1016/S0378-3758(02)00388-9.
 }
 \author{
 Yingxin Lin

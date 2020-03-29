@@ -20,6 +20,7 @@ To plot cell type tree
 \examples{
 
 data("trainClassExample_xin")
-plotCellTypeTree(trainClassExample_xin@cellTypeTree)
+
+plotCellTypeTree(slot(trainClassExample_xin, "cellTypeTree"))
 
 }

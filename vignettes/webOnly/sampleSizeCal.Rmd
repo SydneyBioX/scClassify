@@ -65,7 +65,7 @@ set.seed(2019)
 system.time(accMat <- runSampleCal(exprsMat_xin_subset, 
                                    xin_cellTypes,
                                    n_list = seq(20, 160, 20), 
-                                   num_repeat = 10, ncores = 1))
+                                   num_repeat = 10, BPPARAM = BiocParallel::SerialParam()))
 ```
 
 
@@ -90,7 +90,7 @@ res$plot
 
 
 
-Using `getN` function, we can also esimate a sample size for future experiments given the accuracy rate.
+Using `getN` function, we can also estimate a sample size for future experiments given the accuracy rate.
 
 ```{r}
 getN(res, acc = 0.93)
@@ -112,7 +112,7 @@ system.time(accMat_level1 <- runSampleCal(exprsMat_xin_subset,
                                           num_repeat = 10,
                                           cellType_tree = trainClassExample_xin@cellTypeTree,
                                           level = 1,
-                                          ncores = 1))
+                                          BPPARAM = BiocParallel::SerialParam()))
 
 res_level1 <- learningCurve(accMat_level1,
                             as.numeric(colnames(accMat_level1)))

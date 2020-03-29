@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scClassify</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
       </span>
     </div>
 
@@ -211,9 +211,9 @@
 <a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; [1] "Using dynamic correlation cutoff..."</span></a>
 <a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; classify_res</span></a>
 <a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt;                correct   correctly unassigned           intermediate </span></a>
-<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt;            0.704590818            0.269461078            0.000000000 </span></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt;            0.704590818            0.239520958            0.000000000 </span></a>
 <a class="sourceLine" id="cb5-18" data-line-number="18"><span class="co">#&gt; incorrectly unassigned         error assigned          misclassified </span></a>
-<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#&gt;            0.000000000            0.021956088            0.003992016 </span></a>
+<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">#&gt;            0.000000000            0.051896208            0.003992016 </span></a>
 <a class="sourceLine" id="cb5-20" data-line-number="20"><span class="co">#&gt; Using parameters: </span></a>
 <a class="sourceLine" id="cb5-21" data-line-number="21"><span class="co">#&gt; similarity  algorithm   features </span></a>
 <a class="sourceLine" id="cb5-22" data-line-number="22"><span class="co">#&gt; "spearman"     "WKNN"    "limma" </span></a>
@@ -232,17 +232,17 @@
 <a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt;                    acinar alpha beta delta ductal gamma stellate</span></a>
 <a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt;   alpha                 0   206    0     0      0     2        0</span></a>
 <a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt;   beta                  0     0  118     0      1     0        0</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt;   beta_delta_gamma      0     0    0     0     10     0        0</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt;   beta_delta_gamma      0     0    0     0     25     0        0</span></a>
 <a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt;   delta                 0     0    0    10      0     0        0</span></a>
 <a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt;   gamma                 0     0    0     0      0    19        0</span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;   unassigned            5     0    0     0     85     0       45</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;   unassigned            5     0    0     0     70     0       45</span></a></code></pre></div>
 <p>Prediction results for spearman as the similarity metric:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/table.html">table</a></span>(pred_res<span class="op">$</span>spearman_WKNN_limma<span class="op">$</span>predRes, wang_cellTypes)</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt;                   wang_cellTypes</span></a>
 <a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt;                    acinar alpha beta delta ductal gamma stellate</span></a>
 <a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt;   alpha                 0   206    0     0      0     2        2</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt;   beta                  2     0  118     0     31     0       12</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt;   beta_delta_gamma      1     0    0     0     64     0       25</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt;   beta                  2     0  118     0     29     0        6</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt;   beta_delta_gamma      1     0    0     0     66     0       31</span></a>
 <a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt;   delta                 0     0    0    10      0     0        2</span></a>
 <a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt;   gamma                 0     0    0     0      0    18        0</span></a>
 <a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt;   unassigned            2     0    0     0      1     1        4</span></a></code></pre></div>
@@ -266,35 +266,36 @@
 <a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></a>
 <a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb8-16" data-line-number="16"><span class="co">#&gt; other attached packages:</span></a>
-<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="co">#&gt; [1] scClassify_0.2.1</span></a>
+<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="co">#&gt; [1] scClassify_0.2.3</span></a>
 <a class="sourceLine" id="cb8-18" data-line-number="18"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">#&gt; loaded via a namespace (and not attached):</span></a>
 <a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">#&gt;  [1] Biobase_2.46.0      viridis_0.5.1       mixtools_1.1.0     </span></a>
 <a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">#&gt;  [4] tidyr_1.0.0         tidygraph_1.1.2     viridisLite_0.3.0  </span></a>
 <a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">#&gt;  [7] splines_3.6.1       ggraph_2.0.0        RcppParallel_4.4.4 </span></a>
-<a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt; [10] assertthat_0.2.1    stats4_3.6.1        yaml_2.2.0         </span></a>
-<a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">#&gt; [13] ggrepel_0.8.1       pillar_1.4.2        backports_1.1.5    </span></a>
-<a class="sourceLine" id="cb8-25" data-line-number="25"><span class="co">#&gt; [16] lattice_0.20-38     glue_1.3.1          limma_3.42.0       </span></a>
-<a class="sourceLine" id="cb8-26" data-line-number="26"><span class="co">#&gt; [19] digest_0.6.23       polyclip_1.10-0     colorspace_1.4-1   </span></a>
-<a class="sourceLine" id="cb8-27" data-line-number="27"><span class="co">#&gt; [22] htmltools_0.4.0     Matrix_1.2-18       pkgconfig_2.0.3    </span></a>
-<a class="sourceLine" id="cb8-28" data-line-number="28"><span class="co">#&gt; [25] purrr_0.3.3         scales_1.1.0        tweenr_1.0.1       </span></a>
-<a class="sourceLine" id="cb8-29" data-line-number="29"><span class="co">#&gt; [28] hopach_2.46.0       ggforce_0.3.1       tibble_2.1.3       </span></a>
-<a class="sourceLine" id="cb8-30" data-line-number="30"><span class="co">#&gt; [31] proxy_0.4-23        mgcv_1.8-28         farver_2.0.1       </span></a>
-<a class="sourceLine" id="cb8-31" data-line-number="31"><span class="co">#&gt; [34] ggplot2_3.2.1       BiocGenerics_0.32.0 lazyeval_0.2.2     </span></a>
-<a class="sourceLine" id="cb8-32" data-line-number="32"><span class="co">#&gt; [37] survival_3.1-8      magrittr_1.5        crayon_1.3.4       </span></a>
-<a class="sourceLine" id="cb8-33" data-line-number="33"><span class="co">#&gt; [40] memoise_1.1.0       evaluate_0.14       fs_1.3.1           </span></a>
-<a class="sourceLine" id="cb8-34" data-line-number="34"><span class="co">#&gt; [43] nlme_3.1-141        MASS_7.3-51.4       segmented_1.0-0    </span></a>
-<a class="sourceLine" id="cb8-35" data-line-number="35"><span class="co">#&gt; [46] tools_3.6.1         minpack.lm_1.2-1    lifecycle_0.1.0    </span></a>
-<a class="sourceLine" id="cb8-36" data-line-number="36"><span class="co">#&gt; [49] stringr_1.4.0       S4Vectors_0.23.25   munsell_0.5.0      </span></a>
-<a class="sourceLine" id="cb8-37" data-line-number="37"><span class="co">#&gt; [52] cluster_2.1.0       compiler_3.6.1      pkgdown_1.4.1      </span></a>
-<a class="sourceLine" id="cb8-38" data-line-number="38"><span class="co">#&gt; [55] proxyC_0.1.5        pbmcapply_1.5.0     rlang_0.4.2        </span></a>
-<a class="sourceLine" id="cb8-39" data-line-number="39"><span class="co">#&gt; [58] grid_3.6.1          rstudioapi_0.10     igraph_1.2.4.2     </span></a>
-<a class="sourceLine" id="cb8-40" data-line-number="40"><span class="co">#&gt; [61] labeling_0.3        rmarkdown_1.18      gtable_0.3.0       </span></a>
-<a class="sourceLine" id="cb8-41" data-line-number="41"><span class="co">#&gt; [64] graphlayouts_0.5.0  R6_2.4.1            gridExtra_2.3      </span></a>
-<a class="sourceLine" id="cb8-42" data-line-number="42"><span class="co">#&gt; [67] knitr_1.26          dplyr_0.8.3         zeallot_0.1.0      </span></a>
-<a class="sourceLine" id="cb8-43" data-line-number="43"><span class="co">#&gt; [70] rprojroot_1.3-2     desc_1.2.0          stringi_1.4.3      </span></a>
-<a class="sourceLine" id="cb8-44" data-line-number="44"><span class="co">#&gt; [73] parallel_3.6.1      Rcpp_1.0.3          vctrs_0.2.0        </span></a>
-<a class="sourceLine" id="cb8-45" data-line-number="45"><span class="co">#&gt; [76] diptest_0.75-7      tidyselect_0.2.5    xfun_0.11</span></a></code></pre></div>
+<a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">#&gt; [10] assertthat_0.2.1    statmod_1.4.32      stats4_3.6.1       </span></a>
+<a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">#&gt; [13] yaml_2.2.0          ggrepel_0.8.1       pillar_1.4.2       </span></a>
+<a class="sourceLine" id="cb8-25" data-line-number="25"><span class="co">#&gt; [16] backports_1.1.5     lattice_0.20-38     glue_1.3.1         </span></a>
+<a class="sourceLine" id="cb8-26" data-line-number="26"><span class="co">#&gt; [19] limma_3.42.0        digest_0.6.23       polyclip_1.10-0    </span></a>
+<a class="sourceLine" id="cb8-27" data-line-number="27"><span class="co">#&gt; [22] colorspace_1.4-1    htmltools_0.4.0     Matrix_1.2-18      </span></a>
+<a class="sourceLine" id="cb8-28" data-line-number="28"><span class="co">#&gt; [25] pkgconfig_2.0.3     purrr_0.3.3         scales_1.1.0       </span></a>
+<a class="sourceLine" id="cb8-29" data-line-number="29"><span class="co">#&gt; [28] tweenr_1.0.1        hopach_2.46.0       BiocParallel_1.20.0</span></a>
+<a class="sourceLine" id="cb8-30" data-line-number="30"><span class="co">#&gt; [31] ggforce_0.3.1       tibble_2.1.3        proxy_0.4-23       </span></a>
+<a class="sourceLine" id="cb8-31" data-line-number="31"><span class="co">#&gt; [34] mgcv_1.8-28         farver_2.0.1        ggplot2_3.2.1      </span></a>
+<a class="sourceLine" id="cb8-32" data-line-number="32"><span class="co">#&gt; [37] BiocGenerics_0.32.0 lazyeval_0.2.2      survival_3.1-8     </span></a>
+<a class="sourceLine" id="cb8-33" data-line-number="33"><span class="co">#&gt; [40] magrittr_1.5        crayon_1.3.4        memoise_1.1.0      </span></a>
+<a class="sourceLine" id="cb8-34" data-line-number="34"><span class="co">#&gt; [43] evaluate_0.14       fs_1.3.1            nlme_3.1-141       </span></a>
+<a class="sourceLine" id="cb8-35" data-line-number="35"><span class="co">#&gt; [46] MASS_7.3-51.4       segmented_1.0-0     tools_3.6.1        </span></a>
+<a class="sourceLine" id="cb8-36" data-line-number="36"><span class="co">#&gt; [49] minpack.lm_1.2-1    lifecycle_0.1.0     stringr_1.4.0      </span></a>
+<a class="sourceLine" id="cb8-37" data-line-number="37"><span class="co">#&gt; [52] S4Vectors_0.23.25   munsell_0.5.0       cluster_2.1.0      </span></a>
+<a class="sourceLine" id="cb8-38" data-line-number="38"><span class="co">#&gt; [55] compiler_3.6.1      pkgdown_1.4.1       proxyC_0.1.5       </span></a>
+<a class="sourceLine" id="cb8-39" data-line-number="39"><span class="co">#&gt; [58] rlang_0.4.2         grid_3.6.1          rstudioapi_0.10    </span></a>
+<a class="sourceLine" id="cb8-40" data-line-number="40"><span class="co">#&gt; [61] igraph_1.2.4.2      labeling_0.3        rmarkdown_1.18     </span></a>
+<a class="sourceLine" id="cb8-41" data-line-number="41"><span class="co">#&gt; [64] gtable_0.3.0        graphlayouts_0.5.0  R6_2.4.1           </span></a>
+<a class="sourceLine" id="cb8-42" data-line-number="42"><span class="co">#&gt; [67] gridExtra_2.3       knitr_1.26          dplyr_0.8.3        </span></a>
+<a class="sourceLine" id="cb8-43" data-line-number="43"><span class="co">#&gt; [70] zeallot_0.1.0       rprojroot_1.3-2     desc_1.2.0         </span></a>
+<a class="sourceLine" id="cb8-44" data-line-number="44"><span class="co">#&gt; [73] stringi_1.4.3       parallel_3.6.1      Rcpp_1.0.3         </span></a>
+<a class="sourceLine" id="cb8-45" data-line-number="45"><span class="co">#&gt; [76] vctrs_0.2.0         diptest_0.75-7      tidyselect_0.2.5   </span></a>
+<a class="sourceLine" id="cb8-46" data-line-number="46"><span class="co">#&gt; [79] xfun_0.11</span></a></code></pre></div>
 </div>
   </div>
 

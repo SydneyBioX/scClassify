@@ -1,7 +1,7 @@
 Package: scClassify
 Type: Package
 Title: scClassify: single-cell Hierarchical Classification 
-Version: 0.2.2
+Version: 0.2.3
 Author: Yingxin Lin
 Maintainer: Yingxin Lin <yingxin.lin@sydney.edu.au>
 Description: Classification of single cells via cell-type hierarchies based on ensemble learning and sample size estimation.
@@ -18,7 +18,7 @@ Imports:
     cluster,
     minpack.lm,
     mixtools,
-    pbmcapply,
+    BiocParallel,
     proxy,
     proxyC,
     Matrix,

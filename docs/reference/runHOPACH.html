@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scClassify</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
       </span>
     </div>
 
@@ -202,14 +202,15 @@
     <p>A function generating HOPACH tree using the average expression matrix for each cell type.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>runHOPACH</span>(<span class='no'>data</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='no'>T</span>, <span class='kw'>kmax</span> <span class='kw'>=</span> <span class='fl'>5</span>)</pre>
+    <pre class="usage"><span class='fu'>runHOPACH</span>(<span class='no'>data</span>, <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>kmax</span> <span class='kw'>=</span> <span class='fl'>5</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>A matrix of average expression matrix (each row indicates the gene, each column indicates the cell type)</p></td>
+      <td><p>A matrix of average expression matrix
+(each row indicates the gene, each column indicates the cell type)</p></td>
     </tr>
     <tr>
       <th>plot</th>
@@ -217,7 +218,8 @@
     </tr>
     <tr>
       <th>kmax</th>
-      <td><p>Integer between 1 and 9 specifying the maximum number of children at each node in the tree.</p></td>
+      <td><p>Integer between 1 and 9 specifying the maximum number of children
+at each node in the tree.</p></td>
     </tr>
     </table>
 
@@ -230,8 +232,21 @@
 
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>van der Laan, M. J. and Pollard, K. S. (2003) ‘A new algorithm for hybrid hierarchical clustering with visualization and the bootstrap’, Journal of Statistical Planning and Inference. doi: 10.1016/S0378-3758(02)00388-9.</p>
+    <p>van der Laan, M. J. and Pollard, K. S. (2003)
+‘A new algorithm for hybrid hierarchical clustering with visualization and the bootstrap’,
+Journal of Statistical Planning and Inference. doi: 10.1016/S0378-3758(02)00388-9.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"scClassify_example"</span>)
+<span class='no'>wang_cellTypes</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>scClassify_example</span>$<span class='no'>wang_cellTypes</span>)
+<span class='no'>exprsMat_wang_subset</span> <span class='kw'>&lt;-</span> <span class='no'>scClassify_example</span>$<span class='no'>exprsMat_wang_subset</span>
+<span class='no'>avgMat_wang</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>exprsMat_wang_subset</span>, <span class='fl'>1</span>, <span class='kw'>function</span>(<span class='no'>x</span>)
+<span class='fu'><a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a></span>(<span class='no'>x</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>wang_cellTypes</span>), <span class='no'>mean</span>)$<span class='no'>x</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>avgMat_wang</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>wang_cellTypes</span>)
+<span class='no'>res_hopach</span> <span class='kw'>&lt;-</span> <span class='fu'>runHOPACH</span>(<span class='no'>avgMat_wang</span>)
+<span class='no'>res_hopach</span>$<span class='no'>plot</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 4 rows containing missing values (geom_text).</span></div><div class='img'><img src='runHOPACH-1.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -239,6 +254,7 @@
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
       <li><a href="#references">References</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
     <h2>Author</h2>

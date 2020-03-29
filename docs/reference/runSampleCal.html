@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scClassify</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
       </span>
     </div>
 
@@ -209,7 +209,7 @@
   <span class='kw'>num_repeat</span> <span class='kw'>=</span> <span class='fl'>20</span>,
   <span class='kw'>level</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>cellType_tree</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>ncores</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>BPPARAM</span> <span class='kw'>=</span> <span class='kw pkg'>BiocParallel</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html'>SerialParam</a></span>(),
   <span class='kw'>subset_test</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>num_test</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='no'>...</span>
@@ -220,7 +220,8 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>exprsMat</th>
-      <td><p>A matrix of expression matrix of pilot dataset (log-transformed, or normalised)</p></td>
+      <td><p>A matrix of expression matrix of pilot dataset
+(log-transformed, or normalised)</p></td>
     </tr>
     <tr>
       <th>cellTypes</th>
@@ -232,26 +233,31 @@
     </tr>
     <tr>
       <th>num_repeat</th>
-      <td><p>An integer indicates the number of run for each sample size will be repeated.</p></td>
+      <td><p>An integer indicates the number of run for
+each sample size will be repeated.</p></td>
     </tr>
     <tr>
       <th>level</th>
-      <td><p>An integer indicates the accuracy rate is calculate based on the n-th level from top of cell type tree.
+      <td><p>An integer indicates the accuracy rate is calculate
+based on the n-th level from top of cell type tree.
 If it is NULL (by default), it will be the bottom of the cell type tree.
 It can not be larger than the total number of levels of the tree.</p></td>
     </tr>
     <tr>
       <th>cellType_tree</th>
-      <td><p>A list indicates the cell type tree (optional), if it is NULL, the accuracy rate is calculate
+      <td><p>A list indicates the cell type tree (optional),
+if it is NULL, the accuracy rate is calculate
 based on the provided cellTypes.</p></td>
     </tr>
     <tr>
-      <th>ncores</th>
-      <td><p>An integer indicates the number of cores that can be used to run the algorithm.</p></td>
+      <th>BPPARAM</th>
+      <td><p>A <code>BiocParallelParam</code> class object
+from the <code>BiocParallel</code> package is used. Default is SerialParam().</p></td>
     </tr>
     <tr>
       <th>subset_test</th>
-      <td><p>A ogical input indicates whether we used a subset of data (fixed number for each sample size)
+      <td><p>A ogical input indicates whether we used a subset of data
+(fixed number for each sample size)
 to test instead of all remaining data. By default, it is FALSE.</p></td>
     </tr>
     <tr>
@@ -264,12 +270,162 @@ to test instead of all remaining data. By default, it is FALSE.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>A matrix of accuracy matrix, where columns corresponding to different
+sample sizes, rows corresponding to the number of repetation.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"scClassify_example"</span>)
+<span class='no'>xin_cellTypes</span> <span class='kw'>&lt;-</span> <span class='no'>scClassify_example</span>$<span class='no'>xin_cellTypes</span>
+<span class='no'>exprsMat_xin_subset</span> <span class='kw'>&lt;-</span> <span class='no'>scClassify_example</span>$<span class='no'>exprsMat_xin_subset</span>
+
+<span class='no'>exprsMat_xin_subset</span> <span class='kw'>&lt;-</span> <span class='fu'>as</span>(<span class='no'>exprsMat_xin_subset</span>, <span class='st'>"dgCMatrix"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>2019</span>)
+<span class='no'>accMat</span> <span class='kw'>&lt;-</span> <span class='fu'>runSampleCal</span>(<span class='no'>exprsMat_xin_subset</span>,
+                                   <span class='no'>xin_cellTypes</span>,
+                                   <span class='kw'>n_list</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>20</span>, <span class='fl'>100</span>, <span class='fl'>20</span>),
+                                   <span class='kw'>num_repeat</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>BPPARAM</span> <span class='kw'>=</span> <span class='kw pkg'>BiocParallel</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html'>SerialParam</a></span>())</div><div class='output co'>#&gt; [1] "n= 20"
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;     8     8     3     3 </div><div class='output co'>#&gt; <span class='message'>There are only 4 selected genes in reference data expressed in query data</span></div><div class='output co'>#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;     8     8     3     3 </div><div class='output co'>#&gt; <span class='message'>There are only 4 selected genes in reference data expressed in query data</span></div><div class='output co'>#&gt; <span class='message'>There are only 4 selected genes in reference data expressed in query data</span></div><div class='output co'>#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;     8     8     3     3 
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;     8     8     3     3 
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;     8     8     3     3 </div><div class='output co'>#&gt; <span class='message'>There are only 3 selected genes in reference data expressed in query data</span></div><div class='output co'>#&gt;                              [,1]        [,2]        [,3]       [,4]      [,5]
+#&gt; correct                0.44631902 0.000000000 0.966257669 0.79447853 0.4079755
+#&gt; correctly unassigned   0.00000000 0.000000000 0.000000000 0.00000000 0.0000000
+#&gt; intermediate           0.51993865 0.957055215 0.015337423 0.01073620 0.3987730
+#&gt; incorrectly unassigned 0.02147239 0.038343558 0.010736196 0.11196319 0.1932515
+#&gt; error assigned         0.00000000 0.000000000 0.000000000 0.00000000 0.0000000
+#&gt; misclassified          0.01226994 0.004601227 0.007668712 0.08282209 0.0000000
+#&gt; [1] "n= 40"
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    17    15     3     5 
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    17    15     3     5 
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    17    15     3     5 
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    17    15     3     5 
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    17    15     3     5 
+#&gt;                               [,1]        [,2]       [,3]       [,4]
+#&gt; correct                0.878548896 0.971608833 0.83596215 0.80757098
+#&gt; correctly unassigned   0.000000000 0.000000000 0.00000000 0.00000000
+#&gt; intermediate           0.031545741 0.011041009 0.00000000 0.00000000
+#&gt; incorrectly unassigned 0.088328076 0.007886435 0.15299685 0.17192429
+#&gt; error assigned         0.000000000 0.000000000 0.00000000 0.00000000
+#&gt; misclassified          0.001577287 0.009463722 0.01104101 0.02050473
+#&gt;                               [,5]
+#&gt; correct                0.766561514
+#&gt; correctly unassigned   0.000000000
+#&gt; intermediate           0.009463722
+#&gt; incorrectly unassigned 0.171924290
+#&gt; error assigned         0.000000000
+#&gt; misclassified          0.052050473
+#&gt; [1] "n= 60"
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    25    23     4     7 
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    25    23     4     7 
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    25    23     4     7 
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    25    23     4     7 
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    25    23     4     7 
+#&gt;                               [,1]        [,2]        [,3]        [,4]
+#&gt; correct                0.865040650 0.910569106 0.902439024 0.884552846
+#&gt; correctly unassigned   0.000000000 0.000000000 0.000000000 0.000000000
+#&gt; intermediate           0.000000000 0.000000000 0.001626016 0.001626016
+#&gt; incorrectly unassigned 0.125203252 0.081300813 0.082926829 0.108943089
+#&gt; error assigned         0.000000000 0.000000000 0.000000000 0.000000000
+#&gt; misclassified          0.009756098 0.008130081 0.013008130 0.004878049
+#&gt;                               [,5]
+#&gt; correct                0.845528455
+#&gt; correctly unassigned   0.000000000
+#&gt; intermediate           0.001626016
+#&gt; incorrectly unassigned 0.143089431
+#&gt; error assigned         0.000000000
+#&gt; misclassified          0.009756098
+#&gt; [1] "n= 80"
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    34    31     6     9 
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    34    31     6     9 
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    34    31     6     9 
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    34    31     6     9 
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    34    31     6     9 
+#&gt;                               [,1]        [,2]       [,3]        [,4]
+#&gt; correct                0.937710438 0.877104377 0.91919192 0.877104377
+#&gt; correctly unassigned   0.000000000 0.000000000 0.00000000 0.000000000
+#&gt; intermediate           0.003367003 0.000000000 0.00000000 0.000000000
+#&gt; incorrectly unassigned 0.052188552 0.114478114 0.07070707 0.116161616
+#&gt; error assigned         0.000000000 0.000000000 0.00000000 0.000000000
+#&gt; misclassified          0.006734007 0.008417508 0.01010101 0.006734007
+#&gt;                               [,5]
+#&gt; correct                0.873737374
+#&gt; correctly unassigned   0.000000000
+#&gt; intermediate           0.001683502
+#&gt; incorrectly unassigned 0.114478114
+#&gt; error assigned         0.000000000
+#&gt; misclassified          0.010101010
+#&gt; [1] "n= 100"
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    42    39     7    12 
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    42    39     7    12 
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    42    39     7    12 
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    42    39     7    12 
+#&gt; cellTypes_train
+#&gt; alpha  beta delta gamma 
+#&gt;    42    39     7    12 
+#&gt;                              [,1]       [,2]        [,3]        [,4]       [,5]
+#&gt; correct                0.89198606 0.91463415 0.951219512 0.979094077 0.89024390
+#&gt; correctly unassigned   0.00000000 0.00000000 0.000000000 0.000000000 0.00000000
+#&gt; intermediate           0.00000000 0.00000000 0.001742160 0.003484321 0.00000000
+#&gt; incorrectly unassigned 0.09233449 0.07491289 0.040069686 0.010452962 0.09930314
+#&gt; error assigned         0.00000000 0.00000000 0.000000000 0.000000000 0.00000000
+#&gt; misclassified          0.01567944 0.01045296 0.006968641 0.006968641 0.01045296</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

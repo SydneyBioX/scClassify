@@ -21,7 +21,8 @@
 #' weighted score for each base classifier.
 #' @param weights A vector indicates the weights for ensemble
 #' @param parallel A logical input indicates whether running in paralllel or not
-#' @param ncores An integer indicates the number of cores that are used
+#' @param BPPARAM  A \code{BiocParallelParam} class object
+#' from the \code{BiocParallel} package is used. Default is SerialParam().
 #' @param verbose A logical input indicates whether the intermediate steps will be printed
 #' @return list of results
 #'
@@ -36,13 +37,14 @@
 #' cellTypes_test = wang_cellTypes,
 #' algorithm = "WKNN",
 #' features = c("limma"),
-#' similarity = c("pearson", "spearman"),
+#' similarity = c("pearson"),
 #' prob_threshold = 0.7,
 #' verbose = TRUE)
 #'
 #' @author Yingxin Lin
 #'
 #' @importFrom methods is
+#' @importFrom BiocParallel SerialParam bplapply
 #'
 #' @export
 
@@ -62,7 +64,7 @@ predict_scClassify <- function(exprsMat_test,
                                weighted_ensemble = FALSE,
                                weights = NULL,
                                parallel = FALSE,
-                               ncores = 1,
+                               BPPARAM = BiocParallel::SerialParam(),
                                verbose = FALSE){
 
   # checking input
@@ -128,7 +130,7 @@ predict_scClassify <- function(exprsMat_test,
 
   if (parallel) {
 
-    predictRes <- pbmcapply::pbmclapply(1:nrow(ensemble_methods), function(em){
+    predictRes <- BiocParallel::bplapply(seq_len(nrow(ensemble_methods)), function(em){
       predict_scClassifySingle(exprsMat_test =  exprsMat_test,
                                trainRes = trainRes,
                                cellTypes_test = cellTypes_test,
@@ -141,7 +143,7 @@ predict_scClassify <- function(exprsMat_test,
                                similarity = ensemble_methods[em, 1],
                                cutoff_method = cutoff_method,
                                verbose = verbose)
-    }, mc.cores = ncores)
+    }, BPPARAM = BPPARAM)
 
 
   }else{
@@ -227,12 +229,14 @@ predict_scClassify <- function(exprsMat_test,
 #' @param cutoff_method A vector indicates the method to cutoff the correlation distribution.
 #' Set as "dynamic" by default.
 #' @param parallel A logical input indicates whether running in paralllel or not
-#' @param ncores An integer indicates the number of cores that are used
+#' @param BPPARAM  A \code{BiocParallelParam} class object
+#' from the \code{BiocParallel} package is used. Default is SerialParam().
 #' @param verbose A logical input indicates whether the intermediate steps will be printed
 #' @return list of results
 #' @author Yingxin Lin
 #'
 #' @importFrom methods is
+#' @importFrom BiocParallel SerialParam
 #'
 #' @export
 
@@ -248,7 +252,7 @@ predict_scClassifyJoint <- function(exprsMat_test,
                                     similarity = "pearson",
                                     cutoff_method = c("dynamic", "static"),
                                     parallel = FALSE,
-                                    ncores = 1,
+                                    BPPARAM = BiocParallel::SerialParam(),
                                     verbose = FALSE){
 
   # checking input
@@ -287,7 +291,7 @@ predict_scClassifyJoint <- function(exprsMat_test,
                                                          similarity = similarity,
                                                          cutoff_method = cutoff_method,
                                                          parallel = parallel,
-                                                         ncores = ncores,
+                                                         BPPARAM = BPPARAM,
                                                          verbose = verbose)
   }
 
@@ -389,7 +393,7 @@ predict_scClassifySingle <- function(exprsMat_test,
   pred <- list()
 
   # For each level
-  for (i in 1:length(levelModel)) {
+  for (i in seq_len(length(levelModel))) {
     # If this level is not NULL (Not Level1)
     if (!is.null(levelModel[[i]])) {
 
@@ -398,7 +402,7 @@ predict_scClassifySingle <- function(exprsMat_test,
       if (sum(pred[[i - 1]] != 0) != 0) {
         pred_level <- list()
 
-        for (j in 1:length(levelModel[[i]])) {
+        for (j in seq_len(length(levelModel[[i]]))) {
 
           # If the model of level i-1, cells labeled as j is NOT "no model"
           if (!"character" %in% is(levelModel[[i]][[j]])) {
@@ -531,7 +535,7 @@ predict_scClassifySingle <- function(exprsMat_test,
   }
 
   predMat <- do.call(cbind, pred)
-  predMat <- sapply(1:ncol(predMat), function(x) getPredRes(predMat, cutree_list, x))
+  predMat <- sapply(seq_len(ncol(predMat)), function(x) getPredRes(predMat, cutree_list, x))
 
   predRes <- apply(predMat, 1, function(x){
     unAssIdx <- which(x == "unassigned")
@@ -719,7 +723,7 @@ wtd_rank2 <- function(mat1, mat2 = NULL, method = "pearson") {
 # Function to get the prediction labels according to the tree
 getPredRes <- function(predMat, cutree_list, level){
   res <- predMat[,level]
-  for (i in 1:length(predMat[,level])) {
+  for (i in seq_len(length(predMat[,level]))) {
     if (predMat[i,level] == 0) {
       res[i] <- "unassigned"
     }else{
@@ -746,7 +750,7 @@ ClassifyError <- function(cellTypes_pred, cellTypes_test, cellTypes_train){
   }
   train_ref <- unique(cellTypes_train)
   # test_ref <- unique(cellTypes_test)
-  res <- sapply(1:length(cellTypes_pred), function(i){
+  res <- sapply(seq_len(length(cellTypes_pred)), function(i){
     if (cellTypes_test[i] %in% train_ref) {
       if (cellTypes_pred[i] %in% c("unassigned", "Unassigned")) {
         "incorrectly unassigned"

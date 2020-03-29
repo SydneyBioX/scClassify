@@ -31,7 +31,9 @@
 #' res_hopach <- runHOPACH(avgMat_wang)
 #' res_hopach$plot
 #'
-#' @references van der Laan, M. J. and Pollard, K. S. (2003) ‘A new algorithm for hybrid hierarchical clustering with visualization and the bootstrap’, Journal of Statistical Planning and Inference. doi: 10.1016/S0378-3758(02)00388-9.
+#' @references van der Laan, M. J. and Pollard, K. S. (2003)
+#' ‘A new algorithm for hybrid hierarchical clustering with visualization and the bootstrap’,
+#' Journal of Statistical Planning and Inference. doi: 10.1016/S0378-3758(02)00388-9.
 #' @export
 
 runHOPACH <- function(data, plot= TRUE, kmax = 5) {
@@ -49,9 +51,10 @@ runHOPACH <- function(data, plot= TRUE, kmax = 5) {
 
   # Get each level seperate
   level_list <- list()
-  for (i in 1:nchar(clustresult$final$labels[1])) {
+  for (i in seq_len(nchar(clustresult$final$labels[1]))) {
     if (i != 1) {
-      level_list[[i]] <- paste(level_list[[i - 1]], unlist(lapply(final_labels, "[[", i)), sep = "")
+      level_list[[i]] <- paste(level_list[[i - 1]],
+                               unlist(lapply(final_labels, "[[", i)), sep = "")
     }else{
       level_list[[i]] <- unlist(lapply(final_labels, "[[", i))
     }
@@ -73,7 +76,7 @@ runHOPACH <- function(data, plot= TRUE, kmax = 5) {
   })
 
   # Last levels will be all distinct numbers
-  cutree_list[[length(cutree_list) + 1]] <- (1:length(clustresult$final$labels))
+  cutree_list[[length(cutree_list) + 1]] <- seq_len(length(clustresult$final$labels))
   names(cutree_list[[length(cutree_list)]]) <- rownames(data)
 
   # To plot using ggraph
@@ -102,7 +105,8 @@ runHOPACH <- function(data, plot= TRUE, kmax = 5) {
 #' @examples
 #'
 #' data("trainClassExample_xin")
-#' plotCellTypeTree(trainClassExample_xin@cellTypeTree)
+#'
+#' plotCellTypeTree(slot(trainClassExample_xin, "cellTypeTree"))
 #'
 #' @export
 
@@ -116,7 +120,7 @@ plotCellTypeTree <- function(cutree_list, group_level = NULL) {
   }
 
   E_list <- list()
-  for (i in 1:length(cutree_list)) {
+  for (i in seq_len(length(cutree_list))) {
     if (i != 1) {
       parent <- cutree_list[[i - 1]]
       E_list[[i]] <- paste(paste(i - 1, parent, sep = ""),
@@ -125,7 +129,7 @@ plotCellTypeTree <- function(cutree_list, group_level = NULL) {
   }
 
   V_list <- list()
-  for (i in 1:length(cutree_list)) {
+  for (i in seq_len(length(cutree_list))) {
     V_list[[i]] <- paste(i, cutree_list[[i]], sep = "")
     names(V_list[[i]]) <- names(cutree_list[[i]])
   }
@@ -190,8 +194,8 @@ labelstomss <- function(labels, dist, khigh = 9, within = "med",
   unlabels <- sort(unique(labels))
   k <- length(unlabels)
   ss <- NULL
-  for (i in 1:k) {
-    labs <- (1:p)[labels == unlabels[i]]
+  for (i in seq_len(k)) {
+    labs <- (seq_len(p))[labels == unlabels[i]]
     pp <- length(labs)
     if (pp < 3)
       ss[i] <- NA
@@ -212,7 +216,7 @@ labelstomss <- function(labels, dist, khigh = 9, within = "med",
       unparentlab <- sort(unique(parentlab))
       pk <- length(unparentlab)
       pss <- NULL
-      for (i in 1:pk) {
+      for (i in seq_len(pk)) {
         if (between == "med")
           pss[i] <- median(ss[trunc(unlabels/10) == unparentlab[i]], na.rm = TRUE)
         if (between == "mean")
@@ -251,12 +255,12 @@ silcheck <- function(data, kmax=9, diss=FALSE, echo=FALSE, graph=FALSE)
 
   sil <- NULL
   m <- min(kmax, max((!diss)*(dim(data)[1] - 1),
-                   (diss)*(0.5*(sqrt(1 + 8*length(data)) - 1)),
-                   na.rm = TRUE))
+                     (diss)*(0.5*(sqrt(1 + 8*length(data)) - 1)),
+                     na.rm = TRUE))
   if (m < 2)
     out <- c(1, NA)
   else{
-    for (i in 1:(m - 1))
+    for (i in seq_len((m - 1)))
       sil[i] <- pam(data, k = (i + 1), diss = diss)$silinfo$avg.width
     if (echo)
       cat("best k = ", order(sil)[length(sil)] + 1, ", sil(k) = ",
@@ -273,7 +277,7 @@ silcheck <- function(data, kmax=9, diss=FALSE, echo=FALSE, graph=FALSE)
 
 #msscheck (mss)
 msscheck <- function(dist, kmax=9, khigh=9, within="med", between="med",
-                   force=FALSE, echo=FALSE, graph=FALSE) {
+                     force=FALSE, echo=FALSE, graph=FALSE) {
   p = dist@Size
   if (p < 3)
     out <- c(1,NA)
@@ -287,7 +291,7 @@ msscheck <- function(dist, kmax=9, khigh=9, within="med", between="med",
       mss <- labelstomss(rep(1,p),dist,khigh,within,between)
     for (k in 2:kmax)
       mss[k] <- labelstomss(pam(dvec, k, diss = TRUE)$clust, dist,
-                          khigh, within, between)
+                            khigh, within, between)
     shift <- 0
     if (force) {
       mss <- mss[-1]
@@ -329,7 +333,7 @@ cutdigits <- function(labels, dig) {
 
 #removes trailing zeros from labels
 cutzeros <- function(labels) {
-  for (i in 1:length(labels)) {
+  for (i in seq_len(length(labels))) {
     while (trunc(labels[i]/10)*10 == labels[i]) {
       labels[i] <- labels[i]/10
     }
@@ -339,7 +343,7 @@ cutzeros <- function(labels) {
 
 #returns the number of non-zero digits in labels
 nonzeros <- function(labels) {
-  for (i in 1:length(labels)) {
+  for (i in seq_len(length(labels))) {
     while (trunc(labels[i]/10)*10 == labels[i]) {
       labels[i] <- labels[i]/10
     }
@@ -392,7 +396,7 @@ msssplitcluster <- function(clust1, l1, id1, medoid1,
       newmedoids1 <- id1[pamobj$medoids]
       newlabels1 <- pamobj$clustering
       distnewmedoids <- NULL
-      for (j in (1:k1))
+      for (j in seq_len(k1))
         distnewmedoids[j] <- mean(med2dist[newlabels1 == newlabels1[pamobj$medoids[j]]])
       if (right == 1)
         #ord <- order(distnewmedoids, decreasing = TRUE)
@@ -402,7 +406,7 @@ msssplitcluster <- function(clust1, l1, id1, medoid1,
       newmedoids1 <- newmedoids1[ord]
       newclussizes <- newclussizes[ord]
       oldlab <- newlabels1
-      for (j in (1:k1))
+      for (j in seq_len(k1))
         newlabels1[oldlab == ord[j]] <- j
       newlabels1 <- rep(10*l1,l) + newlabels1
     }
@@ -412,7 +416,7 @@ msssplitcluster <- function(clust1, l1, id1, medoid1,
     newlabels1 <- rep(10*l1,p1)
     newclussizes <- p1
   }
-  for (a in (1:length(newmedoids1))) {
+  for (a in seq_len(length(newmedoids1))) {
     if (sum(newmedoids1[a] == id1) == 0)
       warning("Problem with new medoids after splitting cluster")
   }
@@ -432,7 +436,7 @@ mssnextlevel <- function(data ,prevlevel, dmat, kmax = 9,
   n <- length(data[1,])
   p <- length(data[,1])
 
-  id <- 1:p
+  id <- seq_len(p)
   k <- prevlevel[[1]]
   medoids <- prevlevel[[2]]
   labels <- prevlevel[[4]]
@@ -459,7 +463,7 @@ mssnextlevel <- function(data ,prevlevel, dmat, kmax = 9,
     else
       checkmeans <- TRUE
   }
-  for (j in (1:k)) {
+  for (j in (seq_len(k))) {
     clust1 <- data[labels == ordlabels[j],]
     id1 <- id[labels == ordlabels[j]]
     if (length(id1) > 1)
@@ -491,8 +495,8 @@ mssnextlevel <- function(data ,prevlevel, dmat, kmax = 9,
     count <- count + k1
   }
   count <- newk <- count - 1
-  newmedoids <- newmedoids[1:newk]
-  newclussizes <- newclussizes[1:newk]
+  newmedoids <- newmedoids[seq_len(newk)]
+  newclussizes <- newclussizes[seq_len(newk)]
   final <- 0
   if (count == k)
     final <- 1
@@ -515,7 +519,7 @@ mssnextlevel <- function(data ,prevlevel, dmat, kmax = 9,
 orderelements  <-  function(level, data, rel = "own",
                             d = "cosangle", dmat = NULL) {
 
-  idn <- 1:length(data[,1])
+  idn <- seq_len(length(data[,1]))
   k <- level[[1]]
   labels <- level[[4]]
   medoids <- level[[2]]
@@ -530,7 +534,7 @@ orderelements  <-  function(level, data, rel = "own",
 
   labelsord <- labels[ord]
   count <- 1
-  for (j in (1:k)) {
+  for (j in (seq_len(k))) {
     start <- count
     end <- count + clussizes[j] - 1
     if (clussizes[j] > 2) {
@@ -585,8 +589,8 @@ orderelements  <-  function(level, data, rel = "own",
 #  correlation ordering ("co") or to build a tree of cluster medoids ("clust")
 
 mssinitlevel <- function(data, kmax=9, khigh=9, d="cosangle", dmat=NULL,
-                       within="med", between="med", ord="co",
-                       verbose=FALSE)
+                         within="med", between="med", ord="co",
+                         verbose=FALSE)
 {
   #print("mssinitlevel")
   if (!is.matrix(data))
@@ -632,7 +636,7 @@ mssinitlevel <- function(data, kmax=9, khigh=9, d="cosangle", dmat=NULL,
       final <- prevlevel[[5]]
       if (final == 0) {
         depth <- (l - 1)
-        for (j in (1:depth)) {
+        for (j in seq_len(depth)) {
           if (final == 0) {
             clustnext <- mssnextlevel(medoidsdata,prevlevel,
                                       dmat = medoidsdist,kmax,
@@ -651,13 +655,13 @@ mssinitlevel <- function(data, kmax=9, khigh=9, d="cosangle", dmat=NULL,
     k <- m[1]
     rowmedoids <- rowmedoids[medoidsord]
     labels <- lab2 <- pamobj$clustering
-    for (j in (1:k))
+    for (j in (seq_len(k)))
       lab2[labels == medoidsord[j]] <- j
-    output <- list(k,rowmedoids,pamobj$clusinfo[,1][medoidsord],lab2,final,cbind(1:k,rowmedoids))
+    output <- list(k,rowmedoids,pamobj$clusinfo[,1][medoidsord],lab2,final,cbind(seq_len(k),rowmedoids))
   }
   else
     output <- list(2,pamobj$medoids,pamobj$clusinfo[,1],
-                   pamobj$clustering,final,cbind(1:2,pamobj$medoids))
+                   pamobj$clustering,final,cbind(seq_len(2),pamobj$medoids))
   return(output)
 }
 
@@ -697,7 +701,7 @@ paircoll <- function(i,j,data,level,d="cosangle",
   if (N == k)
     prevblock <- NULL
   else
-    prevblock <- level[[6]][1:(N - k),]
+    prevblock <- level[[6]][seq_len(N - k),]
   if (max(i,j) > k)
     stop("The clusters to collapse do not exist in paircoll()")
   labeli <- labels[medoids[i]]
@@ -714,7 +718,7 @@ paircoll <- function(i,j,data,level,d="cosangle",
   if (newmed == "uwnn")
     fakemed <- (data[medoids[i],] + data[medoids[j],])/2
   if (newmed == "nn" || newmed == "uwnn") {
-    rowsub <- (1:p)[labels == labeli]
+    rowsub <- (seq_len(p))[labels == labeli]
     distsfm <- distancevector(data[rowsub,],as.vector(fakemed),d)
     medoids[i] <- rowsub[order(distsfm)[1]]
   }
@@ -722,7 +726,7 @@ paircoll <- function(i,j,data,level,d="cosangle",
     #colldist <- as.matrix(dmat[labels == labeli,labels == labeli])
     colldist <- as(dmat[labels == labeli,labels == labeli],"matrix")
 
-    rowsub <- (1:p)[labels == labeli]
+    rowsub <- (seq_len(p))[labels == labeli]
     if (newmed == "center") {
       sumdist <- rowSums(colldist)
     }
@@ -764,9 +768,9 @@ paircoll <- function(i,j,data,level,d="cosangle",
       block[l,] <- block[l+1,]
     }
   }
-  medoids <- medoids[1:k]
-  clussizes <- clussizes[1:k]
-  block <- block[1:k,]
+  medoids <- medoids[seq_len(k)]
+  clussizes <- clussizes[seq_len(k)]
+  block <- block[seq_len(k),]
   if (labels[labels == labeli][1]/10 == trunclabels[labels == labeli][1]) {
     labels[labels == labeli] <- labels[labels == labeli]+1
     labels[labels == labelj] <- labels[labels == labelj]+1
@@ -800,7 +804,9 @@ collap <- function(data,level,d = "cosangle", dmat = NULL, newmed = "medsil") {
   return(clustfinal)
 }
 
-msscollap <- function(data,level,khigh,d="cosangle", dmat = NULL, newmed = "medsil", within = "med", between = "med", impr = 0) {
+msscollap <- function(data,level,khigh,d="cosangle", dmat = NULL,
+                      newmed = "medsil", within = "med",
+                      between = "med", impr = 0) {
 
   newk <- level[[1]]
   mss1 <- labelstomss(level[[4]],dmat,khigh,within,between)
@@ -912,8 +918,8 @@ mssmulticollap <- function(data,level,khigh,d="cosangle",
 # mssmulticollap. the default is impr=0.
 
 mssrundown <- function(data, K=16, kmax=9, khigh=9, d="cosangle",
-                     dmat=NULL, initord="co", coll="seq", newmed="medsil", stop=TRUE,
-                     finish=FALSE, within="med",between="med",impr=0, verbose=FALSE)
+                       dmat=NULL, initord="co", coll="seq", newmed="medsil", stop=TRUE,
+                       finish=FALSE, within="med",between="med",impr=0, verbose=FALSE)
 {
   #print("mssrundown")
   if (!is.matrix(data))
@@ -964,7 +970,7 @@ mssrundown <- function(data, K=16, kmax=9, khigh=9, d="cosangle",
 }
 
 msscomplete <- function(level, data, K=16, khigh=9, d="cosangle",
-                      dmat=NULL, within="med", between="med", verbose=FALSE)
+                        dmat=NULL, within="med", between="med", verbose=FALSE)
 {
   if (!is.matrix(data))
     stop("First arg to msscomplete() must be a matrix")
@@ -996,7 +1002,7 @@ newnextlevel <- function(data, prevlevel, dmat, klow=2, khigh=6) {
     stop("First arg to newnextlevel() must be a matrix")
   p <- length(data[,1])
   n <- length(data[1,])
-  id <- 1:p
+  id <- seq_len(p)
   k <- prevlevel[[1]]
   medoids <- prevlevel[[2]]
   labels <- prevlevel[[4]]
@@ -1023,7 +1029,7 @@ newnextlevel <- function(data, prevlevel, dmat, klow=2, khigh=6) {
     else
       checkmeans <- TRUE
   }
-  for (j in (1:k)) {
+  for (j in (seq_len(k))) {
     clust1 <- data[labels == ordlabels[j],]
     id1 <- id[labels == ordlabels[j]]
     if (length(id1) > 1) {
@@ -1056,14 +1062,16 @@ newnextlevel <- function(data, prevlevel, dmat, klow=2, khigh=6) {
   }
   count <- count - 1
   newk <- count
-  newmedoids <- newmedoids[1:newk]
-  newclussizes <- newclussizes[1:newk]
+  newmedoids <- newmedoids[seq_len(newk)]
+  newclussizes <- newclussizes[seq_len(newk)]
   final <- 0
   if (count == k)
     final <- 1
   if (max(newclussizes) == 3)
     final <- 1
-  return(list(newk,newmedoids,newclussizes,newlabels,final,rbind(rbind(prevlevel[[6]],cbind(sort(unique(newlabels)),newmedoids)))))
+  return(list(newk,newmedoids,newclussizes,newlabels,
+              final,rbind(rbind(prevlevel[[6]],
+                                cbind(sort(unique(newlabels)),newmedoids)))))
 }
 
 newsplitcluster <- function(clust1, l1, id1, klow=2, khigh=2, medoid1, med2dist, right, dist1) {
@@ -1102,7 +1110,7 @@ newsplitcluster <- function(clust1, l1, id1, klow=2, khigh=2, medoid1, med2dist,
     newmedoids1 <- id1[pamobj$medoids]
     newlabels1 <- pamobj$clustering
     distnewmedoids <- NULL
-    for (j in (1:k1))
+    for (j in seq_len(k1))
       distnewmedoids[j] <- mean(med2dist[newlabels1 == newlabels1[pamobj$medoids[j]]])
     if (right == 1)
       ord <- order(distnewmedoids, decreasing = TRUE)
@@ -1112,11 +1120,11 @@ newsplitcluster <- function(clust1, l1, id1, klow=2, khigh=2, medoid1, med2dist,
     newmedoids1 <- newmedoids1[ord]
     newclussizes <- newclussizes[ord]
     oldlab <- newlabels1
-    for (j in (1:k1))
+    for (j in seq_len(k1))
       newlabels1[oldlab == ord[j]] <- j
     newlabels1 <- rep(10*l1,l) + newlabels1
   }
-  for (a in (1:length(newmedoids1))) {
+  for (a in seq_len(length(newmedoids1))) {
     if (sum(newmedoids1[a] == id1) == 0)
       warning("Problem with new medoids after splitting cluster")
   }
@@ -1158,8 +1166,8 @@ newsplitcluster <- function(clust1, l1, id1, klow=2, khigh=2, medoid1, med2dist,
 # is distance to the neighboring medoid (to the right).
 
 hopach <- function(data, dmat=NULL, d="cosangle", clusters="best", K=15,
-                 kmax=9, khigh=9, coll="seq", newmed="medsil",
-                 mss="med", impr=0, initord="co", ord="own", verbose=FALSE) {
+                   kmax=9, khigh=9, coll="seq", newmed="medsil",
+                   mss="med", impr=0, initord="co", ord="own", verbose=FALSE) {
   # if (inherits(data,"ExpressionSet"))
   #   data  <-  exprs(data)
   data <- as.matrix(data)
@@ -1170,7 +1178,9 @@ hopach <- function(data, dmat=NULL, d="cosangle", clusters="best", K=15,
   }else if ( is.matrix(dmat) ) {
     dmat <- as(dmat, "hdist")
   }else if ( "dist" %in% is(dmat)) {
-    dmat <- hdist(Data = as.numeric(dmat), Size = attr(dmat, "Size"), Labels = (1:(attr(dmat, "Size"))), Call = as.character(attr(dmat, "call"))[3])
+    dmat <- hdist(Data = as.numeric(dmat), Size = attr(dmat, "Size"),
+                  Labels = seq_len(attr(dmat, "Size")),
+                  Call = as.character(attr(dmat, "call"))[3])
   }else if (!is.hdist(dmat)) {
     stop("Distance matrix could not be created into hdist object.")
   }
@@ -1185,9 +1195,9 @@ hopach <- function(data, dmat=NULL, d="cosangle", clusters="best", K=15,
   }
   if (clusters != "none") {
     cuttree <- mssrundown(data, K, kmax, khigh, d, dmat,
-                        initord, coll, newmed,
-                        stop = (clusters == "greedy"), finish = TRUE, within = mss,
-                        between = mss, impr, verbose)
+                          initord, coll, newmed,
+                          stop = (clusters == "greedy"), finish = TRUE, within = mss,
+                          between = mss, impr, verbose)
     if (cuttree[[1]] > 1)
       cutord <- orderelements(cuttree, data, rel = ord, d, dmat)[[2]]
     else
@@ -1195,19 +1205,19 @@ hopach <- function(data, dmat=NULL, d="cosangle", clusters="best", K=15,
     out1 <- list(k = cuttree[[1]], medoids = cuttree[[2]],
                  sizes = cuttree[[3]], labels = cuttree[[4]], order = cutord)
     finaltree <- msscomplete(cuttree, data, K, khigh, d,
-                           dmat, within = mss, between = mss, verbose)
+                             dmat, within = mss, between = mss, verbose)
   }
   else{
     out1 <- NULL
     finaltree <- msscomplete(mssinitlevel(as.matrix(data),
-                                        kmax, khigh, d, dmat, within = mss, between = mss,
-                                        initord), data, K, khigh, d, dmat, within = mss,
-                           between = mss, verbose)
+                                          kmax, khigh, d, dmat, within = mss, between = mss,
+                                          initord), data, K, khigh, d, dmat, within = mss,
+                             between = mss, verbose)
   }
   dimnames(finaltree[[6]]) <- list(NULL,c("label","medoid"))
   out2 <- list(labels = finaltree[[4]],
-             order = orderelements(finaltree, data, rel = ord, d,
-                                 dmat)[[2]], medoids = finaltree[[6]])
+               order = orderelements(finaltree, data, rel = ord, d,
+                                     dmat)[[2]], medoids = finaltree[[6]])
   return(list(clustering = out1, final = out2, call = match.call(), metric = d))
 }
 

@@ -15,27 +15,28 @@ featureSelection <- function(exprsMat,
  if (feature == "DV") {
     tt <- doDV(exprsMat, trainClass)
     tt <- lapply(tt, function(x)sort(x))
-    res <- Reduce(union, lapply(tt, function(t) names(t)[1:max(min(topN, sum(t < pSig)), 30)]))
+    res <- Reduce(union, lapply(tt, function(t) names(t)[seq_len(min(topN, sum(t < pSig)))]))
   } else if (feature == "DD") {
     tt <- doDD(exprsMat, trainClass)
     tt <- lapply(tt, function(x)sort(x))
-    res <- Reduce(union, lapply(tt, function(t) names(t)[1:max(min(topN, sum(t < pSig)), 30)]))
+    res <- Reduce(union, lapply(tt, function(t) names(t)[seq_len(min(topN, sum(t < pSig)))]))
   } else if (feature == "chisq") {
     tt <- doChisSquared(exprsMat, trainClass)
     tt <- lapply(tt, function(x)sort(x))
-    res <- Reduce(union, lapply(tt, function(t) names(t)[1:max(min(topN, sum(t < pSig)), 30)]))
+    res <- Reduce(union, lapply(tt, function(t) names(t)[seq_len(min(topN, sum(t < pSig)))]))
     #
   } else if (feature == "BI") {
     tt <- doBI(exprsMat, trainClass)
     tt <- lapply(tt, function(x)x)
-    res <- Reduce(union, lapply(tt, function(t) names(t)[1:topN]))
+    res <- Reduce(union, lapply(tt, function(t) names(t)[seq_len(topN)]))
   }
 
 
   else{
     tt <- doLimma(exprsMat, trainClass)
     res <- Reduce(union, lapply(tt, function(t)
-      rownames(t[t$logFC > 0 & (t$meanPct.2 - t$meanPct.1) > 0.05 & t$adj.P.Val < pSig,])[1:topN]))
+      rownames(t[t$logFC > 0 & (t$meanPct.2 - t$meanPct.1) > 0.05 &
+                   t$adj.P.Val < pSig,])[seq_len(topN)]))
 
   }
 
@@ -50,7 +51,7 @@ doLimma <- function(exprsMat, cellTypes, exprs_pct = 0.05){
 
   cellTypes <- droplevels(as.factor(cellTypes))
   tt <- list()
-  for (i in 1:nlevels(cellTypes)) {
+  for (i in seq_len(nlevels(cellTypes))) {
     tmp_celltype <- (ifelse(cellTypes == levels(cellTypes)[i], 1, 0))
     design <- stats::model.matrix(~tmp_celltype)
 
@@ -60,7 +61,8 @@ doLimma <- function(exprsMat, cellTypes, exprs_pct = 0.05){
     }))
 
     meanPct <- do.call(cbind, lapply(c(0,1), function(i){
-      Matrix::rowSums(exprsMat[, tmp_celltype == i, drop = FALSE] > 0)/sum(tmp_celltype == i)
+      Matrix::rowSums(exprsMat[, tmp_celltype == i,
+                               drop = FALSE] > 0)/sum(tmp_celltype == i)
     }))
 
     keep <- meanPct[,2] > exprs_pct
@@ -99,7 +101,7 @@ doDV <- function(exprsMat, cellTypes){
 
   cellTypes <- droplevels(as.factor(cellTypes))
   tt <- list()
-  for (i in 1:nlevels(cellTypes)) {
+  for (i in seq_len(nlevels(cellTypes))) {
     tmp_celltype <- (ifelse(cellTypes == levels(cellTypes)[i], 1, 0))
 
     meanPct <- do.call(cbind, lapply(c(0,1), function(i){
@@ -129,7 +131,7 @@ doDD <- function(exprsMat, cellTypes){
 
   cellTypes <- droplevels(as.factor(cellTypes))
   tt <- list()
-  for (i in 1:nlevels(cellTypes)) {
+  for (i in seq_len(nlevels(cellTypes))) {
     tmp_celltype <- ifelse(cellTypes == levels(cellTypes)[i], 1, 0)
 
 
@@ -165,7 +167,7 @@ doChisSquared <- function(exprsMat, cellTypes, threshold = 1){
 
   cellTypes <- droplevels(as.factor(cellTypes))
   tt <- list()
-  for (i in 1:nlevels(cellTypes)) {
+  for (i in seq_len(nlevels(cellTypes))) {
     tmp_celltype <- (ifelse(cellTypes == levels(cellTypes)[i], 1, 0))
 
 
@@ -207,7 +209,7 @@ doBI <- function(exprsMat, cellTypes){
 
   cellTypes <- droplevels(as.factor(cellTypes))
   tt <- list()
-  for (i in 1:nlevels(cellTypes)) {
+  for (i in seq_len(nlevels(cellTypes))) {
     tmp_celltype <- (ifelse(cellTypes == levels(cellTypes)[i], 1, 0))
 
     pi <- table(tmp_celltype)/length(tmp_celltype)

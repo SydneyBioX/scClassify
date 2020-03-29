@@ -15,7 +15,7 @@ train_scClassify(
   cellType_tree = NULL,
   weightsCal = FALSE,
   parallel = FALSE,
-  ncores = 1,
+  BPPARAM = BiocParallel::SerialParam(),
   verbose = TRUE,
   returnList = TRUE,
   ...
@@ -45,7 +45,8 @@ children at each node in the HOPACH tree.}
 
 \item{parallel}{A logical input indicates whether the algorihms will run in parallel}
 
-\item{ncores}{An integer indicates the number of cores that are used}
+\item{BPPARAM}{A \code{BiocParallelParam} class object
+from the \code{BiocParallel} package is used. Default is SerialParam().}
 
 \item{verbose}{A logical input indicates whether the intermediate steps will be printed}
 

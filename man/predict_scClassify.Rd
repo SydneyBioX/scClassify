@@ -19,7 +19,7 @@ predict_scClassify(
   weighted_ensemble = FALSE,
   weights = NULL,
   parallel = FALSE,
-  ncores = 1,
+  BPPARAM = BiocParallel::SerialParam(),
   verbose = FALSE
 )
 }
@@ -59,7 +59,8 @@ weighted score for each base classifier.}
 
 \item{parallel}{A logical input indicates whether running in paralllel or not}
 
-\item{ncores}{An integer indicates the number of cores that are used}
+\item{BPPARAM}{A \code{BiocParallelParam} class object
+from the \code{BiocParallel} package is used. Default is SerialParam().}
 
 \item{verbose}{A logical input indicates whether the intermediate steps will be printed}
 }
@@ -80,7 +81,7 @@ trainRes = trainClassExample_xin,
 cellTypes_test = wang_cellTypes,
 algorithm = "WKNN",
 features = c("limma"),
-similarity = c("pearson", "spearman"),
+similarity = c("pearson"),
 prob_threshold = 0.7,
 verbose = TRUE)
 

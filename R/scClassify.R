@@ -29,7 +29,8 @@
 #' @param cor_threshold_high A numeric indicates the highest correlation threshold
 #' @param returnList A logical input indicates whether the output will be class of list
 #' @param parallel A logical input indicates whether running in paralllel or not
-#' @param ncores An integer indicates the number of cores that are used
+#' @param BPPARAM  A \code{BiocParallelParam} class object
+#' from the \code{BiocParallel} package is used. Default is SerialParam().
 #' @param verbose A logical input indicates whether the intermediate steps will be printed
 #'
 #' @return A list of the results, including testRes storing the results of the testing information,
@@ -56,9 +57,9 @@
 #' returnList = FALSE,
 #' verbose = FALSE)
 #'
-#' @importFrom pbmcapply pbmclapply
 #' @importFrom S4Vectors DataFrame
 #' @importFrom methods is
+#' @importFrom BiocParallel SerialParam
 #' @export
 
 
@@ -84,7 +85,7 @@ scClassify <- function(exprsMat_train = NULL,
                        cor_threshold_high = 0.7,
                        returnList = TRUE,
                        parallel = FALSE,
-                       ncores = 1,
+                       BPPARAM = BiocParallel::SerialParam(),
                        verbose = FALSE) {
 
 
@@ -231,7 +232,7 @@ scClassify <- function(exprsMat_train = NULL,
                                cellType_tree = cellType_tree,
                                weightsCal = weightsCal,
                                parallel = parallel,
-                               ncores = min(ncores, length(selectFeatures)),
+                               BPPARAM = BPPARAM,
                                verbose = verbose,
                                k = k,
                                prob_threshold = prob_threshold,
@@ -293,7 +294,7 @@ scClassify <- function(exprsMat_train = NULL,
                                                              weighted_ensemble = weighted_ensemble,
                                                              weights = weights,
                                                              parallel = parallel,
-                                                             ncores = ncores,
+                                                             BPPARAM = BPPARAM,
                                                              verbose = verbose)
 
         }
@@ -313,7 +314,7 @@ scClassify <- function(exprsMat_train = NULL,
                                          weighted_ensemble = weighted_ensemble,
                                          weights = weights,
                                          parallel = parallel,
-                                         ncores = ncores,
+                                         BPPARAM = BPPARAM,
                                          verbose = verbose)
 
 
@@ -349,7 +350,7 @@ scClassify <- function(exprsMat_train = NULL,
                                                         weighted_ensemble = weighted_ensemble,
                                                         weights = weights,
                                                         parallel = parallel,
-                                                        ncores = ncores,
+                                                        BPPARAM = BPPARAM,
                                                         verbose = verbose)
 
       }
@@ -369,7 +370,7 @@ scClassify <- function(exprsMat_train = NULL,
                                        weighted_ensemble = weighted_ensemble,
                                        weights = weights,
                                        parallel = parallel,
-                                       ncores = ncores,
+                                       BPPARAM = BPPARAM,
                                        verbose = verbose)
       testRes <- list(test = predictRes)
     }

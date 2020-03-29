@@ -6,8 +6,8 @@
 #' @param n_list A vector of integer indicates the sample size to run.
 #' @param num_repeat An integer indicates the number of run for
 #' each sample size will be repeated.
-#' @param ncores An integer indicates the number of cores that
-#' can be used to run the algorithm.
+#' @param BPPARAM  A \code{BiocParallelParam} class object
+#' from the \code{BiocParallel} package is used. Default is SerialParam().
 #' @param subset_test A ogical input indicates whether we used a subset of data
 #' (fixed number for each sample size)
 #' to test instead of all remaining data. By default, it is FALSE.
@@ -34,9 +34,9 @@
 #' accMat <- runSampleCal(exprsMat_xin_subset,
 #'                                    xin_cellTypes,
 #'                                    n_list = seq(20, 100, 20),
-#'                                    num_repeat = 5, ncores = 1)
+#'                                    num_repeat = 5, BPPARAM = BiocParallel::SerialParam())
 #'
-#' @importFrom pbmcapply pbmclapply
+#' @importFrom BiocParallel bplapply SerialParam
 #' @export
 
 
@@ -46,7 +46,7 @@ runSampleCal <- function(exprsMat,
                          num_repeat = 20,
                          level = NULL,
                          cellType_tree = NULL,
-                         ncores = 1,
+                         BPPARAM = BiocParallel::SerialParam(),
                          subset_test = FALSE,
                          num_test = NULL,
                          ...) {
@@ -95,7 +95,7 @@ runSampleCal <- function(exprsMat,
 
   for (i in seq_len(length(n_list))) {
     print(paste("n=",n_list[i]))
-    system.time(res_sub[[i]] <- pbmcapply::pbmclapply(seq_len(num_repeat), function(x) {
+    res_sub[[i]] <- BiocParallel::bplapply(seq_len(num_repeat), function(x) {
       tryCatch({
         l <- runSubSampling(exprsMat, cellTypes, n = n_list[[i]],
                             subset_test = subset_test, num_test = num_test,
@@ -106,7 +106,7 @@ runSampleCal <- function(exprsMat,
 
         table(l)/length(l)},
         error = function(e){NULL})
-    }, mc.cores = ncores))
+    }, BPPARAM = BPPARAM)
     print(do.call(cbind, res_sub[[i]]))
     gc(reset = TRUE)
   }

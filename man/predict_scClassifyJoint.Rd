@@ -17,7 +17,7 @@ predict_scClassifyJoint(
   similarity = "pearson",
   cutoff_method = c("dynamic", "static"),
   parallel = FALSE,
-  ncores = 1,
+  BPPARAM = BiocParallel::SerialParam(),
   verbose = FALSE
 )
 }
@@ -52,7 +52,8 @@ Set as "dynamic" by default.}
 
 \item{parallel}{A logical input indicates whether running in paralllel or not}
 
-\item{ncores}{An integer indicates the number of cores that are used}
+\item{BPPARAM}{A \code{BiocParallelParam} class object
+from the \code{BiocParallel} package is used. Default is SerialParam().}
 
 \item{verbose}{A logical input indicates whether the intermediate steps will be printed}
 }

@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scClassify</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
       </span>
     </div>
 
@@ -215,7 +215,7 @@
   <span class='kw'>similarity</span> <span class='kw'>=</span> <span class='st'>"pearson"</span>,
   <span class='kw'>cutoff_method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"dynamic"</span>, <span class='st'>"static"</span>),
   <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>ncores</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>BPPARAM</span> <span class='kw'>=</span> <span class='kw pkg'>BiocParallel</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html'>SerialParam</a></span>(),
   <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )</pre>
 
@@ -262,20 +262,24 @@ should be one or more of "WKNN", "KNN", "DWKNN".</p></td>
     </tr>
     <tr>
       <th>similarity</th>
-      <td><p>A vector indicates the similarity measure that are used, set as "pearson" by default.
-This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kendall", "binomial", "weighted_rank","manhattan"</p></td>
+      <td><p>A vector indicates the similarity measure that are used,
+set as "pearson" by default.
+This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kendall",
+"binomial", "weighted_rank","manhattan"</p></td>
     </tr>
     <tr>
       <th>cutoff_method</th>
-      <td><p>A vector indicates the method to cutoff the correlation distribution. Set as "dynamic" by default.</p></td>
+      <td><p>A vector indicates the method to cutoff the correlation distribution.
+Set as "dynamic" by default.</p></td>
     </tr>
     <tr>
       <th>parallel</th>
       <td><p>A logical input indicates whether running in paralllel or not</p></td>
     </tr>
     <tr>
-      <th>ncores</th>
-      <td><p>An integer indicates the number of cores that are used</p></td>
+      <th>BPPARAM</th>
+      <td><p>A <code>BiocParallelParam</code> class object
+from the <code>BiocParallel</code> package is used. Default is SerialParam().</p></td>
     </tr>
     <tr>
       <th>verbose</th>

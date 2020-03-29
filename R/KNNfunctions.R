@@ -23,10 +23,10 @@ KNNcor <- function(corMat,
     }
 
     # get the KNN labels
-    topKNN <- apply(corMat, 2, function(x) subLevelModel$y[order(x, decreasing = TRUE)][1:k])
+    topKNN <- apply(corMat, 2, function(x) subLevelModel$y[order(x, decreasing = TRUE)][seq_len(k)])
 
     # get the KNN correlation
-    topKNN_cor <- apply(corMat, 2, function(x) x[order(x, decreasing = TRUE)][1:k])
+    topKNN_cor <- apply(corMat, 2, function(x) x[order(x, decreasing = TRUE)][seq_len(k)])
 
     # If the KNN labels with correlation less than the threshood,
     # set the labels as -1
@@ -62,14 +62,11 @@ KNNcor <- function(corMat,
     if (topLevel) {
       # if(i==2){
 
-      # cat("The first layer correlation cutoff: \n")
-
-
       # We select different cutoffs for each cell type
       unique_y <- levels(subLevelModel$y)
       cor_threshold_tmp <- c()
 
-      for (l in 1:length(unique_y)) {
+      for (l in seq_len(length(unique_y))) {
         print(paste("y", l))
         # Fitting the mixture model if it is not unimodal distribution.
         corMat_vec <- thin_cor(corMat_vec, min(10000, length(corMat_vec)))
@@ -86,15 +83,15 @@ KNNcor <- function(corMat,
           if (!"try-error" %in% is(mixmdl)) {
             if (suppressWarnings(min(unique(mixmdl$rho)) == 0)) {
               quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = TRUE, maxrestarts = 100,
-                                                                   k = length(unique_y), maxit = 2000,
-                                                                   ECM = TRUE, verb = verbose),
-                                             silent = TRUE))
+                                                        k = length(unique_y), maxit = 2000,
+                                                        ECM = TRUE, verb = verbose),
+                                  silent = TRUE))
             }
           }else{
             quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = TRUE, maxrestarts = 100,
-                                                                 k = length(unique_y), maxit = 2000,
-                                                                 ECM = TRUE, verb = verbose),
-                                           silent = TRUE))
+                                                      k = length(unique_y), maxit = 2000,
+                                                      ECM = TRUE, verb = verbose),
+                                silent = TRUE))
           }
         }
 
@@ -111,21 +108,16 @@ KNNcor <- function(corMat,
 
 
 
-        # if (verbose) {
-        #   cat("Correlation threshold: \n")
-        #   print(cor_threshold_tmp)
-        # }
-
       }
       names(cor_threshold_tmp) <- unique_y
 
 
-      topKNN <- apply(corMat, 2, function(x) subLevelModel$y[order(x, decreasing = TRUE)][1:k])
-      topKNN_cor <- apply(corMat, 2, function(x) x[order(x, decreasing = TRUE)][1:k])
+      topKNN <- apply(corMat, 2, function(x) subLevelModel$y[order(x, decreasing = TRUE)][seq_len(k)])
+      topKNN_cor <- apply(corMat, 2, function(x) x[order(x, decreasing = TRUE)][seq_len(k)])
 
       # get the threshold
-      topKNN_threshold <- apply(corMat, 2,
-                                function(x) cor_threshold_tmp[as.numeric((subLevelModel$y[order(x, decreasing = TRUE)][1:k]))])
+      topKNN_threshold <- apply(corMat, 2, function(x)
+        cor_threshold_tmp[as.numeric((subLevelModel$y[order(x, decreasing = TRUE)][seq_len(k)]))])
 
       topKNN <- ifelse(topKNN_cor >= topKNN_threshold, topKNN, -1)
 
@@ -151,7 +143,7 @@ KNNcor <- function(corMat,
       unique_y <- levels(subLevelModel$y)
       cor_threshold_tmp <- c()
 
-      for (l in 1:length(unique_y)) {
+      for (l in seq_len(length(unique_y))) {
 
 
         corMat_vec <- c(corMat[subLevelModel$y == unique_y[l],])
@@ -172,15 +164,15 @@ KNNcor <- function(corMat,
           if (!"try-error" %in% is(mixmdl) ) {
             if (suppressWarnings(min(unique(mixmdl$rho)) == 0)) {
               quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = TRUE, maxrestarts = 100,
-                                                                   k = length(unique_y), maxit = 2000,
-                                                                   ECM = TRUE, verb = verbose),
-                                             silent = TRUE))
+                                                        k = length(unique_y), maxit = 2000,
+                                                        ECM = TRUE, verb = verbose),
+                                  silent = TRUE))
             }
           }else{
             quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = TRUE, maxrestarts = 100,
-                                                                 k = length(unique_y), maxit = 2000,
-                                                                 ECM = TRUE, verb = verbose),
-                                           silent = TRUE))
+                                                      k = length(unique_y), maxit = 2000,
+                                                      ECM = TRUE, verb = verbose),
+                                silent = TRUE))
           }
         }
 
@@ -199,13 +191,13 @@ KNNcor <- function(corMat,
       }
       names(cor_threshold_tmp) <- unique_y
 
-      topKNN <- apply(corMat, 2, function(x) subLevelModel$y[order(x, decreasing = TRUE)][1:k])
-      topKNN_cor <- apply(corMat, 2, function(x) x[order(x, decreasing = TRUE)][1:k])
+      topKNN <- apply(corMat, 2, function(x) subLevelModel$y[order(x, decreasing = TRUE)][seq_len(k)])
+      topKNN_cor <- apply(corMat, 2, function(x) x[order(x, decreasing = TRUE)][seq_len(k)])
 
       # get the threshold
       # the threshold_tmp is order based on the levels of factor. no need to change the character
-      topKNN_threshold <- apply(corMat, 2,
-                                function(x) cor_threshold_tmp[as.numeric((subLevelModel$y[order(x, decreasing = TRUE)][1:k]))])
+      topKNN_threshold <- apply(corMat, 2, function(x)
+        cor_threshold_tmp[as.numeric((subLevelModel$y[order(x, decreasing = TRUE)][seq_len(k)]))])
 
       topKNN <- ifelse(topKNN_cor >= topKNN_threshold, topKNN, -1)
 
@@ -252,8 +244,8 @@ WKNNcor <- function(corMat,
     }
 
 
-    topKNN <- apply(corMat, 2, function(x) subLevelModel$y[order(x, decreasing = TRUE)][1:k])
-    topKNN_cor <- apply(corMat, 2, function(x) x[order(x, decreasing = TRUE)][1:k])
+    topKNN <- apply(corMat, 2, function(x) subLevelModel$y[order(x, decreasing = TRUE)][seq_len(k)])
+    topKNN_cor <- apply(corMat, 2, function(x) x[order(x, decreasing = TRUE)][seq_len(k)])
     topKNN <- ifelse(topKNN_cor >= cor_threshold_static, topKNN, -1)
 
     topKNN_weight <- apply(topKNN_cor, 2, function(x){
@@ -267,7 +259,7 @@ WKNNcor <- function(corMat,
 
 
 
-    predRes <- sapply(1:ncol(corMat),
+    predRes <- sapply(seq_len(ncol(corMat)),
                       function(i){
                         vote <- stats::aggregate(topKNN_weight[,i], by = list(topKNN[,i]), sum)
                         maxIdx <- which.max(vote$x)
@@ -296,7 +288,7 @@ WKNNcor <- function(corMat,
     }
 
 
-    # if(i==2){
+
     if (topLevel) {
       # cat("The first layer correlation cutoff: \n")
 
@@ -304,7 +296,7 @@ WKNNcor <- function(corMat,
 
       unique_y <- levels(subLevelModel$y)
       cor_threshold_tmp <- c()
-      for (l in 1:length(unique_y)) {
+      for (l in seq_len(length(unique_y))) {
         # print(paste("y", l))
 
         # Fitting the mixture model if it is not unimodal distribution.
@@ -324,15 +316,15 @@ WKNNcor <- function(corMat,
           if (!"try-error" %in% is(mixmdl) ) {
             if (suppressWarnings(min(unique(mixmdl$rho)) == 0)) {
               quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = TRUE, maxrestarts = 100,
-                                                                   k = length(unique_y), maxit = 2000,
-                                                                   ECM = TRUE, verb = verbose),
-                                             silent = TRUE))
+                                                        k = length(unique_y), maxit = 2000,
+                                                        ECM = TRUE, verb = verbose),
+                                  silent = TRUE))
             }
           }else{
             quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = TRUE, maxrestarts = 100,
-                                                                 k = length(unique_y), maxit = 2000,
-                                                                 ECM = TRUE, verb = verbose),
-                                           silent = TRUE))
+                                                      k = length(unique_y), maxit = 2000,
+                                                      ECM = TRUE, verb = verbose),
+                                silent = TRUE))
           }
         }
 
@@ -342,7 +334,6 @@ WKNNcor <- function(corMat,
         }else if ("try-error" %in% is(mixmdl)) {
           cor_threshold_tmp = c(cor_threshold_tmp, 0)
         }else{
-          # plot(mixmdl,which = 2)
           t_G2 <- getThreshold(mixmdl, verbose = verbose)
           cor_threshold_tmp = c(cor_threshold_tmp, t_G2)
         }
@@ -358,15 +349,13 @@ WKNNcor <- function(corMat,
 
       names(cor_threshold_tmp) <- unique_y
 
-      # if (verbose) {
-      #   cat("Correlation threshold: \n")
-      #   print(cor_threshold_tmp)
-      # }
+
 
       ### calcualte the Weighted KNN
-      topKNN <- apply(corMat, 2, function(x)subLevelModel$y[order(x, decreasing = TRUE)][1:k])
-      topKNN_cor <- apply(corMat, 2, function(x)x[order(x, decreasing = TRUE)][1:k])
-      topKNN_threshold <- apply(corMat, 2, function(x)cor_threshold_tmp[as.numeric(subLevelModel$y[order(x, decreasing = TRUE)][1:k])])
+      topKNN <- apply(corMat, 2, function(x)subLevelModel$y[order(x, decreasing = TRUE)][seq_len(k)])
+      topKNN_cor <- apply(corMat, 2, function(x)x[order(x, decreasing = TRUE)][seq_len(k)])
+      topKNN_threshold <- apply(corMat, 2, function(x)
+        cor_threshold_tmp[as.numeric(subLevelModel$y[order(x, decreasing = TRUE)][seq_len(k)])])
       topKNN <- ifelse(topKNN_cor >= topKNN_threshold, topKNN, min(corMat))
 
       topKNN_weight <- apply(topKNN_cor, 2, function(x){
@@ -378,25 +367,9 @@ WKNNcor <- function(corMat,
         }
       })
 
-      # print(topKNN_weight[,1:6])
-
-      # if (verbose) {
-      #   votes <- sapply(1:ncol(corMat),
-      #                   function(i){
-      #                     vote <- (stats::aggregate(topKNN_weight[,i], by = list(topKNN[,i]), sum))
-      #                     vote$x/sum(vote$x)
-      #
-      #
-      #                   })
-      #   print(head(votes))
-      #   cat("Summary of the votes \n")
-      #   print(summary(unlist(votes)))
-      #   graphics::hist(unlist(votes), main = "Votes", breaks = 100)
-      # }
 
 
-
-      predRes <- sapply(1:ncol(corMat),
+      predRes <- sapply(seq_len(ncol(corMat)),
                         function(i){
                           vote <- stats::aggregate(topKNN_weight[,i], by = list(topKNN[,i]), sum)
                           maxIdx <- which.max(vote$x)
@@ -418,7 +391,7 @@ WKNNcor <- function(corMat,
 
       unique_y <- levels(subLevelModel$y)
       cor_threshold_tmp <- c()
-      for (l in 1:length(unique_y)) {
+      for (l in seq_len(length(unique_y))) {
 
         if ("dgCMatrix" %in% is(corMat)) {
           corMat_vec <- corMat@x
@@ -428,9 +401,6 @@ WKNNcor <- function(corMat,
 
 
         # Fitting the mixture model if it is not unimodal distribution.
-        #corMat_vec <- corMat_vec[sort(sample(length(corMat_vec), max(round(length(corMat_vec)*0.001), min(200000, length(corMat_vec)))))]
-        #print(length(corMat_vec))
-        #corMat_vec <- corMat_vec[sort(sample(length(corMat_vec), min(10000, length(corMat_vec))))]
         corMat_vec <- thin_cor(corMat_vec, min(10000, length(corMat_vec)))
         corMat_vec <- corMat_vec[corMat_vec != min(corMat)]
         suppressMessages(dip_test <- diptest::dip.test(corMat_vec, B = 10000))
@@ -446,15 +416,15 @@ WKNNcor <- function(corMat,
           if (!"try-error" %in% is(mixmdl)) {
             if (suppressWarnings(min(unique(mixmdl$rho)) == 0)) {
               quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = TRUE, maxrestarts = 100,
-                                                                   k = length(unique_y), maxit = 2000,
-                                                                   ECM = TRUE, verb = verbose),
-                                             silent = TRUE))
+                                                        k = length(unique_y), maxit = 2000,
+                                                        ECM = TRUE, verb = verbose),
+                                  silent = TRUE))
             }
           }else{
             quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = TRUE, maxrestarts = 100,
-                                                                 k = length(unique_y), maxit = 2000,
-                                                                 ECM = TRUE, verb = verbose),
-                                           silent = TRUE))
+                                                      k = length(unique_y), maxit = 2000,
+                                                      ECM = TRUE, verb = verbose),
+                                silent = TRUE))
           }
         }
 
@@ -472,15 +442,12 @@ WKNNcor <- function(corMat,
       }
       names(cor_threshold_tmp) <- unique_y
 
-      # if (verbose) {
-      #   cat("Correlation threshold: \n")
-      #   print(cor_threshold_tmp)
-      # }
 
       ### calcualte the Weighted KNN
-      topKNN <- apply(corMat, 2, function(x)subLevelModel$y[order(x, decreasing = TRUE)][1:k])
-      topKNN_cor <- apply(corMat, 2, function(x)x[order(x, decreasing = TRUE)][1:k])
-      topKNN_threshold <- apply(corMat, 2, function(x)cor_threshold_tmp[as.numeric(subLevelModel$y[order(x, decreasing = TRUE)][1:k])])
+      topKNN <- apply(corMat, 2, function(x)subLevelModel$y[order(x, decreasing = TRUE)][seq_len(k)])
+      topKNN_cor <- apply(corMat, 2, function(x)x[order(x, decreasing = TRUE)][seq_len(k)])
+      topKNN_threshold <- apply(corMat, 2, function(x)
+        cor_threshold_tmp[as.numeric(subLevelModel$y[order(x, decreasing = TRUE)][seq_len(k)])])
       topKNN <- ifelse(topKNN_cor >= topKNN_threshold, topKNN, -1)
 
       topKNN_weight <- apply(topKNN_cor, 2, function(x){
@@ -493,23 +460,10 @@ WKNNcor <- function(corMat,
         }
       })
 
-      # if (verbose) {
-      #   votes <- sapply(1:ncol(corMat),
-      #                   function(i){
-      #                     vote <- (stats::aggregate(topKNN_weight[,i], by = list(topKNN[,i]), sum))
-      #                     vote$x/sum(vote$x)
-      #
-      #
-      #                   })
-      #
-      #   cat("Summary of the votes \n")
-      #   print(summary(unlist(votes)))
-      #   graphics::hist(unlist(votes), main = "Votes", breaks = 100)
-      # }
 
 
 
-      predRes <- sapply(1:ncol(corMat),
+      predRes <- sapply(seq_len(ncol(corMat)),
                         function(i){
                           vote <- stats::aggregate(topKNN_weight[,i], by = list(topKNN[,i]), sum)
                           maxIdx <- which.max(vote$x)
@@ -559,8 +513,8 @@ DWKNNcor <- function(corMat,
     }
 
 
-    topKNN <- apply(corMat, 2, function(x) subLevelModel$y[order(x, decreasing = TRUE)][1:k])
-    topKNN_cor <- apply(corMat, 2, function(x) x[order(x, decreasing = TRUE)][1:k])
+    topKNN <- apply(corMat, 2, function(x) subLevelModel$y[order(x, decreasing = TRUE)][seq_len(k)])
+    topKNN_cor <- apply(corMat, 2, function(x) x[order(x, decreasing = TRUE)][seq_len(k)])
     topKNN <- ifelse(topKNN_cor >= cor_threshold_static, topKNN, -1)
 
 
@@ -576,7 +530,7 @@ DWKNNcor <- function(corMat,
     })
 
 
-    predRes <- sapply(1:ncol(corMat),
+    predRes <- sapply(seq_len(ncol(corMat)),
                       function(i){
                         vote <- stats::aggregate(topKNN_weight[,i], by = list(topKNN[,i]), sum)
                         maxIdx <- which.max(vote$x)
@@ -605,7 +559,6 @@ DWKNNcor <- function(corMat,
     }
 
 
-    # if(i==2){
     if (topLevel) {
       # cat("The first layer correlation cutoff: \n")
 
@@ -613,7 +566,7 @@ DWKNNcor <- function(corMat,
 
       unique_y <- levels(subLevelModel$y)
       cor_threshold_tmp <- c()
-      for (l in 1:length(unique_y)) {
+      for (l in seq_len(length(unique_y))) {
         # print(paste("y", l))
 
         # Fitting the mixture model if it is not unimodal distribution.
@@ -632,15 +585,15 @@ DWKNNcor <- function(corMat,
           if (!"try-error" %in% is(mixmdl) ) {
             if (suppressWarnings(min(unique(mixmdl$rho)) == 0)) {
               quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = TRUE, maxrestarts = 100,
-                                                                   k = length(unique_y), maxit = 2000,
-                                                                   ECM = TRUE, verb = verbose),
-                                             silent = TRUE))
+                                                        k = length(unique_y), maxit = 2000,
+                                                        ECM = TRUE, verb = verbose),
+                                  silent = TRUE))
             }
           }else{
             quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = TRUE, maxrestarts = 100,
-                                                                 k = length(unique_y), maxit = 2000,
-                                                                 ECM = TRUE, verb = verbose),
-                                           silent = TRUE))
+                                                      k = length(unique_y), maxit = 2000,
+                                                      ECM = TRUE, verb = verbose),
+                                silent = TRUE))
           }
         }
 
@@ -658,15 +611,12 @@ DWKNNcor <- function(corMat,
 
       names(cor_threshold_tmp) <- unique_y
 
-      # if (verbose) {
-      #   cat("Correlation threshold: \n")
-      #   print(cor_threshold_tmp)
-      # }
 
       ### calcualte the Weighted KNN
-      topKNN <- apply(corMat, 2, function(x)subLevelModel$y[order(x, decreasing = TRUE)][1:k])
-      topKNN_cor <- apply(corMat, 2, function(x)x[order(x, decreasing = TRUE)][1:k])
-      topKNN_threshold <- apply(corMat, 2, function(x)cor_threshold_tmp[as.numeric(subLevelModel$y[order(x, decreasing = TRUE)][1:k])])
+      topKNN <- apply(corMat, 2, function(x)subLevelModel$y[order(x, decreasing = TRUE)][seq_len(k)])
+      topKNN_cor <- apply(corMat, 2, function(x)x[order(x, decreasing = TRUE)][seq_len(k)])
+      topKNN_threshold <- apply(corMat, 2, function(x)
+        cor_threshold_tmp[as.numeric(subLevelModel$y[order(x, decreasing = TRUE)][seq_len(k)])])
       topKNN <- ifelse(topKNN_cor >= topKNN_threshold, topKNN, min(corMat))
 
       topKNN_weight <- apply(topKNN_cor, 2, function(x){
@@ -680,23 +630,9 @@ DWKNNcor <- function(corMat,
       })
 
 
-      # if (verbose) {
-      #   votes <- sapply(1:ncol(corMat),
-      #                   function(i){
-      #                     vote <- (stats::aggregate(topKNN_weight[,i], by = list(topKNN[,i]), sum))
-      #                     vote$x/sum(vote$x)
-      #
-      #
-      #                   })
-      #   # print(head(votes))
-      #   cat("Summary of the votes \n")
-      #   print(summary(unlist(votes)))
-      #   graphics::hist(unlist(votes), main = "Votes", breaks = 100)
-      # }
 
 
-
-      predRes <- sapply(1:ncol(corMat),
+      predRes <- sapply(seq_len(ncol(corMat)),
                         function(i){
                           vote <- stats::aggregate(topKNN_weight[,i], by = list(topKNN[,i]), sum)
                           maxIdx <- which.max(vote$x)
@@ -718,7 +654,7 @@ DWKNNcor <- function(corMat,
 
       unique_y <- levels(subLevelModel$y)
       cor_threshold_tmp <- c()
-      for (l in 1:length(unique_y)) {
+      for (l in seq_len(length(unique_y))) {
 
         corMat_vec <- c(corMat[subLevelModel$y == unique_y[l],])
 
@@ -740,15 +676,15 @@ DWKNNcor <- function(corMat,
           if (!"try-error" %in% is(mixmdl) ) {
             if (suppressWarnings(min(unique(mixmdl$rho)) == 0)) {
               quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = TRUE, maxrestarts = 100,
-                                                                   k = length(unique_y), maxit = 2000,
-                                                                   ECM = TRUE, verb = verbose),
-                                             silent = TRUE))
+                                                        k = length(unique_y), maxit = 2000,
+                                                        ECM = TRUE, verb = verbose),
+                                  silent = TRUE))
             }
           }else{
             quiet(mixmdl <- try(mixtools::normalmixEM(corMat_vec, fast = TRUE, maxrestarts = 100,
-                                                                 k = length(unique_y), maxit = 2000,
-                                                                 ECM = TRUE, verb = verbose),
-                                           silent = TRUE))
+                                                      k = length(unique_y), maxit = 2000,
+                                                      ECM = TRUE, verb = verbose),
+                                silent = TRUE))
           }
         }
 
@@ -773,9 +709,10 @@ DWKNNcor <- function(corMat,
       # }
 
       ### calcualte the Weighted KNN
-      topKNN <- apply(corMat, 2, function(x)subLevelModel$y[order(x, decreasing = TRUE)][1:k])
-      topKNN_cor <- apply(corMat, 2, function(x)x[order(x, decreasing = TRUE)][1:k])
-      topKNN_threshold <- apply(corMat, 2, function(x)cor_threshold_tmp[as.numeric(subLevelModel$y[order(x, decreasing = TRUE)][1:k])])
+      topKNN <- apply(corMat, 2, function(x)subLevelModel$y[order(x, decreasing = TRUE)][seq_len(k)])
+      topKNN_cor <- apply(corMat, 2, function(x)x[order(x, decreasing = TRUE)][seq_len(k)])
+      topKNN_threshold <- apply(corMat, 2, function(x)
+        cor_threshold_tmp[as.numeric(subLevelModel$y[order(x, decreasing = TRUE)][seq_len(k)])])
       topKNN <- ifelse(topKNN_cor >= topKNN_threshold, topKNN, -1)
 
       topKNN_weight <- apply(topKNN_cor, 2, function(x){
@@ -788,25 +725,14 @@ DWKNNcor <- function(corMat,
         }
       })
 
-      # if (verbose) {
-      #   votes <- sapply(1:ncol(corMat),
-      #                   function(i){
-      #                     vote <- (stats::aggregate(topKNN_weight[,i], by = list(topKNN[,i]), sum))
-      #                     vote$x/sum(vote$x)
-      #
-      #
-      #                   })
-      #   cat("Summary of the votes \n")
-      #   print(summary(unlist(votes)))
-      #   graphics::hist(unlist(votes), main = "Votes", breaks = 100)
-      # }
 
 
 
 
-      predRes <- sapply(1:ncol(corMat),
+      predRes <- sapply(seq_len(ncol(corMat)),
                         function(i){
-                          vote <- stats::aggregate(topKNN_weight[,i], by = list(topKNN[,i]), sum)
+                          vote <- stats::aggregate(topKNN_weight[,i],
+                                                   by = list(topKNN[,i]), sum)
                           maxIdx <- which.max(vote$x)
                           if (max(vote$x/sum(vote$x)) < prob_threshold) {
                             0
@@ -853,14 +779,15 @@ getThreshold <- function(mixmdl, verbose = FALSE){
   m_list <- sort(unique(membership))
 
   mu_list <- mixmdl$mu
-  names(mu_list) <- c(1:length(mu_list))
+  names(mu_list) <- seq_len(length(mu_list))
   mu_list <- mu_list[m_list]
 
   if (length(mu_list) > 1) {
     idx1 <- as.numeric(names(mu_list)[order(mu_list)][1])
     idx2 <- as.numeric(names(mu_list)[order(mu_list)][2])
 
-    root <- try(uniroot(funMixModel, interval = c(mixmdl$mu[idx1] - mixmdl$sigma[idx1], mixmdl$mu[idx2] + mixmdl$sigma[idx2]),
+    root <- try(uniroot(funMixModel, interval = c(mixmdl$mu[idx1] - mixmdl$sigma[idx1],
+                                                  mixmdl$mu[idx2] + mixmdl$sigma[idx2]),
                         mu1 = mixmdl$mu[idx1], mu2 = mixmdl$mu[idx2],
                         sd1 = mixmdl$sigma[idx1], sd2 = mixmdl$sigma[idx2],
                         rho1 = mixmdl$lambda[idx1], rho2 = mixmdl$lambda[idx2]),

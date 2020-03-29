@@ -5,9 +5,12 @@
 #' @slot ensembleLabel A vector of character indicates the ensemble predicted label
 #' @slot ensembleScore A vector of numeric indicates scores of the ensemble predicted label
 #' @slot ensembleModelWeights A vector of numeric indicates the weights of each model
-#' @slot predictedLabel A data.frame indicates the predicted labels for each base model (each column indicates one base model)
-#' @slot predictedMatrix A list indicates the labels of all level predictions for each base model (each list indicates one base model)
-#' @slot resCategories A data.frame indicates the predicted results for each base model (if true test label is provided)
+#' @slot predictedLabel A data.frame indicates the predicted labels for each base model
+#' (each column indicates one base model)
+#' @slot predictedMatrix A list indicates the labels of all level predictions for
+#'  each base model (each list indicates one base model)
+#' @slot resCategories A data.frame indicates the predicted results for each base model
+#' (if true test label is provided)
 #' @slot featureCombination A vector of character indicates the features and similarity combinations
 #'  that are trained for this data
 #'

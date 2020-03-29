@@ -20,11 +20,14 @@ An S4 class to stored training model for scClassify
 
 \item{\code{ensembleModelWeights}}{A vector of numeric indicates the weights of each model}
 
-\item{\code{predictedLabel}}{A data.frame indicates the predicted labels for each base model (each column indicates one base model)}
+\item{\code{predictedLabel}}{A data.frame indicates the predicted labels for each base model
+(each column indicates one base model)}
 
-\item{\code{predictedMatrix}}{A list indicates the labels of all level predictions for each base model (each list indicates one base model)}
+\item{\code{predictedMatrix}}{A list indicates the labels of all level predictions for
+each base model (each list indicates one base model)}
 
-\item{\code{resCategories}}{A data.frame indicates the predicted results for each base model (if true test label is provided)}
+\item{\code{resCategories}}{A data.frame indicates the predicted results for each base model
+(if true test label is provided)}
 
 \item{\code{featureCombination}}{A vector of character indicates the features and similarity combinations
 that are trained for this data}

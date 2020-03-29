@@ -26,9 +26,14 @@ devtools::install_github("SydneyBioX/scClassify")
 
 ## Vignette and Shiny app
 
-You can find the vignette at this webiste: https://sydneybiox.github.io/scClassify/index.html.
+You can find the vignette at this website (https://sydneybiox.github.io/scClassify/index.html):
 
-Also, you can find our interactive shiny application (beta) at this webiste:
++ scClassify Model Building and Prediction: https://sydneybiox.github.io/scClassify/articles/scClassify.html
++ Sample size calculation: https://sydneybiox.github.io/scClassify/articles/webOnly/sampleSizeCal.html
++ Performing scClassify using pretrained models: https://sydneybiox.github.io/scClassify/articles/pretrainedModel.html
+
+
+Also, you can find our interactive shiny application (beta) at this website:
 http://shiny.maths.usyd.edu.au/scClassify.
 
 
@@ -61,7 +66,7 @@ Currently available pre-trained scClassify models (in `scClassifyTrainModel` cla
 
 ## Contact us
 
-If you have any enquiries, espcially about performing `scClassify` to classify your cells or to build your own models, please contact <yingxin.lin@sydney.edu.au> or <bioinformatics@maths.usyd.edu.au>.
+If you have any enquiries, especially about performing `scClassify` to classify your cells or to build your own models, please contact <yingxin.lin@sydney.edu.au> or <bioinformatics@maths.usyd.edu.au>.
 
 
 ## Reference

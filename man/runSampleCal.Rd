@@ -11,7 +11,7 @@ runSampleCal(
   num_repeat = 20,
   level = NULL,
   cellType_tree = NULL,
-  ncores = 1,
+  BPPARAM = BiocParallel::SerialParam(),
   subset_test = FALSE,
   num_test = NULL,
   ...
@@ -37,8 +37,8 @@ It can not be larger than the total number of levels of the tree.}
 if it is NULL, the accuracy rate is calculate
 based on the provided cellTypes.}
 
-\item{ncores}{An integer indicates the number of cores that
-can be used to run the algorithm.}
+\item{BPPARAM}{A \code{BiocParallelParam} class object
+from the \code{BiocParallel} package is used. Default is SerialParam().}
 
 \item{subset_test}{A ogical input indicates whether we used a subset of data
 (fixed number for each sample size)
@@ -65,6 +65,6 @@ set.seed(2019)
 accMat <- runSampleCal(exprsMat_xin_subset,
                                    xin_cellTypes,
                                    n_list = seq(20, 100, 20),
-                                   num_repeat = 5, ncores = 1)
+                                   num_repeat = 5, BPPARAM = BiocParallel::SerialParam())
 
 }
