@@ -22,7 +22,16 @@ library(ggplot2)
 library(gridExtra)
 ```
 
-This vignette demonstrates a case study of `scClassify`, using Tabula Muris data from Heart tissue. 
+This vignette demonstrates a case study of `scClassify`, using Tabula Muris data from Heart tissue. The files can be downloaded using the following codes.
+
+```{r eval = FALSE}
+download.file("https://raw.githubusercontent.com/SydneyBioX/scClassify/master/vignettes/webOnly/Heart_10X.rds",
+              "Heart_10X.rds")
+
+download.file("https://raw.githubusercontent.com/SydneyBioX/scClassify/master/vignettes/webOnly/Heart_FACS.rds",
+              "Heart_FACS.rds")
+```
+
 
 
 ```{r}
@@ -53,6 +62,7 @@ Heart_10X <- scater::normalize(Heart_10X)
 Heart_FACS <- scater::normalize(Heart_FACS)
 ```
 
+We can visualise the two datasets using UMAP, coloured by the cell type information.
 
 ```{r fig.height=8, fig.width=12}
 set.seed(2019)
@@ -72,9 +82,7 @@ grid.arrange(g_10X, g_FACS, ncol = 2)
 
 
 
-## Non-ensemble scClassify
-
-We first perform non-ensemble `scClassify` by using Xin et al. as our reference dataset and Wang et al. data as ur query data. We use `WKNN` as the KNN algorithm, `DE` (differential expression genes) as the gene selection method, and lastly `pearson` as the similarity calculation method.
+We will perform non-ensemble `scClassify` by using 10X as our reference dataset and FACS data as ur query data. We use `WKNN` as the KNN algorithm, `DE` (differential expression genes) as the gene selection method, and lastly `pearson` as the similarity calculation method.
 
 ```{r}
 scClassify_res <- scClassify(exprsMat_train = logcounts(Heart_10X),
@@ -100,7 +108,7 @@ plotCellTypeTree(scClassify_res$trainRes@cellTypeTree)
 Noted that `scClassify_res$trainRes` is a `scClassifyTrainModel` class.
 
 
-Check the prediction results.
+Check the prediction results for the FACS data.
 
 ```{r}
 Heart_FACS$scClassify_predicted <- scClassify_res$testRes$FACS$pearson_WKNN_limma$predRes
