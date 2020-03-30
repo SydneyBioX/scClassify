@@ -2,16 +2,20 @@
 #'
 #' @param exprsMat_train A matrix of log-transformed expression matrix of reference dataset
 #' @param cellTypes_train A vector of cell types of reference dataset
-#' @param tree A vector indicates the method to build hierarchical tree, set as "HOPACH" by default.
+#' @param tree A vector indicates the method to build hierarchical tree,
+#' set as "HOPACH" by default.
 #' This should be one of "HOPACH" and "HC" (using stats::hclust).
-#' @param selectFeatures A vector indicates the gene selection method, set as "limma" by default.
+#' @param selectFeatures A vector indicates the gene selection method,
+#' set as "limma" by default.
 #' This should be one or more of "limma", "DV", "DD", "chisq", "BI".
 #' @param topN An integer indicates the top number of features that are selected
 #' @param hopach_kmax An integer between 1 and 9 specifying the maximum number of
 #' children at each node in the HOPACH tree.
 #' @param pSig A numeric indicates the cutoff of pvalue for features
-#' @param cellType_tree A list indicates the cell type tree provided by user. (By default, it is NULL)
-#' @param weightsCal A logical input indicates whether we need to calculate the weights for the model.
+#' @param cellType_tree A list indicates the cell type tree provided by user.
+#' (By default, it is NULL)
+#' @param weightsCal A logical input indicates whether we need to
+#' calculate the weights for the model.
 #' @param parallel A logical input indicates whether the algorihms will run in parallel
 #' @param BPPARAM  A \code{BiocParallelParam} class object
 #' from the \code{BiocParallel} package is used. Default is SerialParam().
@@ -19,7 +23,7 @@
 #' @param returnList A logical input indicates whether the output will be class of list
 #' @param ... Other input for predict_scClassify for the case when weights calculation
 #' of the pretrained model is performed
-#' @return list of results
+#' @return list of results or an object of \code{scClassifyTrainModel}
 #' @author Yingxin Lin
 #'
 #' @examples
@@ -61,11 +65,9 @@ train_scClassify <- function(exprsMat_train,
   }
 
   # Matching the argument of the tree construction method
-  # TODO: Allow user to provide their own tree
   tree <- match.arg(tree, c("HOPACH", "HC"), several.ok = FALSE)
 
   # Matching the argument of feature selection method
-  # TODO: 1. Allow user to provide their own markers
   selectFeatures <- match.arg(selectFeatures,
                               c("limma", "DV", "DD", "chisq", "BI"),
                               several.ok = TRUE)
@@ -90,9 +92,10 @@ train_scClassify <- function(exprsMat_train,
   # To rename the train list if name is null (only when there are multiple training datasets)
   if ( "list" %in% is(exprsMat_train)) {
     if (is.null(names(exprsMat_train))) {
-      names(exprsMat_train) <- names(cellTypes_train) <- paste("TrainData",
-                                                               seq_len(length(exprsMat_train)),
-                                                               sep = "_")
+      names(exprsMat_train) <- names(cellTypes_train) <-
+        paste("TrainData",
+              seq_len(length(exprsMat_train)),
+              sep = "_")
     } else if (sum(names(exprsMat_train) == "") != 0) {
       names(exprsMat_train)[names(exprsMat_train) == ""] <-
         names(cellTypes_train)[names(cellTypes_train) == ""] <-
@@ -239,11 +242,9 @@ train_scClassifySingle <- function(exprsMat_train,
   }
 
   # Matching the argument of the tree construction method
-  # TODO: Allow user to provide their own tree
   tree <- match.arg(tree, c("HOPACH", "HC"), several.ok = FALSE)
 
   # Matching the argument of feature selection method
-  # TODO: 1. Allow user to provide their own markers
   selectFeatures <- match.arg(selectFeatures,
                               c("limma", "DV", "DD", "chisq", "BI"),
                               several.ok = TRUE)
@@ -292,14 +293,6 @@ train_scClassifySingle <- function(exprsMat_train,
 
 
 
-  # if (featureHierachy) {
-  #   hierachyKNNRes <-  hierchyKNNcor_prob2(exprsMat_train,
-  #                                          cellTypes_train,
-  #                                          cutree_list,
-  #                                          topN = topN,
-  #                                          feature = selectFeatures)
-  # }
-  #
 
   if (parallel) {
     hierarchyKNNRes <- BiocParallel::bplapply(seq_len(length(selectFeatures)),
@@ -451,9 +444,6 @@ hierarchyKNNcor <- function(exprsMat,
                                        topN = topN,
                                        pSig = pSig
           )
-          # if (verbose) {
-          #   print(hvg[[j]])
-          # }
 
           model[[j]] <- list(train = Matrix::t(exprsMat[na.omit(hvg[[j]]),
                                                         trainIdx, drop = FALSE]),

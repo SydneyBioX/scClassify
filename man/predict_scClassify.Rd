@@ -24,7 +24,8 @@ predict_scClassify(
 )
 }
 \arguments{
-\item{exprsMat_test}{A list or a matrix indicates the expression matrices of the query datasets}
+\item{exprsMat_test}{A list or a matrix indicates the log-transformed expression matrices
+of the query datasets}
 
 \item{trainRes}{A `scClassifyTrainModel` or a `list` indicates scClassify trained model}
 
@@ -41,8 +42,8 @@ predict_scClassify(
 \item{features}{A vector indicates the gene selection method, set as "limma" by default.
 This should be one or more of "limma", "DV", "DD", "chisq", "BI".}
 
-\item{algorithm}{A vector indicates the KNN method that are used, set as "WKNN" by default. This
-should be one or more of "WKNN", "KNN", "DWKNN".}
+\item{algorithm}{A vector indicates the KNN method that are used, set as "WKNN" by default.
+This should be one or more of "WKNN", "KNN", "DWKNN".}
 
 \item{similarity}{A vector indicates the similarity measure that are used, set as "pearson" by default.
 This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kendall", "binomial",

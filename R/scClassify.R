@@ -10,14 +10,13 @@
 #' This should be one or more of "limma", "DV", "DD", "chisq", "BI".
 #' @param algorithm A vector indicates the KNN method that are used, set as
 #' "WKNN" by default. Thisshould be one or more of "WKNN", "KNN", "DWKNN".
-#' @param similarity A vector indicates the similarity measure that are used, set as "pearson" by default.
-#' This should be one or more of "pearson",  "spearman", "cosine", "jaccard",
-#' "kendall", "binomial", "weighted_rank","manhattan"
+#' @param similarity A vector indicates the similarity measure that are used,
+#' set as "pearson" by default. This should be one or more of "pearson",
+#' "spearman", "cosine", "jaccard", kendall", "binomial", "weighted_rank","manhattan"
 #' @param cutoff_method A vector indicates the method to cutoff the correlation distribution.
 #' Set as "dynamic" by default.
 #' @param weighted_ensemble A logical input indicates in ensemble learning,
-#' whether the results is combined by a
-#' weighted score for each base classifier.
+#' whether the results is combined by a weighted score for each base classifier.
 #' @param weights A vector indicates the weights for ensemble
 #' @param weighted_jointClassification A logical input indicates in joint classification
 #' using multiple training datasets,

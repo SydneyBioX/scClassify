@@ -22,7 +22,7 @@ train_scClassify(
 )
 }
 \arguments{
-\item{exprsMat_train}{A matrix of expression matrix of reference dataset}
+\item{exprsMat_train}{A matrix of log-transformed expression matrix of reference dataset}
 
 \item{cellTypes_train}{A vector of cell types of reference dataset}
 
@@ -52,10 +52,11 @@ from the \code{BiocParallel} package is used. Default is SerialParam().}
 
 \item{returnList}{A logical input indicates whether the output will be class of list}
 
-\item{...}{Other input for predict_scClassify for the case when weights calculation of the pretrained model is performed}
+\item{...}{Other input for predict_scClassify for the case when weights calculation
+of the pretrained model is performed}
 }
 \value{
-list of results
+list of results or an object of \code{scClassifyTrainModel}
 }
 \description{
 Training scClassify model

@@ -237,7 +237,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>exprsMat_train</th>
-      <td><p>A matrix of expression matrix of reference dataset</p></td>
+      <td><p>A matrix of log-transformed expression matrix of reference dataset</p></td>
     </tr>
     <tr>
       <th>cellTypes_train</th>
@@ -258,8 +258,8 @@ This should be one of "HOPACH" and "HC" (using hclust).</p></td>
     </tr>
     <tr>
       <th>algorithm</th>
-      <td><p>A vector indicates the KNN method that are used, set as "WKNN" by default. This
-should be one or more of "WKNN", "KNN", "DWKNN".</p></td>
+      <td><p>A vector indicates the KNN method that are used, set as
+"WKNN" by default. Thisshould be one or more of "WKNN", "KNN", "DWKNN".</p></td>
     </tr>
     <tr>
       <th>selectFeatures</th>
@@ -268,17 +268,19 @@ This should be one or more of "limma", "DV", "DD", "chisq", "BI".</p></td>
     </tr>
     <tr>
       <th>similarity</th>
-      <td><p>A vector indicates the similarity measure that are used, set as "pearson" by default.
-This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kendall", "binomial", "weighted_rank","manhattan"</p></td>
+      <td><p>A vector indicates the similarity measure that are used,
+set as "pearson" by default. This should be one or more of "pearson",
+"spearman", "cosine", "jaccard", kendall", "binomial", "weighted_rank","manhattan"</p></td>
     </tr>
     <tr>
       <th>cutoff_method</th>
-      <td><p>A vector indicates the method to cutoff the correlation distribution. Set as "dynamic" by default.</p></td>
+      <td><p>A vector indicates the method to cutoff the correlation distribution.
+Set as "dynamic" by default.</p></td>
     </tr>
     <tr>
       <th>weighted_ensemble</th>
-      <td><p>A logical input indicates in ensemble learning, whether the results is combined by a
-weighted score for each base classifier.</p></td>
+      <td><p>A logical input indicates in ensemble learning,
+whether the results is combined by a weighted score for each base classifier.</p></td>
     </tr>
     <tr>
       <th>weights</th>
@@ -286,12 +288,14 @@ weighted score for each base classifier.</p></td>
     </tr>
     <tr>
       <th>weighted_jointClassification</th>
-      <td><p>A logical input indicates in joint classification using multiple training datasets,
+      <td><p>A logical input indicates in joint classification
+using multiple training datasets,
 whether the results is combined by a weighted score for each training model.</p></td>
     </tr>
     <tr>
       <th>cellType_tree</th>
-      <td><p>A list indicates the cell type tree provided by user. (By default, it is NULL) (Only for one training data input)</p></td>
+      <td><p>A list indicates the cell type tree provided by user.
+(By default, it is NULL) (Only for one training data input)</p></td>
     </tr>
     <tr>
       <th>k</th>

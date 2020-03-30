@@ -54,7 +54,7 @@ By default, `scClassify` will construct the learning curve on the basis of class
 
 Next, we can get an accuracy matrix by running `runSampleCal` function, where the parameter `n_list` indicates a list of sample sizes (N) that you would like to subsample from the data as the training set, and `num_repeat` indicates the number of times to repeat this procedure for each `N`.
 
-For the purpose of illustration, here we set a short length of `n_list` and a small number of `num_repeat`. A longer `n_list` and a larger number of `num_repeat` is recommended for better learning curve fitting.
+For the purpose of illustration, here we set a short length of `n_list` and a small number of `num_repeat`. A longer `n_list` and a larger number of `num_repeat` is recommended for better learning curve fitting. If you want to run `runSampleCal` in parallel, for windows users, you can use `SnowParam()`, and for Macs/Unix users, use `MulticoreParam()`.
 
 ```{r eval = TRUE, results='hide'}
 set.seed(2019)
@@ -62,7 +62,7 @@ system.time(accMat <- runSampleCal(exprsMat_xin_subset,
                                    xin_cellTypes,
                                    n_list = seq(80, 400, 20), 
                                    num_repeat = 20,
-                                   BPPARAM = BiocParallel::MulticoreParam(workers = 4)))
+                                   BPPARAM = BiocParallel::SerialParam()))
 ```
 
 
@@ -109,7 +109,7 @@ system.time(accMat_level1 <- runSampleCal(exprsMat_xin_subset,
                                           num_repeat = 20,
                                           cellType_tree = trainClassExample_xin@cellTypeTree,
                                           level = 1,
-                                          BPPARAM = BiocParallel::MulticoreParam(workers = 4)))
+                                          BPPARAM = BiocParallel::SerialParam()))
 
 res_level1 <- learningCurve(accMat_level1,
                             as.numeric(colnames(accMat_level1)),

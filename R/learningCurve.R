@@ -67,9 +67,6 @@ learningCurve <- function(accMat, n, auto_initial = TRUE,
                                   b = b, d_list = d_list,
                                   verbose = verbose)
 
-      # if (i == 1) {
-      #   d_list <- model[[i]]$para["d"]
-      # }
     } else if (fitmodel == "gam") {
       model[[i]] <- mgcv::gam(acc ~ s(n, bs = "cr"),
                               data = data.frame(acc = dat[,i], n = n),
@@ -77,15 +74,6 @@ learningCurve <- function(accMat, n, auto_initial = TRUE,
     }
 
     else{
-      # if (i == 2 | i == 4) {
-      #   model[[i]] <- fitLC(dat[,i], n, auto_initial = auto_initial,
-      #                       a = a, b = b, c = c,
-      #                       verbose = verbose, b_max = b_max)
-      # } else {
-      #   model[[i]] <- fitLC(dat[,i], n, auto_initial = auto_initial,
-      #                       a = a, b = b, c = c,
-      #                       verbose = verbose, b_max = 1)
-      # }
       model[[i]] <- fitLC(dat[,i], n, auto_initial = auto_initial,
                           a = a, b = b, c = c,
                           verbose = verbose, b_max = 1)
@@ -132,8 +120,6 @@ learningCurve <- function(accMat, n, auto_initial = TRUE,
 
 
 init_fit <- function(acc, n){
-  # y1 <- log(max(acc) + 0.001 - acc)
-  # x1 <- log(n)
   fit <- lm(log(n) ~ log(max(acc) + 0.001 - acc))
 
   c <- -coef(fit)[2]
@@ -171,14 +157,12 @@ fitLC <- function(acc, n, auto_initial = TRUE,
 
 
   }else if (!is.null(a) & !is.null(b) & !is.null(c)) {
-    # warnings("fails in fit 1")
     # For the case that user supplies starting point
     learning_curve <- stats::nls(acc ~ I(1 / n^(c) * a) + b,
                                  data = dat_train,
                                  start = list(a = a, c = c, b = b))
   }else{
     # this starting point may not work all the time
-    # warnings("fails in fit 2")
     learning_curve <- stats::nls(acc ~ I(1 / n^(c) * a) + b,
                                  data = dat_train,
                                  start = list(a = -10, c = 1, b = 1))

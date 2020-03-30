@@ -97,7 +97,7 @@ We next perform ensemble `scClassify` by using Xin et al. as our reference datas
 1. `WKNN` + `DE` + `pearson`
 2. `WKNN` + `DE` + `spearman`
 
-Here, we will weight these two classifiers equally by setting `wegihted_ensemble = FALSE`. By default this is set as `TRUE`, so each base classifier will be weighted by the accuracy rates trained in the reference data.
+Here, we will weight these two classifiers equally by setting `weighted_ensemble = FALSE`. By default this is set as `TRUE`, so each base classifier will be weighted by the accuracy rates trained in the reference data.
 
 ```{r}
 scClassify_res_ensemble <- scClassify(exprsMat_train = exprsMat_xin_subset,

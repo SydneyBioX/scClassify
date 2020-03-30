@@ -182,8 +182,6 @@ reLevelCellTypeTree <- function(cellType_tree, level) {
 
   for (i in seq_len((level - 1))) {
 
-    # cellTypes_newTree[[i]] <- cellType_tree[[i]]
-    #
     cellTypes_newTree[[i]] <- sapply(seq_len(length(newCellTypeNames)),
                                      function(j)
                                        unique(cellType_tree[[i]][names(cellType_tree[[i]]) %in%

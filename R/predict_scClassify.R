@@ -221,8 +221,8 @@ predict_scClassify <- function(exprsMat_test,
 #' @param cor_threshold_high A numeric indicates the highest correlation threshold
 #' @param features A vector indicates the method to select features, set as "limma" by default.
 #' This should be one or more of "limma", "DV", "DD", "chisq", "BI".
-#' @param algorithm A vector indicates the KNN method that are used, set as "WKNN" by default. This
-#' should be one or more of "WKNN", "KNN", "DWKNN".
+#' @param algorithm A vector indicates the KNN method that are used, set as "WKNN" by default.
+#' This should be one or more of "WKNN", "KNN", "DWKNN".
 #' @param similarity A vector indicates the similarity measure that are used,
 #' set as "pearson" by default.
 #' This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kendall",
@@ -418,7 +418,8 @@ predict_scClassifySingle <- function(exprsMat_test,
               # features that are in the test dataset
               common_HVG <- intersect(rownames(exprsMat_test), levelHVG[[i]][[j]])
               exprsMat_toTest <- exprsMat_test[common_HVG, predIdx, drop = FALSE]
-              exprsMat_toTest <- exprsMat_toTest[Matrix::rowSums(exprsMat_toTest) != 0, , drop = FALSE]
+              exprsMat_toTest <- exprsMat_toTest[Matrix::rowSums(exprsMat_toTest) != 0, ,
+                                                 drop = FALSE]
 
               if (nrow(exprsMat_toTest) < 5) {
 
@@ -467,10 +468,6 @@ predict_scClassifySingle <- function(exprsMat_test,
                                       topLevel = FALSE,
                                       verbose = verbose)
                 }
-
-
-
-
 
                 pred_level[[j]] <- predRes$predRes
               }
@@ -537,7 +534,8 @@ predict_scClassifySingle <- function(exprsMat_test,
   }
 
   predMat <- do.call(cbind, pred)
-  predMat <- sapply(seq_len(ncol(predMat)), function(x) getPredRes(predMat, cutree_list, x))
+  predMat <- sapply(seq_len(ncol(predMat)),
+                    function(x) getPredRes(predMat, cutree_list, x))
 
   predRes <- apply(predMat, 1, function(x){
     unAssIdx <- which(x == "unassigned")

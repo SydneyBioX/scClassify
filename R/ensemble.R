@@ -20,7 +20,8 @@ getTrainWeights <- function(trainRes) {
 
 
 # function to get the ensemble res
-getEnsembleRes <- function(testRes, weighted_train, exclude = NULL, weighted_ensemble = TRUE) {
+getEnsembleRes <- function(testRes, weighted_train,
+                           exclude = NULL, weighted_ensemble = TRUE) {
 #
 #    trainRes <- testRes$train
   # Get the weighted
@@ -34,11 +35,6 @@ getEnsembleRes <- function(testRes, weighted_train, exclude = NULL, weighted_ens
     weighted_train <- NULL
   }
 
-  # ensembleRes <- lapply(testRes, function(x) {
-  #   calEnsembleRes(x,
-  #                  exclude = exclude,
-  #                  weight = weighted_train)
-  # })
   ensembleRes <-   calEnsembleRes(testRes,
                                   exclude = exclude,
                                   weight = weighted_train)
@@ -65,7 +61,6 @@ calEnsembleRes <- function(res, exclude = NULL, weight = NULL){
 
   ensembleRes <- apply(ensembleResMat, 1, function(x) {
     names(x) <- colnames(ensembleResMat)
-    # keep <- x!="unassigned"
     keep <- rep(TRUE, length(x))
     if (sum(keep) == 0) {
       data.frame(cellTypes = "unassigned", scores = 0)

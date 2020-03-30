@@ -11,8 +11,8 @@
 #'  each base model (each list indicates one base model)
 #' @slot resCategories A data.frame indicates the predicted results for each base model
 #' (if true test label is provided)
-#' @slot featureCombination A vector of character indicates the features and similarity combinations
-#'  that are trained for this data
+#' @slot featureCombination A vector of character indicates the features and
+#' similarity combinations that are trained for this data
 #'
 #'
 #' @importClassesFrom S4Vectors character_OR_NULL
