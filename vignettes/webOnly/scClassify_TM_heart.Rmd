@@ -58,8 +58,8 @@ table(Heart_FACS$cell_ontology_class)
 scClassify utilises *log-transformed* (size-factor normalized) matrices as input where each row is a gene and each column a cell for a reference dataset and a query dataset. We will use `normalize()` in package `scater` to compute the log-normalize expression values.
 
 ```{r}
-Heart_10X <- scater::normalize(Heart_10X)
-Heart_FACS <- scater::normalize(Heart_FACS)
+Heart_10X <- scater::logNormCounts(Heart_10X)
+Heart_FACS <- scater::logNormCounts(Heart_FACS)
 ```
 
 We can visualise the two datasets using UMAP, coloured by the cell type information.

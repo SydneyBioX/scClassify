@@ -6,19 +6,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>scClassify: single-cell Hierarchical Classification  • scClassify</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
+<script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="scClassify: single-cell Hierarchical Classification ">
 <meta property="og:description" content="Classification of single cells via cell-type hierarchies based on ensemble learning and sample size estimation.">
-<meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">scClassify</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
 
@@ -167,11 +167,11 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Install Bioconductor packages <code>S4Vectors</code>, <code>hopach</code> and <code>limma</code> packages using <code>BiocManager</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install.packages("BiocManager")</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">BiocManager<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"S4Vectors"</span>, <span class="st">"hopach"</span>, <span class="st">"limma"</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="co"># install.packages("BiocManager")</span>
+<span class="kw pkg">BiocManager</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"S4Vectors"</span>, <span class="st">"hopach"</span>, <span class="st">"limma"</span>))</pre></div>
 <p>Then install <code>scClassify</code> using <code>devtools</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(devtools)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">devtools<span class="op">::</span><span class="kw"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"SydneyBioX/scClassify"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">devtools</span>)
+<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu">install_github</span>(<span class="st">"SydneyBioX/scClassify"</span>)</pre></div>
 </div>
 <div id="vignette-and-shiny-app" class="section level2">
 <h2 class="hasAnchor">
@@ -200,6 +200,7 @@
 <th align="center">Summary</th>
 <th align="center">Download <code>.rds</code>
 </th>
+<th align="center">Gene Name Format</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -209,6 +210,7 @@
 <td align="center"><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE115746">GSE115746</a></td>
 <td align="center"><a href="https://SydneyBioX.github.io/scClassify/articles/webOnly/Tasic2018_mouseNeuronal.html">link</a></td>
 <td align="center"><a href="http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/trainTasicV2resClass.rds">link</a></td>
+<td align="center">Mm Gene Symbol</td>
 </tr>
 <tr class="even">
 <td align="center">Primary visual cortex</td>
@@ -217,6 +219,7 @@
 <td align="center"><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE71585">GSE71585</a></td>
 <td align="center"><a href="https://SydneyBioX.github.io/scClassify/articles/webOnly/Tasic2016_mouseNeuronal.html">link</a></td>
 <td align="center"><a href="http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/trainTasicV1resClass.rds">link</a></td>
+<td align="center">Mm Gene Symbol</td>
 </tr>
 <tr class="odd">
 <td align="center">Visual cortex</td>
@@ -225,6 +228,7 @@
 <td align="center"><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE102827">GSE102827</a></td>
 <td align="center"><a href="https://SydneyBioX.github.io/scClassify/articles/webOnly/Hrvatin_mouseNeuronal.html">link</a></td>
 <td align="center"><a href="http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/trainHrvatinresClass.rds">link</a></td>
+<td align="center">Mm Gene Symbol</td>
 </tr>
 <tr class="even">
 <td align="center">Lung</td>
@@ -233,6 +237,7 @@
 <td align="center"><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE119228">GSE119228</a></td>
 <td align="center"><a href="https://SydneyBioX.github.io/scClassify/articles/webOnly/Cohen_mouseLung.html">link</a></td>
 <td align="center"><a href="http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/trainCohenresClass.rds">link</a></td>
+<td align="center">Mm Gene Symbol</td>
 </tr>
 <tr class="odd">
 <td align="center">Kidney</td>
@@ -241,6 +246,7 @@
 <td align="center"><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE107585">GSE107585</a></td>
 <td align="center"><a href="https://SydneyBioX.github.io/scClassify/articles/webOnly/Park_mouseKidney.html">link</a></td>
 <td align="center"><a href="http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/trainParkresClass.rds">link</a></td>
+<td align="center">Mm Gene Symbol</td>
 </tr>
 <tr class="even">
 <td align="center">Liver</td>
@@ -249,6 +255,7 @@
 <td align="center"><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE115469">GSE115469</a></td>
 <td align="center"><a href="https://SydneyBioX.github.io/scClassify/articles/webOnly/MacParlandres_humanLiver.html">link</a></td>
 <td align="center"><a href="http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/trainMacParlandresClass.rds">link</a></td>
+<td align="center">Hs Gene Symbol</td>
 </tr>
 <tr class="odd">
 <td align="center">Liver</td>
@@ -257,6 +264,7 @@
 <td align="center"><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE124395">GSE124395</a></td>
 <td align="center"><a href="https://SydneyBioX.github.io/scClassify/articles/webOnly/Aizarani_humanLiver.html">link</a></td>
 <td align="center"><a href="http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/trainAizaraniresClass.rds">link</a></td>
+<td align="center">Hs Gene Symbol</td>
 </tr>
 <tr class="even">
 <td align="center">Pancreas</td>
@@ -265,6 +273,7 @@
 <td align="center"><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE81608">GSE81608</a></td>
 <td align="center"><a href="https://SydneyBioX.github.io/scClassify/articles/webOnly/Xin_humanPancreas.html">link</a></td>
 <td align="center"><a href="http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/trainXinClass.rds">link</a></td>
+<td align="center">Hs Gene Symbol</td>
 </tr>
 <tr class="odd">
 <td align="center">Pancreas</td>
@@ -273,6 +282,7 @@
 <td align="center"><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE83139">GSE83139</a></td>
 <td align="center"><a href="https://SydneyBioX.github.io/scClassify/articles/webOnly/Wang_humanPancreas.html">link</a></td>
 <td align="center"><a href="http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/trainWangClass.rds">link</a></td>
+<td align="center">Hs Gene Symbol</td>
 </tr>
 <tr class="even">
 <td align="center">Pancreas</td>
@@ -281,6 +291,7 @@
 <td align="center"><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE86469">GSE86469</a></td>
 <td align="center"><a href="https://SydneyBioX.github.io/scClassify/articles/webOnly/Lawlor_humanPancreas.html">link</a></td>
 <td align="center"><a href="http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/trainLawlorClass.rds">link</a></td>
+<td align="center">Hs Gene Symbol</td>
 </tr>
 <tr class="odd">
 <td align="center">Pancreas</td>
@@ -289,6 +300,7 @@
 <td align="center"><a href="https://www.ebi.ac.uk/arrayexpress/E-MTAB-5061">E-MTAB-5061</a></td>
 <td align="center"><a href="https://SydneyBioX.github.io/scClassify/articles/webOnly/Segerstolpe_humanPancreas.html">link</a></td>
 <td align="center"><a href="http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/trainSegerstolpeClass.rds">link</a></td>
+<td align="center">Hs Gene Symbol</td>
 </tr>
 <tr class="even">
 <td align="center">Pancreas</td>
@@ -297,6 +309,7 @@
 <td align="center"><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE85241">GSE85241</a></td>
 <td align="center"><a href="https://SydneyBioX.github.io/scClassify/articles/webOnly/Muraro_humanPancreas.html">link</a></td>
 <td align="center"><a href="http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/trainMuraroClass.rds">link</a></td>
+<td align="center">Hs Gene Symbol</td>
 </tr>
 <tr class="odd">
 <td align="center">Pancreas</td>
@@ -305,6 +318,7 @@
 <td align="center"><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE84133">GSE84133</a></td>
 <td align="center"><a href="https://SydneyBioX.github.io/scClassify/articles/webOnly/Baron_humanPancreas.html">link</a></td>
 <td align="center"><a href="http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/trainBaronClass.rds">link</a></td>
+<td align="center">Hs Gene Symbol</td>
 </tr>
 <tr class="even">
 <td align="center">Pancreas</td>
@@ -313,6 +327,7 @@
 <td align="center">-</td>
 <td align="center"><a href="https://SydneyBioX.github.io/scClassify/articles/webOnly/Joint_humanPancreas.html">link</a></td>
 <td align="center"><a href="http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/jointPancreasClass.rds">link</a></td>
+<td align="center">Hs Gene Symbol</td>
 </tr>
 <tr class="odd">
 <td align="center">Melanoma</td>
@@ -321,6 +336,7 @@
 <td align="center"><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE123139">GSE123139</a></td>
 <td align="center"><a href="https://SydneyBioX.github.io/scClassify/articles/webOnly/Li_humanMelanoma.html">link</a></td>
 <td align="center"><a href="http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/trainLiresClass.rds">link</a></td>
+<td align="center">Hs Gene Symbol</td>
 </tr>
 <tr class="even">
 <td align="center">PBMC</td>
@@ -329,6 +345,7 @@
 <td align="center">-</td>
 <td align="center"><a href="https://SydneyBioX.github.io/scClassify/articles/webOnly/Joint_humanPBMC.html">link</a></td>
 <td align="center"><a href="http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/jointPBMCClass.rds">link</a></td>
+<td align="center">Mm EMSEMBL ID</td>
 </tr>
 <tr class="odd">
 <td align="center">Tabula Muris</td>
@@ -337,6 +354,7 @@
 <td align="center"><a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE109774">GSE109774</a></td>
 <td align="center"><a href="https://SydneyBioX.github.io/scClassify/articles/webOnly/TabulaMuris.html">link</a></td>
 <td align="center"><a href="http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/trainTMresClass.rds">link</a></td>
+<td align="center">Mm Gene Symbol</td>
 </tr>
 </tbody>
 </table>
@@ -356,7 +374,7 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
@@ -379,7 +397,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

@@ -6,19 +6,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Case Study: Tabula Muris Heart Data • scClassify</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../../pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../../bootstrap-toc.css">
+<script src="../../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../../pkgdown.css" rel="stylesheet">
 <script src="../../pkgdown.js"></script><meta property="og:title" content="Case Study: Tabula Muris Heart Data">
-<meta property="og:description" content="">
-<meta name="twitter:card" content="summary">
+<meta property="og:description" content="scClassify">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">scClassify</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
 
@@ -158,7 +158,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Case Study: Tabula Muris Heart Data</h1>
+      <h1 data-toc-skip>Case Study: Tabula Muris Heart Data</h1>
             
       
       
@@ -171,222 +171,211 @@
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(scClassify)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(scater)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(gridExtra)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">scClassify</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">scater</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gridExtra</span>)</pre></body></html></div>
 <p>This vignette demonstrates a case study of <code>scClassify</code>, using Tabula Muris data from Heart tissue. The files can be downloaded using the following codes.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span>(<span class="st">"https://raw.githubusercontent.com/SydneyBioX/scClassify/master/vignettes/webOnly/Heart_10X.rds"</span>,</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">              <span class="st">"Heart_10X.rds"</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span>(<span class="st">"https://raw.githubusercontent.com/SydneyBioX/scClassify/master/vignettes/webOnly/Heart_FACS.rds"</span>,</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">              <span class="st">"Heart_FACS.rds"</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">Heart_10X &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span>(<span class="st">"Heart_10X.rds"</span>)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">Heart_FACS &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span>(<span class="st">"Heart_FACS.rds"</span>)</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">Heart_10X</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; class: SingleCellExperiment </span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; dim: 23433 624 </span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt; metadata(1): log.exprs.offset</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; assays(1): counts</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; rownames(23433): Xkr4 Rp1 ... Tdtom_transgene zsGreen_transgene</span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; rowData names(0):</span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; colnames(624): 10X_P7_4_AAACCTGCACGACGAA 10X_P7_4_AAACCTGGTTCCACGG ...</span></a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">#&gt;   10X_P7_4_TTTGTCAGTCGATTGT 10X_P7_4_TTTGTCAGTGCGCTTG</span></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">#&gt; colData names(4): tissue cell_ontology_class cell_ontology_term_iri</span></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">#&gt;   cell_ontology_id</span></a>
-<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">#&gt; reducedDimNames(0):</span></a>
-<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt; spikeNames(0):</span></a>
-<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt; altExpNames(0):</span></a>
-<a class="sourceLine" id="cb3-18" data-line-number="18">Heart_FACS</a>
-<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt; class: SingleCellExperiment </span></a>
-<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt; dim: 23433 4221 </span></a>
-<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt; metadata(1): log.exprs.offset</span></a>
-<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">#&gt; assays(1): counts</span></a>
-<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co">#&gt; rownames(23433): 0610005C13Rik 0610007C21Rik ... l7Rn6</span></a>
-<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="co">#&gt;   zsGreen_transgene</span></a>
-<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="co">#&gt; rowData names(0):</span></a>
-<a class="sourceLine" id="cb3-26" data-line-number="26"><span class="co">#&gt; colnames(4221): B12.MAA000398.3_9_M.1.1 D16.MAA000398.3_9_M.1.1 ...</span></a>
-<a class="sourceLine" id="cb3-27" data-line-number="27"><span class="co">#&gt;   F1.MAA100097.3_38_F.1.1 D8.MAA100097.3_39_F.1.1</span></a>
-<a class="sourceLine" id="cb3-28" data-line-number="28"><span class="co">#&gt; colData names(4): tissue cell_ontology_class cell_ontology_term_iri</span></a>
-<a class="sourceLine" id="cb3-29" data-line-number="29"><span class="co">#&gt;   cell_ontology_id</span></a>
-<a class="sourceLine" id="cb3-30" data-line-number="30"><span class="co">#&gt; reducedDimNames(0):</span></a>
-<a class="sourceLine" id="cb3-31" data-line-number="31"><span class="co">#&gt; spikeNames(0):</span></a>
-<a class="sourceLine" id="cb3-32" data-line-number="32"><span class="co">#&gt; altExpNames(0):</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span>(<span class="st">"https://raw.githubusercontent.com/SydneyBioX/scClassify/master/vignettes/webOnly/Heart_10X.rds"</span>,
+              <span class="st">"Heart_10X.rds"</span>)
+
+<span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span>(<span class="st">"https://raw.githubusercontent.com/SydneyBioX/scClassify/master/vignettes/webOnly/Heart_FACS.rds"</span>,
+              <span class="st">"Heart_FACS.rds"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">Heart_10X</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span>(<span class="st">"Heart_10X.rds"</span>)
+<span class="no">Heart_FACS</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span>(<span class="st">"Heart_FACS.rds"</span>)
+
+<span class="no">Heart_10X</span>
+<span class="co">#&gt; class: SingleCellExperiment </span>
+<span class="co">#&gt; dim: 23433 624 </span>
+<span class="co">#&gt; metadata(1): log.exprs.offset</span>
+<span class="co">#&gt; assays(1): counts</span>
+<span class="co">#&gt; rownames(23433): Xkr4 Rp1 ... Tdtom_transgene zsGreen_transgene</span>
+<span class="co">#&gt; rowData names(0):</span>
+<span class="co">#&gt; colnames(624): 10X_P7_4_AAACCTGCACGACGAA 10X_P7_4_AAACCTGGTTCCACGG ...</span>
+<span class="co">#&gt;   10X_P7_4_TTTGTCAGTCGATTGT 10X_P7_4_TTTGTCAGTGCGCTTG</span>
+<span class="co">#&gt; colData names(4): tissue cell_ontology_class cell_ontology_term_iri</span>
+<span class="co">#&gt;   cell_ontology_id</span>
+<span class="co">#&gt; reducedDimNames(0):</span>
+<span class="co">#&gt; altExpNames(0):</span>
+<span class="no">Heart_FACS</span>
+<span class="co">#&gt; class: SingleCellExperiment </span>
+<span class="co">#&gt; dim: 23433 4221 </span>
+<span class="co">#&gt; metadata(1): log.exprs.offset</span>
+<span class="co">#&gt; assays(1): counts</span>
+<span class="co">#&gt; rownames(23433): 0610005C13Rik 0610007C21Rik ... l7Rn6</span>
+<span class="co">#&gt;   zsGreen_transgene</span>
+<span class="co">#&gt; rowData names(0):</span>
+<span class="co">#&gt; colnames(4221): B12.MAA000398.3_9_M.1.1 D16.MAA000398.3_9_M.1.1 ...</span>
+<span class="co">#&gt;   F1.MAA100097.3_38_F.1.1 D8.MAA100097.3_39_F.1.1</span>
+<span class="co">#&gt; colData names(4): tissue cell_ontology_class cell_ontology_term_iri</span>
+<span class="co">#&gt;   cell_ontology_id</span>
+<span class="co">#&gt; reducedDimNames(0):</span>
+<span class="co">#&gt; altExpNames(0):</span></pre></body></html></div>
 <p>The original cell type annotations and compositions of the example datasets can be easily accessed as shown below.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="st">"Data from Tabula Muris Heart 10X data"</span>)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; Data from Tabula Muris Heart 10X data</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw"><a href="https://rdrr.io/r/base/table.html">table</a></span>(Heart_10X<span class="op">$</span>cell_ontology_class)</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; cardiac muscle cell    endocardial cell    endothelial cell         erythrocyte </span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt;                  83                  65                 178                  55 </span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt;          fibroblast  smooth muscle cell </span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt;                 222                  21</span></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="kw"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="st">"Data from Tabula Muris  10X data"</span>)</a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">#&gt; Data from Tabula Muris  10X data</span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="kw"><a href="https://rdrr.io/r/base/table.html">table</a></span>(Heart_FACS<span class="op">$</span>cell_ontology_class)</a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt; cardiac muscle cell    endocardial cell    endothelial cell         erythrocyte </span></a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt;                 140                 175                1137                  11 </span></a>
-<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">#&gt;          fibroblast           leukocyte  smooth muscle cell </span></a>
-<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">#&gt;                2052                 488                 218</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="st">"Data from Tabula Muris Heart 10X data"</span>)
+<span class="co">#&gt; Data from Tabula Muris Heart 10X data</span>
+<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">Heart_10X</span>$<span class="no">cell_ontology_class</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; cardiac muscle cell    endocardial cell    endothelial cell         erythrocyte </span>
+<span class="co">#&gt;                  83                  65                 178                  55 </span>
+<span class="co">#&gt;          fibroblast  smooth muscle cell </span>
+<span class="co">#&gt;                 222                  21</span>
+<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="st">"Data from Tabula Muris  10X data"</span>)
+<span class="co">#&gt; Data from Tabula Muris  10X data</span>
+<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">Heart_FACS</span>$<span class="no">cell_ontology_class</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; cardiac muscle cell    endocardial cell    endothelial cell         erythrocyte </span>
+<span class="co">#&gt;                 140                 175                1137                  11 </span>
+<span class="co">#&gt;          fibroblast           leukocyte  smooth muscle cell </span>
+<span class="co">#&gt;                2052                 488                 218</span></pre></body></html></div>
 </div>
 <div id="setting-up-the-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#setting-up-the-data" class="anchor"></a>Setting up the data</h1>
-<p>scClassify utilises <em>log-transformed</em> (size-factor normalized) matrices as input where each row is a gene and each column a cell for a reference dataset and a query dataset. We will use <code><a href="https://rdrr.io/pkg/scater/man/normalize.html">normalize()</a></code> in package <code>scater</code> to compute the log-normalize expression values.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">Heart_10X &lt;-<span class="st"> </span>scater<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/scater/man/normalize.html">normalize</a></span>(Heart_10X)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">Heart_FACS &lt;-<span class="st"> </span>scater<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/scater/man/normalize.html">normalize</a></span>(Heart_FACS)</a></code></pre></div>
+<p>scClassify utilises <em>log-transformed</em> (size-factor normalized) matrices as input where each row is a gene and each column a cell for a reference dataset and a query dataset. We will use <code>normalize()</code> in package <code>scater</code> to compute the log-normalize expression values.</p>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">Heart_10X</span> <span class="kw">&lt;-</span> <span class="kw pkg">scater</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/scater/man/logNormCounts.html">logNormCounts</a></span>(<span class="no">Heart_10X</span>)
+<span class="no">Heart_FACS</span> <span class="kw">&lt;-</span> <span class="kw pkg">scater</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/scater/man/logNormCounts.html">logNormCounts</a></span>(<span class="no">Heart_FACS</span>)</pre></body></html></div>
 <p>We can visualise the two datasets using UMAP, coloured by the cell type information.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">2019</span>)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">Heart_10X &lt;-<span class="st"> </span>scater<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/scater/man/runUMAP.html">runUMAP</a></span>(Heart_10X)</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">Heart_FACS &lt;-<span class="st"> </span>scater<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/scater/man/runUMAP.html">runUMAP</a></span>(Heart_FACS)</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">g_10X &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/scater/man/plot_reddim.html">plotUMAP</a></span>(Heart_10X, <span class="dt">colour_by =</span> <span class="st">"cell_ontology_class"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">aspect.ratio =</span> <span class="dv">1</span>, <span class="dt">legend.position =</span> <span class="st">"bottom"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">title =</span> <span class="st">"Tabula Muris (10X)"</span>)</a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">g_FACS &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/scater/man/plot_reddim.html">plotUMAP</a></span>(Heart_FACS, <span class="dt">colour_by =</span> <span class="st">"cell_ontology_class"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">aspect.ratio =</span> <span class="dv">1</span>, <span class="dt">legend.position =</span> <span class="st">"bottom"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">title =</span> <span class="st">"Tabula Muris (FACS)"</span>)</a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="kw"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span>(g_10X, g_FACS, <span class="dt">ncol =</span> <span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">2019</span>)
+<span class="no">Heart_10X</span> <span class="kw">&lt;-</span> <span class="kw pkg">scater</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/scater/man/runUMAP.html">runUMAP</a></span>(<span class="no">Heart_10X</span>)
+<span class="no">Heart_FACS</span> <span class="kw">&lt;-</span> <span class="kw pkg">scater</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/scater/man/runUMAP.html">runUMAP</a></span>(<span class="no">Heart_FACS</span>)
+<span class="no">g_10X</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scater/man/plot_reddim.html">plotUMAP</a></span>(<span class="no">Heart_10X</span>, <span class="kw">colour_by</span> <span class="kw">=</span> <span class="st">"cell_ontology_class"</span>) +
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="kw">aspect.ratio</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">legend.position</span> <span class="kw">=</span> <span class="st">"bottom"</span>) +
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"Tabula Muris (10X)"</span>)
+<span class="no">g_FACS</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scater/man/plot_reddim.html">plotUMAP</a></span>(<span class="no">Heart_FACS</span>, <span class="kw">colour_by</span> <span class="kw">=</span> <span class="st">"cell_ontology_class"</span>) +
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="kw">aspect.ratio</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">legend.position</span> <span class="kw">=</span> <span class="st">"bottom"</span>) +
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"Tabula Muris (FACS)"</span>)
+<span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span>(<span class="no">g_10X</span>, <span class="no">g_FACS</span>, <span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">2</span>)</pre></body></html></div>
 <p><img src="scClassify_TM_heart_files/figure-html/unnamed-chunk-6-1.png" width="1152"></p>
 </div>
 <div id="scclassify" class="section level1">
 <h1 class="hasAnchor">
 <a href="#scclassify" class="anchor"></a>scClassify</h1>
 <p>We will perform non-ensemble <code>scClassify</code> by using 10X as our reference dataset and FACS data as ur query data. We use <code>WKNN</code> as the KNN algorithm, <code>DE</code> (differential expression genes) as the gene selection method, and lastly <code>pearson</code> as the similarity calculation method.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">scClassify_res &lt;-<span class="st"> </span><span class="kw"><a href="../../reference/scClassify.html">scClassify</a></span>(<span class="dt">exprsMat_train =</span> <span class="kw">logcounts</span>(Heart_10X),</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">                             <span class="dt">cellTypes_train =</span> Heart_10X<span class="op">$</span>cell_ontology_class,</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">                             <span class="dt">exprsMat_test =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">FACS =</span> <span class="kw">logcounts</span>(Heart_FACS)),</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">                             <span class="dt">cellTypes_test =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">FACS =</span> Heart_FACS<span class="op">$</span>cell_ontology_class),</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">                             <span class="dt">tree =</span> <span class="st">"HOPACH"</span>,</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">                             <span class="dt">algorithm =</span> <span class="st">"WKNN"</span>,</a>
-<a class="sourceLine" id="cb7-7" data-line-number="7">                             <span class="dt">selectFeatures =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"limma"</span>),</a>
-<a class="sourceLine" id="cb7-8" data-line-number="8">                             <span class="dt">similarity =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"pearson"</span>),</a>
-<a class="sourceLine" id="cb7-9" data-line-number="9">                             <span class="dt">returnList =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb7-10" data-line-number="10">                             <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">scClassify_res</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../../reference/scClassify.html">scClassify</a></span>(<span class="kw">exprsMat_train</span> <span class="kw">=</span> <span class="fu">logcounts</span>(<span class="no">Heart_10X</span>),
+                             <span class="kw">cellTypes_train</span> <span class="kw">=</span> <span class="no">Heart_10X</span>$<span class="no">cell_ontology_class</span>,
+                             <span class="kw">exprsMat_test</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">FACS</span> <span class="kw">=</span> <span class="fu">logcounts</span>(<span class="no">Heart_FACS</span>)),
+                             <span class="kw">cellTypes_test</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">FACS</span> <span class="kw">=</span> <span class="no">Heart_FACS</span>$<span class="no">cell_ontology_class</span>),
+                             <span class="kw">tree</span> <span class="kw">=</span> <span class="st">"HOPACH"</span>,
+                             <span class="kw">algorithm</span> <span class="kw">=</span> <span class="st">"WKNN"</span>,
+                             <span class="kw">selectFeatures</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"limma"</span>),
+                             <span class="kw">similarity</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"pearson"</span>),
+                             <span class="kw">returnList</span> <span class="kw">=</span> <span class="fl">FALSE</span>,
+                             <span class="kw">verbose</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
 <p>We can check the cell type tree generated by the reference data:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">scClassify_res<span class="op">$</span>trainRes</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt; Class: scClassifyTrainModel </span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; Model name: training </span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt; Feature selection methods: limma </span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt; Number of cells in the training data: 624 </span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; Number of cell types in the training data: 6</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="kw"><a href="../../reference/plotCellTypeTree.html">plotCellTypeTree</a></span>(scClassify_res<span class="op">$</span>trainRes<span class="op">@</span>cellTypeTree)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">scClassify_res</span>$<span class="no">trainRes</span>
+<span class="co">#&gt; Class: scClassifyTrainModel </span>
+<span class="co">#&gt; Model name: training </span>
+<span class="co">#&gt; Feature selection methods: limma </span>
+<span class="co">#&gt; Number of cells in the training data: 624 </span>
+<span class="co">#&gt; Number of cell types in the training data: 6</span>
+<span class="fu"><a href="../../reference/plotCellTypeTree.html">plotCellTypeTree</a></span>(<span class="no">scClassify_res</span>$<span class="no">trainRes</span>@<span class="kw">cellTypeTree</span>)</pre></body></html></div>
 <p><img src="scClassify_TM_heart_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <p>Noted that <code>scClassify_res$trainRes</code> is a <code>scClassifyTrainModel</code> class.</p>
 <p>Check the prediction results for the FACS data.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">Heart_FACS<span class="op">$</span>scClassify_predicted &lt;-<span class="st"> </span>scClassify_res<span class="op">$</span>testRes<span class="op">$</span>FACS<span class="op">$</span>pearson_WKNN_limma<span class="op">$</span>predRes</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">intermediate_cells &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span>(Heart_FACS<span class="op">$</span>scClassify_predicted, <span class="st">"_"</span>), length) <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co"># renamed the intermediate cell labels to intermediate</span></a>
-<a class="sourceLine" id="cb9-6" data-line-number="6">Heart_FACS<span class="op">$</span>scClassify_predicted2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(intermediate_cells, </a>
-<a class="sourceLine" id="cb9-7" data-line-number="7">                                           <span class="st">"intermediate"</span>, Heart_FACS<span class="op">$</span>scClassify_predicted)</a>
-<a class="sourceLine" id="cb9-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="kw"><a href="https://rdrr.io/r/base/table.html">table</a></span>(Heart_FACS<span class="op">$</span>scClassify_predicted2, Heart_FACS<span class="op">$</span>cell_ontology_class)</a>
-<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">#&gt;                      </span></a>
-<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co">#&gt;                       cardiac muscle cell endocardial cell endothelial cell</span></a>
-<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt;   cardiac muscle cell                 127                0                0</span></a>
-<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="co">#&gt;   endocardial cell                      0              164                0</span></a>
-<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="co">#&gt;   endothelial cell                      0                8             1130</span></a>
-<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt;   erythrocyte                           0                0                0</span></a>
-<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="co">#&gt;   fibroblast                            7                0                4</span></a>
-<a class="sourceLine" id="cb9-17" data-line-number="17"><span class="co">#&gt;   intermediate                          0                3                3</span></a>
-<a class="sourceLine" id="cb9-18" data-line-number="18"><span class="co">#&gt;   smooth muscle cell                    0                0                0</span></a>
-<a class="sourceLine" id="cb9-19" data-line-number="19"><span class="co">#&gt;   unassigned                            6                0                0</span></a>
-<a class="sourceLine" id="cb9-20" data-line-number="20"><span class="co">#&gt;                      </span></a>
-<a class="sourceLine" id="cb9-21" data-line-number="21"><span class="co">#&gt;                       erythrocyte fibroblast leukocyte smooth muscle cell</span></a>
-<a class="sourceLine" id="cb9-22" data-line-number="22"><span class="co">#&gt;   cardiac muscle cell           0          1        46                  0</span></a>
-<a class="sourceLine" id="cb9-23" data-line-number="23"><span class="co">#&gt;   endocardial cell              0          1         0                  0</span></a>
-<a class="sourceLine" id="cb9-24" data-line-number="24"><span class="co">#&gt;   endothelial cell              4          5         1                  1</span></a>
-<a class="sourceLine" id="cb9-25" data-line-number="25"><span class="co">#&gt;   erythrocyte                   1          1       430                  0</span></a>
-<a class="sourceLine" id="cb9-26" data-line-number="26"><span class="co">#&gt;   fibroblast                    6       2040         3                  2</span></a>
-<a class="sourceLine" id="cb9-27" data-line-number="27"><span class="co">#&gt;   intermediate                  0          3         0                  8</span></a>
-<a class="sourceLine" id="cb9-28" data-line-number="28"><span class="co">#&gt;   smooth muscle cell            0          0         0                207</span></a>
-<a class="sourceLine" id="cb9-29" data-line-number="29"><span class="co">#&gt;   unassigned                    0          1         8                  0</span></a></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">g_FACS_scClassify &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/scater/man/plot_reddim.html">plotUMAP</a></span>(Heart_FACS, <span class="dt">colour_by =</span> <span class="st">"scClassify_predicted2"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="dt">aspect.ratio =</span> <span class="dv">1</span>, <span class="dt">legend.position =</span> <span class="st">"bottom"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">title =</span> <span class="st">"Tabula Muris (FACS, scClassify annotated)"</span>)</a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="kw"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span>(g_FACS, g_FACS_scClassify, <span class="dt">ncol =</span> <span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">Heart_FACS</span>$<span class="no">scClassify_predicted</span> <span class="kw">&lt;-</span> <span class="no">scClassify_res</span>$<span class="no">testRes</span>$<span class="no">FACS</span>$<span class="no">pearson_WKNN_limma</span>$<span class="no">predRes</span>
+
+<span class="no">intermediate_cells</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span>(<span class="no">Heart_FACS</span>$<span class="no">scClassify_predicted</span>, <span class="st">"_"</span>), <span class="no">length</span>) <span class="kw">&gt;</span> <span class="fl">1</span>
+
+<span class="co"># renamed the intermediate cell labels to intermediate</span>
+<span class="no">Heart_FACS</span>$<span class="no">scClassify_predicted2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">intermediate_cells</span>,
+                                           <span class="st">"intermediate"</span>, <span class="no">Heart_FACS</span>$<span class="no">scClassify_predicted</span>)
+
+<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">Heart_FACS</span>$<span class="no">scClassify_predicted2</span>, <span class="no">Heart_FACS</span>$<span class="no">cell_ontology_class</span>)
+<span class="co">#&gt;                      </span>
+<span class="co">#&gt;                       cardiac muscle cell endocardial cell endothelial cell</span>
+<span class="co">#&gt;   cardiac muscle cell                 127                0                0</span>
+<span class="co">#&gt;   endocardial cell                      0              164                0</span>
+<span class="co">#&gt;   endothelial cell                      0                8             1130</span>
+<span class="co">#&gt;   erythrocyte                           0                0                0</span>
+<span class="co">#&gt;   fibroblast                            7                0                4</span>
+<span class="co">#&gt;   intermediate                          0                3                3</span>
+<span class="co">#&gt;   smooth muscle cell                    0                0                0</span>
+<span class="co">#&gt;   unassigned                            6                0                0</span>
+<span class="co">#&gt;                      </span>
+<span class="co">#&gt;                       erythrocyte fibroblast leukocyte smooth muscle cell</span>
+<span class="co">#&gt;   cardiac muscle cell           0          1        46                  0</span>
+<span class="co">#&gt;   endocardial cell              0          1         0                  0</span>
+<span class="co">#&gt;   endothelial cell              4          5         1                  1</span>
+<span class="co">#&gt;   erythrocyte                   1          1       430                  0</span>
+<span class="co">#&gt;   fibroblast                    6       2040         3                  2</span>
+<span class="co">#&gt;   intermediate                  0          3         0                  8</span>
+<span class="co">#&gt;   smooth muscle cell            0          0         0                207</span>
+<span class="co">#&gt;   unassigned                    0          1         8                  0</span></pre></body></html></div>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">g_FACS_scClassify</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scater/man/plot_reddim.html">plotUMAP</a></span>(<span class="no">Heart_FACS</span>, <span class="kw">colour_by</span> <span class="kw">=</span> <span class="st">"scClassify_predicted2"</span>) +
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="kw">aspect.ratio</span> <span class="kw">=</span> <span class="fl">1</span>, <span class="kw">legend.position</span> <span class="kw">=</span> <span class="st">"bottom"</span>) +
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">"Tabula Muris (FACS, scClassify annotated)"</span>)
+<span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span>(<span class="no">g_FACS</span>, <span class="no">g_FACS_scClassify</span>, <span class="kw">ncol</span> <span class="kw">=</span> <span class="fl">2</span>)</pre></body></html></div>
 <p><img src="scClassify_TM_heart_files/figure-html/unnamed-chunk-10-1.png" width="1152"></p>
 </div>
 <div id="session-info" class="section level1">
 <h1 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session Info</h1>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="co">#&gt; R version 3.6.1 (2019-07-05)</span></a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#&gt; Platform: x86_64-apple-darwin15.6.0 (64-bit)</span></a>
-<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt; Running under: macOS Catalina 10.15.3</span></a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt; Matrix products: default</span></a>
-<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib</span></a>
-<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib</span></a>
-<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt; locale:</span></a>
-<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt; [1] en_AU.UTF-8/en_AU.UTF-8/en_AU.UTF-8/C/en_AU.UTF-8/en_AU.UTF-8</span></a>
-<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-13" data-line-number="13"><span class="co">#&gt; attached base packages:</span></a>
-<a class="sourceLine" id="cb11-14" data-line-number="14"><span class="co">#&gt; [1] parallel  stats4    stats     graphics  grDevices utils     datasets </span></a>
-<a class="sourceLine" id="cb11-15" data-line-number="15"><span class="co">#&gt; [8] methods   base     </span></a>
-<a class="sourceLine" id="cb11-16" data-line-number="16"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-17" data-line-number="17"><span class="co">#&gt; other attached packages:</span></a>
-<a class="sourceLine" id="cb11-18" data-line-number="18"><span class="co">#&gt;  [1] gridExtra_2.3               scater_1.13.7              </span></a>
-<a class="sourceLine" id="cb11-19" data-line-number="19"><span class="co">#&gt;  [3] ggplot2_3.2.1               SingleCellExperiment_1.8.0 </span></a>
-<a class="sourceLine" id="cb11-20" data-line-number="20"><span class="co">#&gt;  [5] SummarizedExperiment_1.16.0 DelayedArray_0.12.0        </span></a>
-<a class="sourceLine" id="cb11-21" data-line-number="21"><span class="co">#&gt;  [7] BiocParallel_1.20.0         matrixStats_0.55.0         </span></a>
-<a class="sourceLine" id="cb11-22" data-line-number="22"><span class="co">#&gt;  [9] Biobase_2.46.0              GenomicRanges_1.38.0       </span></a>
-<a class="sourceLine" id="cb11-23" data-line-number="23"><span class="co">#&gt; [11] GenomeInfoDb_1.22.0         IRanges_2.20.1             </span></a>
-<a class="sourceLine" id="cb11-24" data-line-number="24"><span class="co">#&gt; [13] S4Vectors_0.23.25           BiocGenerics_0.32.0        </span></a>
-<a class="sourceLine" id="cb11-25" data-line-number="25"><span class="co">#&gt; [15] scClassify_0.2.3           </span></a>
-<a class="sourceLine" id="cb11-26" data-line-number="26"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb11-27" data-line-number="27"><span class="co">#&gt; loaded via a namespace (and not attached):</span></a>
-<a class="sourceLine" id="cb11-28" data-line-number="28"><span class="co">#&gt;  [1] segmented_1.0-0          nlme_3.1-141             bitops_1.0-6            </span></a>
-<a class="sourceLine" id="cb11-29" data-line-number="29"><span class="co">#&gt;  [4] fs_1.3.1                 RcppAnnoy_0.0.14         hopach_2.46.0           </span></a>
-<a class="sourceLine" id="cb11-30" data-line-number="30"><span class="co">#&gt;  [7] rprojroot_1.3-2          tools_3.6.1              backports_1.1.5         </span></a>
-<a class="sourceLine" id="cb11-31" data-line-number="31"><span class="co">#&gt; [10] irlba_2.3.3              R6_2.4.1                 vipor_0.4.5             </span></a>
-<a class="sourceLine" id="cb11-32" data-line-number="32"><span class="co">#&gt; [13] uwot_0.1.4               lazyeval_0.2.2           mgcv_1.8-28             </span></a>
-<a class="sourceLine" id="cb11-33" data-line-number="33"><span class="co">#&gt; [16] colorspace_1.4-1         withr_2.1.2              tidyselect_0.2.5        </span></a>
-<a class="sourceLine" id="cb11-34" data-line-number="34"><span class="co">#&gt; [19] proxyC_0.1.5             compiler_3.6.1           BiocNeighbors_1.4.1     </span></a>
-<a class="sourceLine" id="cb11-35" data-line-number="35"><span class="co">#&gt; [22] desc_1.2.0               labeling_0.3             diptest_0.75-7          </span></a>
-<a class="sourceLine" id="cb11-36" data-line-number="36"><span class="co">#&gt; [25] scales_1.1.0             proxy_0.4-23             pkgdown_1.4.1           </span></a>
-<a class="sourceLine" id="cb11-37" data-line-number="37"><span class="co">#&gt; [28] stringr_1.4.0            digest_0.6.23            mixtools_1.1.0          </span></a>
-<a class="sourceLine" id="cb11-38" data-line-number="38"><span class="co">#&gt; [31] rmarkdown_1.18           XVector_0.26.0           pkgconfig_2.0.3         </span></a>
-<a class="sourceLine" id="cb11-39" data-line-number="39"><span class="co">#&gt; [34] htmltools_0.4.0          limma_3.42.0             rlang_0.4.2             </span></a>
-<a class="sourceLine" id="cb11-40" data-line-number="40"><span class="co">#&gt; [37] rstudioapi_0.10          FNN_1.1.3                DelayedMatrixStats_1.8.0</span></a>
-<a class="sourceLine" id="cb11-41" data-line-number="41"><span class="co">#&gt; [40] farver_2.0.1             dplyr_0.8.3              BiocSingular_1.2.0      </span></a>
-<a class="sourceLine" id="cb11-42" data-line-number="42"><span class="co">#&gt; [43] RCurl_1.95-4.12          magrittr_1.5             GenomeInfoDbData_1.2.2  </span></a>
-<a class="sourceLine" id="cb11-43" data-line-number="43"><span class="co">#&gt; [46] Matrix_1.2-18            ggbeeswarm_0.6.0         Rcpp_1.0.3              </span></a>
-<a class="sourceLine" id="cb11-44" data-line-number="44"><span class="co">#&gt; [49] munsell_0.5.0            viridis_0.5.1            lifecycle_0.1.0         </span></a>
-<a class="sourceLine" id="cb11-45" data-line-number="45"><span class="co">#&gt; [52] stringi_1.4.3            yaml_2.2.0               ggraph_2.0.0            </span></a>
-<a class="sourceLine" id="cb11-46" data-line-number="46"><span class="co">#&gt; [55] MASS_7.3-51.4            zlibbioc_1.32.0          grid_3.6.1              </span></a>
-<a class="sourceLine" id="cb11-47" data-line-number="47"><span class="co">#&gt; [58] ggrepel_0.8.1            crayon_1.3.4             lattice_0.20-38         </span></a>
-<a class="sourceLine" id="cb11-48" data-line-number="48"><span class="co">#&gt; [61] cowplot_1.0.0            graphlayouts_0.5.0       splines_3.6.1           </span></a>
-<a class="sourceLine" id="cb11-49" data-line-number="49"><span class="co">#&gt; [64] zeallot_0.1.0            knitr_1.26               pillar_1.4.2            </span></a>
-<a class="sourceLine" id="cb11-50" data-line-number="50"><span class="co">#&gt; [67] igraph_1.2.4.2           codetools_0.2-16         glue_1.3.1              </span></a>
-<a class="sourceLine" id="cb11-51" data-line-number="51"><span class="co">#&gt; [70] evaluate_0.14            RcppParallel_4.4.4       vctrs_0.2.0             </span></a>
-<a class="sourceLine" id="cb11-52" data-line-number="52"><span class="co">#&gt; [73] tweenr_1.0.1             gtable_0.3.0             purrr_0.3.3             </span></a>
-<a class="sourceLine" id="cb11-53" data-line-number="53"><span class="co">#&gt; [76] polyclip_1.10-0          tidyr_1.0.0              assertthat_0.2.1        </span></a>
-<a class="sourceLine" id="cb11-54" data-line-number="54"><span class="co">#&gt; [79] xfun_0.11                ggforce_0.3.1            rsvd_1.0.2              </span></a>
-<a class="sourceLine" id="cb11-55" data-line-number="55"><span class="co">#&gt; [82] tidygraph_1.1.2          RSpectra_0.16-0          survival_3.1-8          </span></a>
-<a class="sourceLine" id="cb11-56" data-line-number="56"><span class="co">#&gt; [85] viridisLite_0.3.0        minpack.lm_1.2-1         tibble_2.1.3            </span></a>
-<a class="sourceLine" id="cb11-57" data-line-number="57"><span class="co">#&gt; [88] beeswarm_0.2.3           memoise_1.1.0            cluster_2.1.0           </span></a>
-<a class="sourceLine" id="cb11-58" data-line-number="58"><span class="co">#&gt; [91] statmod_1.4.32</span></a></code></pre></div>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()
+<span class="co">#&gt; R Under development (unstable) (2020-03-25 r78063)</span>
+<span class="co">#&gt; Platform: x86_64-apple-darwin15.6.0 (64-bit)</span>
+<span class="co">#&gt; Running under: macOS Catalina 10.15.3</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Matrix products: default</span>
+<span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.0.dylib</span>
+<span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; locale:</span>
+<span class="co">#&gt; [1] en_AU.UTF-8/en_AU.UTF-8/en_AU.UTF-8/C/en_AU.UTF-8/en_AU.UTF-8</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; attached base packages:</span>
+<span class="co">#&gt; [1] parallel  stats4    stats     graphics  grDevices utils     datasets </span>
+<span class="co">#&gt; [8] methods   base     </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; other attached packages:</span>
+<span class="co">#&gt;  [1] gridExtra_2.3               scater_1.15.28             </span>
+<span class="co">#&gt;  [3] ggplot2_3.3.0               SingleCellExperiment_1.9.2 </span>
+<span class="co">#&gt;  [5] SummarizedExperiment_1.17.4 DelayedArray_0.13.7        </span>
+<span class="co">#&gt;  [7] BiocParallel_1.21.2         matrixStats_0.56.0         </span>
+<span class="co">#&gt;  [9] Biobase_2.47.3              GenomicRanges_1.39.3       </span>
+<span class="co">#&gt; [11] GenomeInfoDb_1.23.14        IRanges_2.21.8             </span>
+<span class="co">#&gt; [13] S4Vectors_0.25.14           BiocGenerics_0.33.3        </span>
+<span class="co">#&gt; [15] scClassify_0.99.0          </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; loaded via a namespace (and not attached):</span>
+<span class="co">#&gt;  [1] segmented_1.1-0          nlme_3.1-145             bitops_1.0-6            </span>
+<span class="co">#&gt;  [4] fs_1.3.2                 RcppAnnoy_0.0.16         hopach_2.47.0           </span>
+<span class="co">#&gt;  [7] rprojroot_1.3-2          tools_4.0.0              backports_1.1.5         </span>
+<span class="co">#&gt; [10] irlba_2.3.3              R6_2.4.1                 vipor_0.4.5             </span>
+<span class="co">#&gt; [13] uwot_0.1.8               mgcv_1.8-31              colorspace_1.4-1        </span>
+<span class="co">#&gt; [16] withr_2.1.2              tidyselect_1.0.0         proxyC_0.1.5            </span>
+<span class="co">#&gt; [19] compiler_4.0.0           BiocNeighbors_1.5.2      desc_1.2.0              </span>
+<span class="co">#&gt; [22] labeling_0.3             diptest_0.75-7           scales_1.1.0            </span>
+<span class="co">#&gt; [25] proxy_0.4-23             pkgdown_1.5.0            stringr_1.4.0           </span>
+<span class="co">#&gt; [28] digest_0.6.25            mixtools_1.2.0           rmarkdown_2.1           </span>
+<span class="co">#&gt; [31] XVector_0.27.2           pkgconfig_2.0.3          htmltools_0.4.0         </span>
+<span class="co">#&gt; [34] limma_3.43.5             rlang_0.4.5              rstudioapi_0.11         </span>
+<span class="co">#&gt; [37] FNN_1.1.3                DelayedMatrixStats_1.9.0 farver_2.0.3            </span>
+<span class="co">#&gt; [40] dplyr_0.8.5              BiocSingular_1.3.2       RCurl_1.98-1.1          </span>
+<span class="co">#&gt; [43] magrittr_1.5             GenomeInfoDbData_1.2.2   Matrix_1.2-18           </span>
+<span class="co">#&gt; [46] ggbeeswarm_0.6.0         Rcpp_1.0.4.5             munsell_0.5.0           </span>
+<span class="co">#&gt; [49] viridis_0.5.1            lifecycle_0.2.0          stringi_1.4.6           </span>
+<span class="co">#&gt; [52] yaml_2.2.1               ggraph_2.0.2             MASS_7.3-51.5           </span>
+<span class="co">#&gt; [55] zlibbioc_1.33.1          grid_4.0.0               ggrepel_0.8.2           </span>
+<span class="co">#&gt; [58] crayon_1.3.4             lattice_0.20-40          cowplot_1.0.0           </span>
+<span class="co">#&gt; [61] graphlayouts_0.6.0       splines_4.0.0            knitr_1.28              </span>
+<span class="co">#&gt; [64] pillar_1.4.3             igraph_1.2.5             codetools_0.2-16        </span>
+<span class="co">#&gt; [67] glue_1.3.2               evaluate_0.14            RcppParallel_5.0.0      </span>
+<span class="co">#&gt; [70] vctrs_0.2.4              tweenr_1.0.1             gtable_0.3.0            </span>
+<span class="co">#&gt; [73] purrr_0.3.3              polyclip_1.10-0          tidyr_1.0.2             </span>
+<span class="co">#&gt; [76] kernlab_0.9-29           assertthat_0.2.1         xfun_0.12               </span>
+<span class="co">#&gt; [79] ggforce_0.3.1            rsvd_1.0.3               tidygraph_1.1.2         </span>
+<span class="co">#&gt; [82] RSpectra_0.16-0          survival_3.1-11          viridisLite_0.3.0       </span>
+<span class="co">#&gt; [85] minpack.lm_1.2-1         tibble_2.1.3             beeswarm_0.2.3          </span>
+<span class="co">#&gt; [88] memoise_1.1.0            cluster_2.1.0            statmod_1.4.34</span></pre></body></html></div>
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#introduction">Introduction</a></li>
-      <li><a href="#setting-up-the-data">Setting up the data</a></li>
-      <li><a href="#scclassify">scClassify</a></li>
-      <li><a href="#session-info">Session Info</a></li>
-      </ul>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
 </div>
-      </div>
 
 </div>
 
@@ -397,7 +386,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>
