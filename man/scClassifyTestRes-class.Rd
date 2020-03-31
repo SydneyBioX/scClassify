@@ -29,7 +29,7 @@ each base model (each list indicates one base model)}
 \item{\code{resCategories}}{A data.frame indicates the predicted results for each base model
 (if true test label is provided)}
 
-\item{\code{featureCombination}}{A vector of character indicates the features and similarity combinations
-that are trained for this data}
+\item{\code{featureCombination}}{A vector of character indicates the features and
+similarity combinations that are trained for this data}
 }}
 

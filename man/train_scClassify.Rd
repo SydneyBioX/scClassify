@@ -26,10 +26,12 @@ train_scClassify(
 
 \item{cellTypes_train}{A vector of cell types of reference dataset}
 
-\item{tree}{A vector indicates the method to build hierarchical tree, set as "HOPACH" by default.
+\item{tree}{A vector indicates the method to build hierarchical tree,
+set as "HOPACH" by default.
 This should be one of "HOPACH" and "HC" (using stats::hclust).}
 
-\item{selectFeatures}{A vector indicates the gene selection method, set as "limma" by default.
+\item{selectFeatures}{A vector indicates the gene selection method,
+set as "limma" by default.
 This should be one or more of "limma", "DV", "DD", "chisq", "BI".}
 
 \item{topN}{An integer indicates the top number of features that are selected}
@@ -39,9 +41,11 @@ children at each node in the HOPACH tree.}
 
 \item{pSig}{A numeric indicates the cutoff of pvalue for features}
 
-\item{cellType_tree}{A list indicates the cell type tree provided by user. (By default, it is NULL)}
+\item{cellType_tree}{A list indicates the cell type tree provided by user.
+(By default, it is NULL)}
 
-\item{weightsCal}{A logical input indicates whether we need to calculate the weights for the model.}
+\item{weightsCal}{A logical input indicates whether we need to
+calculate the weights for the model.}
 
 \item{parallel}{A logical input indicates whether the algorihms will run in parallel}
 

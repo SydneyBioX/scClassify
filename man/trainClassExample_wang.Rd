@@ -4,7 +4,9 @@
 \name{trainClassExample_wang}
 \alias{trainClassExample_wang}
 \title{Subset of pretrained model of Wang et al.}
-\format{An object of class \code{scClassifyTrainModel} of length 1.}
+\format{
+An object of class \code{scClassifyTrainModel} of length 1.
+}
 \usage{
 data(trainClassExample_wang, package = 'scClassify')
 }

@@ -39,8 +39,8 @@ predict_scClassifyJoint(
 \item{features}{A vector indicates the method to select features, set as "limma" by default.
 This should be one or more of "limma", "DV", "DD", "chisq", "BI".}
 
-\item{algorithm}{A vector indicates the KNN method that are used, set as "WKNN" by default. This
-should be one or more of "WKNN", "KNN", "DWKNN".}
+\item{algorithm}{A vector indicates the KNN method that are used, set as "WKNN" by default.
+This should be one or more of "WKNN", "KNN", "DWKNN".}
 
 \item{similarity}{A vector indicates the similarity measure that are used,
 set as "pearson" by default.

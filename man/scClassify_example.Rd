@@ -4,7 +4,9 @@
 \name{scClassify_example}
 \alias{scClassify_example}
 \title{Example data used in scClassify package}
-\format{An object of class \code{list} of length 4.}
+\format{
+An object of class \code{list} of length 4.
+}
 \usage{
 data(scClassify_example, package = 'scClassify')
 }
