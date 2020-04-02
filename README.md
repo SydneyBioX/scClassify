@@ -17,11 +17,17 @@ Install Bioconductor packages `S4Vectors`, `hopach` and `limma` packages using `
 BiocManager::install(c("S4Vectors", "hopach", "limma"))
 ```
 
-Then install `scClassify` using `devtools`:
+Then install the latest `scClassify` using `devtools` (For R >= 4.0):
 
 ```r
 library(devtools)
 devtools::install_github("SydneyBioX/scClassify")
+```
+
+For R >= 3.6, install `scClassify(v0.2.3)` via 
+
+```
+devtools::install_github("SydneyBioX/scClassify@085c72f")
 ```
 
 ## Vignette and Shiny app

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">scClassify</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.1</span>
       </span>
     </div>
 
@@ -169,9 +169,11 @@
 <p>Install Bioconductor packages <code>S4Vectors</code>, <code>hopach</code> and <code>limma</code> packages using <code>BiocManager</code>:</p>
 <div class="sourceCode" id="cb1"><pre class="r"><span class="co"># install.packages("BiocManager")</span>
 <span class="kw pkg">BiocManager</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"S4Vectors"</span>, <span class="st">"hopach"</span>, <span class="st">"limma"</span>))</pre></div>
-<p>Then install <code>scClassify</code> using <code>devtools</code>:</p>
+<p>Then install the latest <code>scClassify</code> using <code>devtools</code> (For R &gt;= 4.0):</p>
 <div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">devtools</span>)
 <span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu">install_github</span>(<span class="st">"SydneyBioX/scClassify"</span>)</pre></div>
+<p>For R &gt;= 3.6, install <code><a href="reference/scClassify.html">scClassify(v0.2.3)</a></code> via</p>
+<pre><code>devtools::install_github("SydneyBioX/scClassify@085c72f")</code></pre>
 </div>
 <div id="vignette-and-shiny-app" class="section level2">
 <h2 class="hasAnchor">

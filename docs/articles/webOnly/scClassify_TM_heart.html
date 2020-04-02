@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../../index.html">scClassify</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.1</span>
       </span>
     </div>
 
@@ -176,10 +176,10 @@
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">gridExtra</span>)</pre></body></html></div>
 <p>This vignette demonstrates a case study of <code>scClassify</code>, using Tabula Muris data from Heart tissue. The files can be downloaded using the following codes.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span>(<span class="st">"https://raw.githubusercontent.com/SydneyBioX/scClassify/master/vignettes/webOnly/Heart_10X.rds"</span>,
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span>(<span class="st">"http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/Heart_10X.rds"</span>,
               <span class="st">"Heart_10X.rds"</span>)
 
-<span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span>(<span class="st">"https://raw.githubusercontent.com/SydneyBioX/scClassify/master/vignettes/webOnly/Heart_FACS.rds"</span>,
+<span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span>(<span class="st">"http://www.maths.usyd.edu.au/u/yingxinl/wwwnb/scClassify/Heart_FACS.rds"</span>,
               <span class="st">"Heart_FACS.rds"</span>)</pre></body></html></div>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">Heart_10X</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span>(<span class="st">"Heart_10X.rds"</span>)
 <span class="no">Heart_FACS</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span>(<span class="st">"Heart_FACS.rds"</span>)
@@ -314,7 +314,7 @@
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()
 <span class="co">#&gt; R Under development (unstable) (2020-03-25 r78063)</span>
 <span class="co">#&gt; Platform: x86_64-apple-darwin15.6.0 (64-bit)</span>
-<span class="co">#&gt; Running under: macOS Catalina 10.15.3</span>
+<span class="co">#&gt; Running under: macOS Catalina 10.15.4</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Matrix products: default</span>
 <span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.0.dylib</span>
@@ -335,7 +335,7 @@
 <span class="co">#&gt;  [9] Biobase_2.47.3              GenomicRanges_1.39.3       </span>
 <span class="co">#&gt; [11] GenomeInfoDb_1.23.14        IRanges_2.21.8             </span>
 <span class="co">#&gt; [13] S4Vectors_0.25.14           BiocGenerics_0.33.3        </span>
-<span class="co">#&gt; [15] scClassify_0.99.0          </span>
+<span class="co">#&gt; [15] scClassify_0.2.3           </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
 <span class="co">#&gt;  [1] segmented_1.1-0          nlme_3.1-145             bitops_1.0-6            </span>

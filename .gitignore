@@ -5,3 +5,5 @@
 .Rproj
 inst/doc
 ^vignettes/webOnly/
+scClassify.Rproj
+.DS_Store
