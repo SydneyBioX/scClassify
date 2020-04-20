@@ -33,7 +33,8 @@ RoxygenNote: 7.1.0
 Suggests: 
     knitr,
     rmarkdown,
-    BiocStyle
+    BiocStyle,
+    pkgdown
 VignetteBuilder: knitr
 biocViews: SingleCell, GeneExpression, Classification
 BugReports: https://github.com/SydneyBioX/scClassify/issues
