@@ -73,7 +73,7 @@ data("trainClassExample_wang")
 trainClassExampleJoint <- scClassifyTrainModelList(trainClassExample_wang,
 trainClassExample_xin)
 
-pred_res <- predict_scClassifyJoint(exprsMat_test = exprsMat_wang_subset,
+pred_res_joint <- predict_scClassifyJoint(exprsMat_test = exprsMat_wang_subset,
 trainRes = trainClassExampleJoint,
 cellTypes_test = wang_cellTypes,
 algorithm = "WKNN",
