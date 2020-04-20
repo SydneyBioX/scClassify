@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scClassify</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.4</span>
       </span>
     </div>
 
@@ -200,7 +200,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Testing scClassify model</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/SydneyBioX/scClassify/blob/master/R/predict_scClassify.R'><code>R/predict_scClassify.R</code></a></small>
     <div class="hidden name"><code>predict_scClassify.Rd</code></div>
     </div>
 
@@ -232,16 +232,18 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>exprsMat_test</th>
-      <td><p>A list or a matrix indicates the log-transformed expression matrices
-of the query datasets</p></td>
+      <td><p>A list or a matrix indicates the log-transformed
+expression matrices of the query datasets</p></td>
     </tr>
     <tr>
       <th>trainRes</th>
-      <td><p>A `scClassifyTrainModel` or a `list` indicates scClassify trained model</p></td>
+      <td><p>A `scClassifyTrainModel` or a `list` indicates
+scClassify trained model</p></td>
     </tr>
     <tr>
       <th>cellTypes_test</th>
-      <td><p>A list or a vector indicates cell types of the qurey datasets (Optional).</p></td>
+      <td><p>A list or a vector indicates cell types
+of the qurey datasets (Optional).</p></td>
     </tr>
     <tr>
       <th>k</th>
@@ -249,36 +251,42 @@ of the query datasets</p></td>
     </tr>
     <tr>
       <th>prob_threshold</th>
-      <td><p>A numeric indicates the probability threshold for KNN/WKNN/DWKNN.</p></td>
+      <td><p>A numeric indicates the probability threshold
+for KNN/WKNN/DWKNN.</p></td>
     </tr>
     <tr>
       <th>cor_threshold_static</th>
-      <td><p>A numeric indicates the static correlation threshold.</p></td>
+      <td><p>A numeric indicates the static
+correlation threshold.</p></td>
     </tr>
     <tr>
       <th>cor_threshold_high</th>
-      <td><p>A numeric indicates the highest correlation threshold</p></td>
+      <td><p>A numeric indicates the highest
+correlation threshold</p></td>
     </tr>
     <tr>
       <th>features</th>
-      <td><p>A vector indicates the gene selection method, set as "limma" by default.
+      <td><p>A vector indicates the gene selection method,
+set as "limma" by default.
 This should be one or more of "limma", "DV", "DD", "chisq", "BI".</p></td>
     </tr>
     <tr>
       <th>algorithm</th>
-      <td><p>A vector indicates the KNN method that are used, set as "WKNN" by default.
+      <td><p>A vector indicates the KNN method that are used,
+set as "WKNN" by default.
 This should be one or more of "WKNN", "KNN", "DWKNN".</p></td>
     </tr>
     <tr>
       <th>similarity</th>
-      <td><p>A vector indicates the similarity measure that are used, set as "pearson" by default.
-This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kendall", "binomial",
-"weighted_rank","manhattan"</p></td>
+      <td><p>A vector indicates the similarity measure that are used,
+set as "pearson" by default.
+This should be one or more of "pearson",  "spearman", "cosine",
+"jaccard", "kendall", "binomial", "weighted_rank","manhattan"</p></td>
     </tr>
     <tr>
       <th>cutoff_method</th>
-      <td><p>A vector indicates the method to cutoff the correlation distribution.
-Set as "dynamic" by default.</p></td>
+      <td><p>A vector indicates the method to cutoff the
+correlation distribution. Set as "dynamic" by default.</p></td>
     </tr>
     <tr>
       <th>weighted_ensemble</th>
@@ -301,7 +309,8 @@ from the <code>BiocParallel</code> package is used. Default is SerialParam().</p
     </tr>
     <tr>
       <th>verbose</th>
-      <td><p>A logical input indicates whether the intermediate steps will be printed</p></td>
+      <td><p>A logical input indicates whether the intermediate steps
+will be printed</p></td>
     </tr>
     </table>
 
@@ -333,7 +342,8 @@ from the <code>BiocParallel</code> package is used. Default is SerialParam().</p
 #&gt;            0.704590818            0.239520958            0.000000000 
 #&gt; incorrectly unassigned         error assigned          misclassified 
 #&gt;            0.000000000            0.051896208            0.003992016 
-#&gt; weights for each base methodnumeric(0)</div><div class='input'>
+#&gt; weights for each base method: 
+#&gt; numeric(0)</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -350,7 +360,7 @@ from the <code>BiocParallel</code> package is used. Default is SerialParam().</p
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

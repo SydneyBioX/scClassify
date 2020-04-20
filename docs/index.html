@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="scClassify: single-cell Hierarchical Classification ">
-<meta property="og:description" content="Classification of single cells via cell-type hierarchies based on ensemble learning and sample size estimation.">
+<meta property="og:description" content="scClassify is a multiscale classification framework for single-cell RNA-seq data based on ensemble learning and cell type hierarchies, enabling sample size estimation required for accurate cell type classification and joint classification of cells using multiple references.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">scClassify</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.4</span>
       </span>
     </div>
 
@@ -171,9 +171,9 @@
 <span class="kw pkg">BiocManager</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"S4Vectors"</span>, <span class="st">"hopach"</span>, <span class="st">"limma"</span>))</pre></div>
 <p>Then install the latest <code>scClassify</code> using <code>devtools</code> (For R &gt;= 4.0):</p>
 <div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">devtools</span>)
-<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu">install_github</span>(<span class="st">"SydneyBioX/scClassify"</span>)</pre></div>
+<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"SydneyBioX/scClassify"</span>)</pre></div>
 <p>For R &gt;= 3.6, install <code><a href="reference/scClassify.html">scClassify(v0.2.3)</a></code> via</p>
-<pre><code>devtools::install_github("SydneyBioX/scClassify@085c72f")</code></pre>
+<pre><code><a href="https://devtools.r-lib.org//reference/remote-reexports.html">devtools::install_github("SydneyBioX/scClassify@085c72f")</a></code></pre>
 </div>
 <div id="vignette-and-shiny-app" class="section level2">
 <h2 class="hasAnchor">
@@ -377,7 +377,16 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="license">
+    <div class="links">
+<h2>Links</h2>
+<ul class="list-unstyled">
+<li>Browse source code at <br><a href="https://github.com/SydneyBioX/scClassify/">https://​github.com/​SydneyBioX/​scClassify/​</a>
+</li>
+<li>Report a bug at <br><a href="https://github.com/SydneyBioX/scClassify/issues">https://​github.com/​SydneyBioX/​scClassify/​issues</a>
+</li>
+</ul>
+</div>
+<div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
 <li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
@@ -399,7 +408,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

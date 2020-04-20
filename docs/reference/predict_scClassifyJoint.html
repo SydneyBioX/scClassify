@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scClassify</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.4</span>
       </span>
     </div>
 
@@ -200,7 +200,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Testing scClassify model (joint training)</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/SydneyBioX/scClassify/blob/master/R/predict_scClassify.R'><code>R/predict_scClassify.R</code></a></small>
     <div class="hidden name"><code>predict_scClassifyJoint.Rd</code></div>
     </div>
 
@@ -297,6 +297,36 @@ from the <code>BiocParallel</code> package is used. Default is SerialParam().</p
 
     <p>list of results</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"scClassify_example"</span>)
+<span class='no'>wang_cellTypes</span> <span class='kw'>&lt;-</span> <span class='no'>scClassify_example</span>$<span class='no'>wang_cellTypes</span>
+<span class='no'>exprsMat_wang_subset</span> <span class='kw'>&lt;-</span> <span class='no'>scClassify_example</span>$<span class='no'>exprsMat_wang_subset</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"trainClassExample_xin"</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"trainClassExample_wang"</span>)
+
+<span class='no'>trainClassExampleJoint</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='scClassifyTrainModelList.html'>scClassifyTrainModelList</a></span>(<span class='no'>trainClassExample_wang</span>,
+<span class='no'>trainClassExample_xin</span>)
+
+<span class='no'>pred_res_joint</span> <span class='kw'>&lt;-</span> <span class='fu'>predict_scClassifyJoint</span>(<span class='kw'>exprsMat_test</span> <span class='kw'>=</span> <span class='no'>exprsMat_wang_subset</span>,
+<span class='kw'>trainRes</span> <span class='kw'>=</span> <span class='no'>trainClassExampleJoint</span>,
+<span class='kw'>cellTypes_test</span> <span class='kw'>=</span> <span class='no'>wang_cellTypes</span>,
+<span class='kw'>algorithm</span> <span class='kw'>=</span> <span class='st'>"WKNN"</span>,
+<span class='kw'>features</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"limma"</span>),
+<span class='kw'>similarity</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"pearson"</span>),
+<span class='kw'>prob_threshold</span> <span class='kw'>=</span> <span class='fl'>0.7</span>,
+<span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+
+<span class='fu'><a href='https://rdrr.io/r/base/table.html'>table</a></span>(<span class='no'>pred_res_joint</span>$<span class='no'>jointRes</span>$<span class='no'>cellTypes</span>, <span class='no'>wang_cellTypes</span>)</div><div class='output co'>#&gt;               wang_cellTypes
+#&gt;                acinar alpha beta delta ductal gamma stellate
+#&gt;   acinar            4     0    0     0      0     0        0
+#&gt;   alpha             0   206    0     0      0     0        0
+#&gt;   beta              0     0  118     0      0     0        0
+#&gt;   delta             0     0    0    10      0     0        0
+#&gt;   ductal            0     0    0     0     93     0        0
+#&gt;   gamma             0     0    0     0      0    21        0
+#&gt;   intermediate      1     0    0     0      3     0        0
+#&gt;   stellate          0     0    0     0      0     0       45</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -312,7 +342,7 @@ from the <code>BiocParallel</code> package is used. Default is SerialParam().</p
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

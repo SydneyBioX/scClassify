@@ -1,5 +1,5 @@
 pandoc: 2.3.1
-pkgdown: 1.5.0
+pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   pretrainedModel: pretrainedModel.html
@@ -23,5 +23,5 @@ articles:
   Xin_humanPancreas: webOnly/Xin_humanPancreas.html
   sampleSizeCal: webOnly/sampleSizeCal.html
   scClassify_TM_heart: webOnly/scClassify_TM_heart.html
-last_built: 2020-04-01T13:09Z
+last_built: 2020-04-20T10:51Z
 

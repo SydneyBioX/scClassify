@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scClassify</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.4</span>
       </span>
     </div>
 
@@ -159,12 +159,15 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>scClassify Model Building and Prediction</h1>
-            
+                        <h4 class="author">Yingxin Lin</h4>
+            <address class="author_afil">
+      School of Mathematics and Statistics, The University of Sydney, Australia<br><h4 class="date">20 April 2020</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/SydneyBioX/scClassify/blob/master/vignettes/scClassify.Rmd"><code>vignettes/scClassify.Rmd</code></a></small>
       <div class="hidden name"><code>scClassify.Rmd</code></div>
 
-    </div>
+    </address>
+</div>
 
     
     
@@ -172,12 +175,18 @@
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
 <p>A common application of single-cell RNA sequencing (RNA-seq) data is to identify discrete cell types. To take advantage of the large collection of well-annotated scRNA-seq datasets, <code>scClassify</code> package implements a set of methods to perform accurate cell type classification based on <em>ensemble learning</em> and <em>sample size calculation</em>. This vignette demonstrates the usage of <code>scClassify</code>, providing a pithy description of each method with workable examples.</p>
+<p>First, install <code>scClassify</code> via <code>BiocManager</code>.</p>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="co"># installation of scClassify</span>
+<span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"BiocManager"</span>, <span class="kw">quietly</span> <span class="kw">=</span> <span class="fl">TRUE</span>)) {
+    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"BiocManager"</span>)
+}
+<span class="kw pkg">BiocManager</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"scClassify"</span>)</pre></body></html></div>
 </div>
 <div id="setting-up-the-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#setting-up-the-data" class="anchor"></a>Setting up the data</h1>
 <p>We assume that you have <em>log-transformed</em> (size-factor normalized) matrices where each row is a gene and each column a cell for a reference dataset and a query dataset. For demonstration purposes, we will take a subset of single-cell pancreas datasets from two independent studies (Wang et al., and Xin et al.).</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"scClassify"</span>)
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"scClassify"</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"scClassify_example"</span>)
 <span class="no">xin_cellTypes</span> <span class="kw">&lt;-</span> <span class="no">scClassify_example</span>$<span class="no">xin_cellTypes</span>
 <span class="no">exprsMat_xin_subset</span> <span class="kw">&lt;-</span> <span class="no">scClassify_example</span>$<span class="no">exprsMat_xin_subset</span>
@@ -186,14 +195,10 @@
 <span class="no">exprsMat_xin_subset</span> <span class="kw">&lt;-</span> <span class="fu">as</span>(<span class="no">exprsMat_xin_subset</span>, <span class="st">"dgCMatrix"</span>)
 <span class="no">exprsMat_wang_subset</span> <span class="kw">&lt;-</span> <span class="fu">as</span>(<span class="no">exprsMat_wang_subset</span>, <span class="st">"dgCMatrix"</span>)</pre></body></html></div>
 <p>The original cell type annotations and compositions of the example datasets can be easily accessed as shown below.</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="st">"Cell type composition of Xin et al. data"</span>)
-<span class="co">#&gt; Cell type composition of Xin et al. data</span>
-<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">xin_cellTypes</span>)
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">xin_cellTypes</span>)
 <span class="co">#&gt; xin_cellTypes</span>
 <span class="co">#&gt; alpha  beta delta gamma </span>
 <span class="co">#&gt;   285   261    49    79</span>
-<span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span>(<span class="st">"Cell type composition of Wang et al. data"</span>)
-<span class="co">#&gt; Cell type composition of Wang et al. data</span>
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">wang_cellTypes</span>)
 <span class="co">#&gt; wang_cellTypes</span>
 <span class="co">#&gt;   acinar    alpha     beta    delta   ductal    gamma stellate </span>
@@ -206,29 +211,29 @@
 <div id="non-ensemble-scclassify" class="section level2">
 <h2 class="hasAnchor">
 <a href="#non-ensemble-scclassify" class="anchor"></a>Non-ensemble scClassify</h2>
-<p>We first perform non-ensemble <code>scClassify</code> by using Xin et al. as our reference dataset and Wang et al. data as ur query data. We use <code>WKNN</code> as the KNN algorithm, <code>DE</code> (differential expression genes) as the gene selection method, and lastly <code>pearson</code> as the similarity calculation method.</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">scClassify_res</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/scClassify.html">scClassify</a></span>(<span class="kw">exprsMat_train</span> <span class="kw">=</span> <span class="no">exprsMat_xin_subset</span>,
-                      <span class="kw">cellTypes_train</span> <span class="kw">=</span> <span class="no">xin_cellTypes</span>,
-                      <span class="kw">exprsMat_test</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">wang</span> <span class="kw">=</span> <span class="no">exprsMat_wang_subset</span>),
-                      <span class="kw">cellTypes_test</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">wang</span> <span class="kw">=</span> <span class="no">wang_cellTypes</span>),
-                      <span class="kw">tree</span> <span class="kw">=</span> <span class="st">"HOPACH"</span>,
-                      <span class="kw">algorithm</span> <span class="kw">=</span> <span class="st">"WKNN"</span>,
-                      <span class="kw">selectFeatures</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"limma"</span>),
-                      <span class="kw">similarity</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"pearson"</span>),
-                      <span class="kw">returnList</span> <span class="kw">=</span> <span class="fl">FALSE</span>,
-                      <span class="kw">verbose</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
+<p>We first perform non-ensemble <code>scClassify</code> by using Xin et al. as our reference dataset and Wang et al. data as ur query data. We use <code>WKNN</code> as the KNN algorithm, <code>DE</code> (differential expression genes) as the gene selection method, and lastly <code>pearson</code> as the similarity calculation method.</p>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">scClassify_res</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/scClassify.html">scClassify</a></span>(<span class="kw">exprsMat_train</span> <span class="kw">=</span> <span class="no">exprsMat_xin_subset</span>,
+                             <span class="kw">cellTypes_train</span> <span class="kw">=</span> <span class="no">xin_cellTypes</span>,
+                             <span class="kw">exprsMat_test</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">wang</span> <span class="kw">=</span> <span class="no">exprsMat_wang_subset</span>),
+                             <span class="kw">cellTypes_test</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">wang</span> <span class="kw">=</span> <span class="no">wang_cellTypes</span>),
+                             <span class="kw">tree</span> <span class="kw">=</span> <span class="st">"HOPACH"</span>,
+                             <span class="kw">algorithm</span> <span class="kw">=</span> <span class="st">"WKNN"</span>,
+                             <span class="kw">selectFeatures</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"limma"</span>),
+                             <span class="kw">similarity</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"pearson"</span>),
+                             <span class="kw">returnList</span> <span class="kw">=</span> <span class="fl">FALSE</span>,
+                             <span class="kw">verbose</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
 <p>We can check the cell type tree generated by the reference data:</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">scClassify_res</span>$<span class="no">trainRes</span>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">scClassify_res</span>$<span class="no">trainRes</span>
 <span class="co">#&gt; Class: scClassifyTrainModel </span>
 <span class="co">#&gt; Model name: training </span>
 <span class="co">#&gt; Feature selection methods: limma </span>
 <span class="co">#&gt; Number of cells in the training data: 674 </span>
 <span class="co">#&gt; Number of cell types in the training data: 4</span>
-<span class="fu"><a href="../reference/plotCellTypeTree.html">plotCellTypeTree</a></span>(<span class="no">scClassify_res</span>$<span class="no">trainRes</span>@<span class="kw">cellTypeTree</span>)</pre></body></html></div>
-<p><img src="scClassify_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<span class="fu"><a href="../reference/plotCellTypeTree.html">plotCellTypeTree</a></span>(<span class="fu"><a href="../reference/cellTypeTree.html">cellTypeTree</a></span>(<span class="no">scClassify_res</span>$<span class="no">trainRes</span>))</pre></body></html></div>
+<p><img src="scClassify_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <p>Noted that <code>scClassify_res$trainRes</code> is a <code>scClassifyTrainModel</code> class.</p>
 <p>Check the prediction results.</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">scClassify_res</span>$<span class="no">testRes</span>$<span class="no">wang</span>$<span class="no">pearson_WKNN_limma</span>$<span class="no">predRes</span>, <span class="no">wang_cellTypes</span>)
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">scClassify_res</span>$<span class="no">testRes</span>$<span class="no">wang</span>$<span class="no">pearson_WKNN_limma</span>$<span class="no">predRes</span>, <span class="no">wang_cellTypes</span>)
 <span class="co">#&gt;                   wang_cellTypes</span>
 <span class="co">#&gt;                    acinar alpha beta delta ductal gamma stellate</span>
 <span class="co">#&gt;   alpha                 0   206    0     0      0     2        0</span>
@@ -241,7 +246,7 @@
 <div id="ensemble-classify" class="section level2">
 <h2 class="hasAnchor">
 <a href="#ensemble-classify" class="anchor"></a>Ensemble Classify</h2>
-<p>We next perform ensemble <code>scClassify</code> by using Xin et al. as our reference dataset and Wang et al. data as our query data. We use <code>WKNN</code> as the KNN algorithm, <code>DE</code> as the gene selection method, and <code>pearson</code> and <code>spearman</code> as the similarity calculation methods. Thus, we will generate two combinations of gene selection models and similarity metrics as training classifiers:</p>
+<p>We next perform ensemble <code>scClassify</code> by using Xin et al. as our reference dataset and Wang et al. data as our query data. We use <code>WKNN</code> as the KNN algorithm, <code>DE</code> as the gene selection method, and <code>pearson</code> and <code>spearman</code> as the similarity calculation methods. Thus, we will generate two combinations of gene selection models and similarity metrics as training classifiers:</p>
 <ol style="list-style-type: decimal">
 <li>
 <code>WKNN</code> + <code>DE</code> + <code>pearson</code>
@@ -251,7 +256,7 @@
 </li>
 </ol>
 <p>Here, we will weight these two classifiers equally by setting <code>weighted_ensemble = FALSE</code>. By default this is set as <code>TRUE</code>, so each base classifier will be weighted by the accuracy rates trained in the reference data.</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">scClassify_res_ensemble</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/scClassify.html">scClassify</a></span>(<span class="kw">exprsMat_train</span> <span class="kw">=</span> <span class="no">exprsMat_xin_subset</span>,
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">scClassify_res_ensemble</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/scClassify.html">scClassify</a></span>(<span class="kw">exprsMat_train</span> <span class="kw">=</span> <span class="no">exprsMat_xin_subset</span>,
                                       <span class="kw">cellTypes_train</span> <span class="kw">=</span> <span class="no">xin_cellTypes</span>,
                                       <span class="kw">exprsMat_test</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">wang</span> <span class="kw">=</span> <span class="no">exprsMat_wang_subset</span>),
                                       <span class="kw">cellTypes_test</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">wang</span> <span class="kw">=</span> <span class="no">wang_cellTypes</span>),
@@ -263,7 +268,7 @@
                                       <span class="kw">returnList</span> <span class="kw">=</span> <span class="fl">FALSE</span>,
                                       <span class="kw">verbose</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
 <p>We can compare the two base classifiers predictions as below.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">scClassify_res_ensemble</span>$<span class="no">testRes</span>$<span class="no">wang</span>$<span class="no">pearson_WKNN_limma</span>$<span class="no">predRes</span>,
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">scClassify_res_ensemble</span>$<span class="no">testRes</span>$<span class="no">wang</span>$<span class="no">pearson_WKNN_limma</span>$<span class="no">predRes</span>,
       <span class="no">scClassify_res_ensemble</span>$<span class="no">testRes</span>$<span class="no">wang</span>$<span class="no">cosine_WKNN_limma</span>$<span class="no">predRes</span>)
 <span class="co">#&gt;                   </span>
 <span class="co">#&gt;                    alpha beta beta_delta_gamma delta gamma unassigned</span>
@@ -274,7 +279,7 @@
 <span class="co">#&gt;   gamma                0    0                0     0    19          0</span>
 <span class="co">#&gt;   unassigned           1    3               15     0     0        101</span></pre></body></html></div>
 <p>Now, check the final ensemble results:</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">scClassify_res_ensemble</span>$<span class="no">testRes</span>$<span class="no">wang</span>$<span class="no">ensembleRes</span>$<span class="no">cellTypes</span>,
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">scClassify_res_ensemble</span>$<span class="no">testRes</span>$<span class="no">wang</span>$<span class="no">ensembleRes</span>$<span class="no">cellTypes</span>,
       <span class="no">wang_cellTypes</span>)
 <span class="co">#&gt;                   wang_cellTypes</span>
 <span class="co">#&gt;                    acinar alpha beta delta ductal gamma stellate</span>
@@ -291,20 +296,20 @@
 <a href="#train-your-own-model" class="anchor"></a>Train your own model</h1>
 <p>You can also train your own model <code>scClassifyTrainModel</code> using <code><a href="../reference/train_scClassify.html">train_scClassify()</a></code>. Note that by setting <code>weightsCal = TRUE</code>, we will calculate the training error of the reference data as the weights for the individual classifiers.</p>
 <p>Here, we illustrate the training function with gene selection methods based on differential expression (“limma”) and biomodal distribution (“BI”).</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">trainClass</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/train_scClassify.html">train_scClassify</a></span>(<span class="kw">exprsMat_train</span> <span class="kw">=</span> <span class="no">exprsMat_xin_subset</span>,
-                 <span class="kw">cellTypes_train</span> <span class="kw">=</span> <span class="no">xin_cellTypes</span>,
-                 <span class="kw">selectFeatures</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"limma"</span>, <span class="st">"BI"</span>),
-                 <span class="kw">returnList</span> <span class="kw">=</span> <span class="fl">FALSE</span>
-                 )
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">trainClass</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/train_scClassify.html">train_scClassify</a></span>(<span class="kw">exprsMat_train</span> <span class="kw">=</span> <span class="no">exprsMat_xin_subset</span>,
+                               <span class="kw">cellTypes_train</span> <span class="kw">=</span> <span class="no">xin_cellTypes</span>,
+                               <span class="kw">selectFeatures</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"limma"</span>, <span class="st">"BI"</span>),
+                               <span class="kw">returnList</span> <span class="kw">=</span> <span class="fl">FALSE</span>
+)
 <span class="co">#&gt; after filtering not expressed genes </span>
 <span class="co">#&gt; [1] 980 674</span>
 <span class="co">#&gt; [1] "Feature Selection..."</span>
 <span class="co">#&gt; [1] "Number of genes selected to construct HOPACH tree 160"</span>
 <span class="co">#&gt; [1] "Constructing tree ..."</span>
 <span class="co">#&gt; [1] "Training...."</span>
-<span class="co">#&gt; [1] "============ selecting features by: limma ============"</span>
-<span class="co">#&gt; [1] "============ selecting features by: BI ============"</span></pre></body></html></div>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">trainClass</span>
+<span class="co">#&gt; [1] "=== selecting features by: limma ===="</span>
+<span class="co">#&gt; [1] "=== selecting features by: BI ===="</span></pre></body></html></div>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">trainClass</span>
 <span class="co">#&gt; Class: scClassifyTrainModel </span>
 <span class="co">#&gt; Model name: training </span>
 <span class="co">#&gt; Feature selection methods: limma BI </span>
@@ -314,7 +319,7 @@
 <div id="session-info" class="section level1">
 <h1 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session Info</h1>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()
 <span class="co">#&gt; R Under development (unstable) (2020-03-25 r78063)</span>
 <span class="co">#&gt; Platform: x86_64-apple-darwin15.6.0 (64-bit)</span>
 <span class="co">#&gt; Running under: macOS Catalina 10.15.4</span>
@@ -330,35 +335,37 @@
 <span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt; [1] scClassify_0.99.1</span>
+<span class="co">#&gt; [1] scClassify_0.99.4 BiocStyle_2.15.6 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
 <span class="co">#&gt;  [1] Biobase_2.47.3      viridis_0.5.1       mixtools_1.2.0     </span>
 <span class="co">#&gt;  [4] tidyr_1.0.2         tidygraph_1.1.2     viridisLite_0.3.0  </span>
 <span class="co">#&gt;  [7] splines_4.0.0       ggraph_2.0.2        RcppParallel_5.0.0 </span>
-<span class="co">#&gt; [10] assertthat_0.2.1    statmod_1.4.34      stats4_4.0.0       </span>
-<span class="co">#&gt; [13] yaml_2.2.1          ggrepel_0.8.2       pillar_1.4.3       </span>
-<span class="co">#&gt; [16] backports_1.1.5     lattice_0.20-40     glue_1.3.2         </span>
-<span class="co">#&gt; [19] limma_3.43.5        digest_0.6.25       polyclip_1.10-0    </span>
-<span class="co">#&gt; [22] colorspace_1.4-1    htmltools_0.4.0     Matrix_1.2-18      </span>
-<span class="co">#&gt; [25] pkgconfig_2.0.3     purrr_0.3.3         scales_1.1.0       </span>
-<span class="co">#&gt; [28] tweenr_1.0.1        hopach_2.47.0       BiocParallel_1.21.2</span>
-<span class="co">#&gt; [31] ggforce_0.3.1       tibble_2.1.3        proxy_0.4-23       </span>
-<span class="co">#&gt; [34] mgcv_1.8-31         farver_2.0.3        ggplot2_3.3.0      </span>
-<span class="co">#&gt; [37] BiocGenerics_0.33.3 survival_3.1-11     magrittr_1.5       </span>
-<span class="co">#&gt; [40] crayon_1.3.4        memoise_1.1.0       evaluate_0.14      </span>
-<span class="co">#&gt; [43] fs_1.3.2            nlme_3.1-145        MASS_7.3-51.5      </span>
-<span class="co">#&gt; [46] segmented_1.1-0     tools_4.0.0         minpack.lm_1.2-1   </span>
-<span class="co">#&gt; [49] lifecycle_0.2.0     stringr_1.4.0       S4Vectors_0.25.14  </span>
-<span class="co">#&gt; [52] kernlab_0.9-29      munsell_0.5.0       cluster_2.1.0      </span>
-<span class="co">#&gt; [55] compiler_4.0.0      pkgdown_1.5.0       proxyC_0.1.5       </span>
-<span class="co">#&gt; [58] rlang_0.4.5         grid_4.0.0          rstudioapi_0.11    </span>
-<span class="co">#&gt; [61] igraph_1.2.5        labeling_0.3        rmarkdown_2.1      </span>
-<span class="co">#&gt; [64] gtable_0.3.0        graphlayouts_0.6.0  R6_2.4.1           </span>
-<span class="co">#&gt; [67] gridExtra_2.3       knitr_1.28          dplyr_0.8.5        </span>
-<span class="co">#&gt; [70] rprojroot_1.3-2     desc_1.2.0          stringi_1.4.6      </span>
-<span class="co">#&gt; [73] parallel_4.0.0      Rcpp_1.0.4.5        vctrs_0.2.4        </span>
-<span class="co">#&gt; [76] diptest_0.75-7      tidyselect_1.0.0    xfun_0.12</span></pre></body></html></div>
+<span class="co">#&gt; [10] assertthat_0.2.1    statmod_1.4.34      BiocManager_1.30.10</span>
+<span class="co">#&gt; [13] stats4_4.0.0        yaml_2.2.1          ggrepel_0.8.2      </span>
+<span class="co">#&gt; [16] pillar_1.4.3        backports_1.1.6     lattice_0.20-41    </span>
+<span class="co">#&gt; [19] glue_1.4.0          limma_3.43.5        digest_0.6.25      </span>
+<span class="co">#&gt; [22] polyclip_1.10-0     colorspace_1.4-1    htmltools_0.4.0    </span>
+<span class="co">#&gt; [25] Matrix_1.2-18       pkgconfig_2.0.3     bookdown_0.18      </span>
+<span class="co">#&gt; [28] purrr_0.3.3         scales_1.1.0        tweenr_1.0.1       </span>
+<span class="co">#&gt; [31] hopach_2.47.0       BiocParallel_1.21.2 ggforce_0.3.1      </span>
+<span class="co">#&gt; [34] proxy_0.4-23        tibble_3.0.0        mgcv_1.8-31        </span>
+<span class="co">#&gt; [37] farver_2.0.3        ggplot2_3.3.0       ellipsis_0.3.0     </span>
+<span class="co">#&gt; [40] BiocGenerics_0.33.3 cli_2.0.2           survival_3.1-12    </span>
+<span class="co">#&gt; [43] magrittr_1.5        crayon_1.3.4        memoise_1.1.0      </span>
+<span class="co">#&gt; [46] evaluate_0.14       fs_1.4.1            fansi_0.4.1        </span>
+<span class="co">#&gt; [49] nlme_3.1-145        MASS_7.3-51.5       segmented_1.1-0    </span>
+<span class="co">#&gt; [52] tools_4.0.0         minpack.lm_1.2-1    lifecycle_0.2.0    </span>
+<span class="co">#&gt; [55] stringr_1.4.0       kernlab_0.9-29      S4Vectors_0.25.15  </span>
+<span class="co">#&gt; [58] munsell_0.5.0       cluster_2.1.0       compiler_4.0.0     </span>
+<span class="co">#&gt; [61] pkgdown_1.5.1       proxyC_0.1.5        rlang_0.4.5        </span>
+<span class="co">#&gt; [64] grid_4.0.0          rstudioapi_0.11     igraph_1.2.5       </span>
+<span class="co">#&gt; [67] labeling_0.3        rmarkdown_2.1       gtable_0.3.0       </span>
+<span class="co">#&gt; [70] graphlayouts_0.6.0  R6_2.4.1            gridExtra_2.3      </span>
+<span class="co">#&gt; [73] knitr_1.28          dplyr_0.8.5         rprojroot_1.3-2    </span>
+<span class="co">#&gt; [76] desc_1.2.0          stringi_1.4.6       parallel_4.0.0     </span>
+<span class="co">#&gt; [79] Rcpp_1.0.4.6        vctrs_0.2.4         diptest_0.75-7     </span>
+<span class="co">#&gt; [82] tidyselect_1.0.0    xfun_0.12</span></pre></body></html></div>
 </div>
   </div>
 
@@ -377,7 +384,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
