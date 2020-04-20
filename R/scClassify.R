@@ -93,332 +93,356 @@ scClassify <- function(exprsMat_train = NULL,
                        verbose = FALSE) {
 
 
-  # check input
-  if (is.null(exprsMat_train) | is.null(cellTypes_train) | is.null(exprsMat_test)) {
-    stop("exprsMat_train or cellTypes_train or exprsMat_test is NULL!")
-  }
+    # check input
+    if (is.null(exprsMat_train) | is.null(cellTypes_train) |
+        is.null(exprsMat_test)) {
+        stop("exprsMat_train or cellTypes_train or exprsMat_test is NULL!")
+    }
 
-  if (!is.null(cellTypes_test)) {
-    if ("character" %in% is(cellTypes_test)) {
-      if (length(cellTypes_test) != ncol(exprsMat_test)) {
-        stop("Length of testing cell types does not match
+    if (!is.null(cellTypes_test)) {
+        if ("character" %in% is(cellTypes_test)) {
+            if (length(cellTypes_test) != ncol(exprsMat_test)) {
+                stop("Length of testing cell types does not match
              with number of column of testing expression matrix")
-      }
-    }
+            }
+        }
 
-    if ("list" %in% is(cellTypes_test)) {
-      if (sum(unlist(lapply(cellTypes_test, length)) !=
-              unlist(lapply(exprsMat_test, ncol))) != 0) {
-        stop("Length of testing cell types does not match
+        if ("list" %in% is(cellTypes_test)) {
+            if (sum(unlist(lapply(cellTypes_test, length)) !=
+                    unlist(lapply(exprsMat_test, ncol))) != 0) {
+                stop("Length of testing cell types does not match
              with number of column of testing expression matrix")
-      }
+            }
+        }
+
     }
 
-  }
-
-  if ("list" %in% is(exprsMat_train) ) {
-    if (sum(unlist(lapply(cellTypes_train, length)) !=
-            unlist(lapply(exprsMat_train, ncol))) != 0) {
-      stop("Length of training cell types does not match with
+    if ("list" %in% is(exprsMat_train) ) {
+        if (sum(unlist(lapply(cellTypes_train, length)) !=
+                unlist(lapply(exprsMat_train, ncol))) != 0) {
+            stop("Length of training cell types does not match with
            number of column of training expression matrix")
-    }
-  }else {
-    if (length(cellTypes_train) != ncol(exprsMat_train)) {
-      stop("Length of training cell types does not match with
+        }
+    }else {
+        if (length(cellTypes_train) != ncol(exprsMat_train)) {
+            stop("Length of training cell types does not match with
            number of column of training expression matrix")
+        }
     }
-  }
 
-  if ("list" %in% is(exprsMat_train)) {
-    if (any(lapply(cellTypes_train, function(x) any(table(x) == 1)))) {
-      stop("There is cell type with only one cell,
+    if ("list" %in% is(exprsMat_train)) {
+        if (any(lapply(cellTypes_train, function(x) any(table(x) == 1)))) {
+            stop("There is cell type with only one cell,
            please check cellTypes_train")
-    }
-  }else {
-    if (any(table(cellTypes_train) == 1)) {
-      stop("There is cell type with only one cell,
+        }
+    }else {
+        if (any(table(cellTypes_train) == 1)) {
+            stop("There is cell type with only one cell,
            please check cellTypes_train")
-    }
-  }
-
-
-
-
-  tree <- match.arg(tree, c("HOPACH", "HC"), several.ok = FALSE)
-  selectFeatures <- match.arg(selectFeatures,
-                              c("limma", "DV", "DD", "chisq", "BI"),
-                              several.ok = TRUE)
-
-  algorithm <- match.arg(algorithm,
-                         c("WKNN", "KNN", "DWKNN"),
-                         several.ok = TRUE)
-
-  similarity <- match.arg(similarity, c("pearson",  "spearman",
-                                        "cosine", "jaccard", "kendall",
-                                        "weighted_rank","manhattan"), several.ok = TRUE)
-  cutoff_method <- match.arg(cutoff_method, c("dynamic", "static"))
-
-
-
-  # To check if need to run weighted ensemble learning
-
-  if ((length(selectFeatures) > 1 | length(algorithm) > 1 | length(similarity) > 1) ) {
-    if (weighted_ensemble) {
-      weighted_ensemble <- TRUE
-      ensemble <- TRUE
-
-      if (verbose) {
-        cat("Performing weighted ensemble learning... \n")
-      }
-
-    } else {
-      weighted_ensemble <- FALSE
-      ensemble <- TRUE
-
-      if (verbose) {
-        cat("Performing unweighted ensemble learning... \n")
-      }
-
-    }
-  } else {
-    weighted_ensemble <- FALSE
-    ensemble <- FALSE
-
-    if (verbose) {
-      cat("Ensemble learning is disabled... \n")
+        }
     }
 
-  }
-
-  # To check if need to run weighted joint classification
-
-  if ("list" %in% is(exprsMat_train) &
-      length(exprsMat_train) > 1 &
-      weighted_jointClassification) {
-    cat("Performing weighted joint classification \n")
-    weighted_jointClassification <- TRUE
-  } else {
-    weighted_jointClassification <- FALSE
-  }
 
 
 
-  ensemble_methods <- as.matrix(expand.grid(similarity = similarity,
-                                            algorithm = algorithm,
-                                            features = selectFeatures))
+    tree <- match.arg(tree, c("HOPACH", "HC"), several.ok = FALSE)
+    selectFeatures <- match.arg(selectFeatures,
+                                c("limma", "DV", "DD", "chisq", "BI"),
+                                several.ok = TRUE)
 
-  if (!is.null(weights)) {
-    if (length(weights) != nrow(ensemble_methods)) {
-      stop("The length of weights is not equal to
-           the number of combination of ensemble methods")
-    }
-  }
+    algorithm <- match.arg(algorithm,
+                           c("WKNN", "KNN", "DWKNN"),
+                           several.ok = TRUE)
 
-
-
-  # calculate the weights for train model
-  if (weighted_jointClassification | (weighted_ensemble & is.null(weights))) {
-    weightsCal = TRUE
-  } else {
-    weightsCal = FALSE
-  }
+    similarity <- match.arg(similarity, c("pearson",  "spearman",
+                                          "cosine", "jaccard", "kendall",
+                                          "weighted_rank","manhattan"),
+                            several.ok = TRUE)
+    cutoff_method <- match.arg(cutoff_method, c("dynamic", "static"))
 
 
 
-  ### train_scClassify
-  trainRes <- train_scClassify(exprsMat_train,
-                               cellTypes_train,
-                               tree = tree,
-                               selectFeatures = selectFeatures,
-                               topN = topN,
-                               hopach_kmax = hopach_kmax,
-                               pSig = pSig,
-                               cellType_tree = cellType_tree,
-                               weightsCal = weightsCal,
-                               parallel = parallel,
-                               BPPARAM = BPPARAM,
-                               verbose = verbose,
-                               k = k,
-                               prob_threshold = prob_threshold,
-                               cor_threshold_static = cor_threshold_static,
-                               cor_threshold_high = cor_threshold_high,
-                               algorithm = algorithm,
-                               similarity = similarity,
-                               cutoff_method = cutoff_method
-                               )
+    # To check if need to run weighted ensemble learning
 
+    if ((length(selectFeatures) > 1 | length(algorithm) > 1 |
+         length(similarity) > 1) ) {
+        if (weighted_ensemble) {
+            weighted_ensemble <- TRUE
+            ensemble <- TRUE
 
+            if (verbose) {
+                cat("Performing weighted ensemble learning... \n")
+            }
 
+        } else {
+            weighted_ensemble <- FALSE
+            ensemble <- TRUE
 
-
-  if (verbose) {
-    cat("Predicting using followings parameter combinations: \n")
-    print(ensemble_methods)
-  }
-
-  ### if there are multiple testing datasets
-  if (verbose) {
-    cat("=====================  Start classifying on test dataset  ========================== \n")
-  }
-
-  if ("list" %in% is(exprsMat_test)) {
-    testRes <- list()
-
-    for (testDataset_idx in seq_len(length(exprsMat_test))) {
-
-      if (verbose) {
-        cat("Predicting: ")
-        print(names(exprsMat_test)[testDataset_idx])
-      }
-
-      if ("list" %in% is(exprsMat_train)) {
-        # for the case there are multiple training datasets
-        #
-        predictRes <- list()
-
-
-        for (train_list_idx in seq_len(length(exprsMat_train))) {
-
-          if (verbose) {
-            cat("Training using ")
-            cat(names(exprsMat_train)[train_list_idx], "\n")
-          }
-
-          predictRes[[train_list_idx]] <- predict_scClassify(exprsMat_test = exprsMat_test[[testDataset_idx]],
-                                                             trainRes  = trainRes[[train_list_idx]],
-                                                             cellTypes_test = cellTypes_test[[testDataset_idx]],
-                                                             k = k,
-                                                             prob_threshold = prob_threshold,
-                                                             cor_threshold_static = cor_threshold_static,
-                                                             cor_threshold_high = cor_threshold_high,
-                                                             algorithm = algorithm,
-                                                             features = selectFeatures,
-                                                             similarity = similarity,
-                                                             cutoff_method = cutoff_method,
-                                                             weighted_ensemble = weighted_ensemble,
-                                                             weights = weights,
-                                                             parallel = parallel,
-                                                             BPPARAM = BPPARAM,
-                                                             verbose = verbose)
+            if (verbose) {
+                cat("Performing unweighted ensemble learning... \n")
+            }
 
         }
-        names(predictRes) <- paste("Trained_by", names(trainRes), sep = "_")
-      }else {
-        predictRes <- predict_scClassify(exprsMat_test = exprsMat_test[[testDataset_idx]],
-                                         trainRes  = trainRes,
-                                         cellTypes_test = cellTypes_test[[testDataset_idx]],
-                                         k = k,
-                                         prob_threshold = prob_threshold,
-                                         cor_threshold_static = cor_threshold_static,
-                                         cor_threshold_high = cor_threshold_high,
-                                         algorithm = algorithm,
-                                         features = selectFeatures,
-                                         similarity = similarity,
-                                         cutoff_method = cutoff_method,
-                                         weighted_ensemble = weighted_ensemble,
-                                         weights = weights,
-                                         parallel = parallel,
-                                         BPPARAM = BPPARAM,
-                                         verbose = verbose)
-
-
-      }
-
-      testRes[[testDataset_idx]] <- predictRes
-    }
-
-    names(testRes) <- names(exprsMat_test)
-  }else{
-    # else only one dataset as a matrix in the test
-    if ("list" %in% is(exprsMat_train)) {
-      # for the case there are multiple training datasets
-      #
-      testRes <- list()
-      for (train_list_idx in seq_len(length(exprsMat_train))) {
+    } else {
+        weighted_ensemble <- FALSE
+        ensemble <- FALSE
 
         if (verbose) {
-          cat("Training using ")
-          cat(names(exprsMat_train)[train_list_idx], "\n")
+            cat("Ensemble learning is disabled... \n")
         }
-        testRes[[train_list_idx]] <- predict_scClassify(exprsMat_test = exprsMat_test,
-                                                        trainRes  = trainRes[[train_list_idx]],
-                                                        cellTypes_test = cellTypes_test,
-                                                        k = k,
-                                                        prob_threshold = prob_threshold,
-                                                        cor_threshold_static = cor_threshold_static,
-                                                        cor_threshold_high = cor_threshold_high,
-                                                        algorithm = algorithm,
-                                                        features = selectFeatures,
-                                                        similarity = similarity,
-                                                        cutoff_method = cutoff_method,
-                                                        weighted_ensemble = weighted_ensemble,
-                                                        weights = weights,
-                                                        parallel = parallel,
-                                                        BPPARAM = BPPARAM,
-                                                        verbose = verbose)
 
-      }
-      names(testRes) <- paste("Trained_by", names(trainRes), sep = "_")
-    }else {
-      predictRes <- predict_scClassify(exprsMat_test = exprsMat_test,
-                                       trainRes  = trainRes,
-                                       cellTypes_test = cellTypes_test,
-                                       k = k,
-                                       prob_threshold = prob_threshold,
-                                       cor_threshold_static = cor_threshold_static,
-                                       cor_threshold_high = cor_threshold_high,
-                                       algorithm = algorithm,
-                                       features = selectFeatures,
-                                       similarity = similarity,
-                                       cutoff_method = cutoff_method,
-                                       weighted_ensemble = weighted_ensemble,
-                                       weights = weights,
-                                       parallel = parallel,
-                                       BPPARAM = BPPARAM,
-                                       verbose = verbose)
-      testRes <- list(test = predictRes)
     }
 
+    # To check if need to run weighted joint classification
 
-
-
-  }
-
-
-  if (returnList) {
-    return(list(testRes = testRes, trainRes = trainRes))
-  } else {
-
-    if ("list" %in% is(exprsMat_train)) {
-      trainClassList <- list()
-      for (train_list_idx in seq_len(length(trainRes))) {
-        trainClassList[[train_list_idx]] <- scClassifyTrainModel(
-          name = names(trainRes)[train_list_idx],
-          cellTypeTree = trainRes[[train_list_idx]]$cutree_list,
-          cellTypeTrain = as.character(trainRes[[train_list_idx]]$cellTypes_train),
-          features = names(trainRes[[train_list_idx]]$hierarchyKNNRes),
-          model = trainRes[[train_list_idx]]$hierarchyKNNRes,
-          modelweights = trainRes[[train_list_idx]]$modelweights,
-          metaData = S4Vectors::DataFrame())
-
-      }
-      trainClassList <- scClassifyTrainModelList(trainClassList)
+    if ("list" %in% is(exprsMat_train) &
+        length(exprsMat_train) > 1 &
+        weighted_jointClassification) {
+        cat("Performing weighted joint classification \n")
+        weighted_jointClassification <- TRUE
     } else {
-      trainClassList <- scClassifyTrainModel(
-        name = "training",
-        cellTypeTree = trainRes$cutree_list,
-        cellTypeTrain = as.character(trainRes$cellTypes_train),
-        features = names(trainRes$hierarchyKNNRes),
-        model = trainRes$hierarchyKNNRes,
-        modelweights = trainRes$modelweights,
-        metaData = S4Vectors::DataFrame())
+        weighted_jointClassification <- FALSE
     }
 
 
-    return(list(testRes = testRes, trainRes = trainClassList))
+
+    ensemble_methods <- as.matrix(expand.grid(similarity = similarity,
+                                              algorithm = algorithm,
+                                              features = selectFeatures))
+
+    if (!is.null(weights)) {
+        if (length(weights) != nrow(ensemble_methods)) {
+            stop("The length of weights is not equal to
+           the number of combination of ensemble methods")
+        }
+    }
 
 
-  }
+
+    # calculate the weights for train model
+    if (weighted_jointClassification | (weighted_ensemble & is.null(weights))) {
+        weightsCal = TRUE
+    } else {
+        weightsCal = FALSE
+    }
+
+
+
+    ### train_scClassify
+    trainRes <- train_scClassify(exprsMat_train,
+                                 cellTypes_train,
+                                 tree = tree,
+                                 selectFeatures = selectFeatures,
+                                 topN = topN,
+                                 hopach_kmax = hopach_kmax,
+                                 pSig = pSig,
+                                 cellType_tree = cellType_tree,
+                                 weightsCal = weightsCal,
+                                 parallel = parallel,
+                                 BPPARAM = BPPARAM,
+                                 verbose = verbose,
+                                 k = k,
+                                 prob_threshold = prob_threshold,
+                                 cor_threshold_static = cor_threshold_static,
+                                 cor_threshold_high = cor_threshold_high,
+                                 algorithm = algorithm,
+                                 similarity = similarity,
+                                 cutoff_method = cutoff_method
+    )
+
+
+
+
+
+    if (verbose) {
+        cat("Predicting using followings parameter combinations: \n")
+        print(ensemble_methods)
+    }
+
+    ### if there are multiple testing datasets
+    if (verbose) {
+        cat("==================  Start classifying on test dataset  ==== \n")
+    }
+
+    if ("list" %in% is(exprsMat_test)) {
+        testRes <- list()
+
+        for (testDataset_idx in seq_len(length(exprsMat_test))) {
+
+            if (verbose) {
+                cat("Predicting: ")
+                print(names(exprsMat_test)[testDataset_idx])
+            }
+
+            if ("list" %in% is(exprsMat_train)) {
+                # for the case there are multiple training datasets
+                #
+                predictRes <- list()
+
+
+                for (train_list_idx in seq_len(length(exprsMat_train))) {
+
+                    if (verbose) {
+                        cat("Training using ")
+                        cat(names(exprsMat_train)[train_list_idx], "\n")
+                    }
+
+                    predictRes[[train_list_idx]] <- predict_scClassify(exprsMat_test = exprsMat_test[[testDataset_idx]],
+                                                                       trainRes  = trainRes[[train_list_idx]],
+                                                                       cellTypes_test = cellTypes_test[[testDataset_idx]],
+                                                                       k = k,
+                                                                       prob_threshold = prob_threshold,
+                                                                       cor_threshold_static = cor_threshold_static,
+                                                                       cor_threshold_high = cor_threshold_high,
+                                                                       algorithm = algorithm,
+                                                                       features = selectFeatures,
+                                                                       similarity = similarity,
+                                                                       cutoff_method = cutoff_method,
+                                                                       weighted_ensemble = weighted_ensemble,
+                                                                       weights = weights,
+                                                                       parallel = parallel,
+                                                                       BPPARAM = BPPARAM,
+                                                                       verbose = verbose)
+
+                }
+                names(predictRes) <- paste("Trained_by",
+                                           names(trainRes), sep = "_")
+
+
+                jointRes <- getJointRes(predictRes, trainRes)
+
+                rownames(jointRes) <- colnames(exprsMat_test)
+
+
+                predictRes$jointRes <- jointRes
+
+
+            }else {
+                predictRes <- predict_scClassify(exprsMat_test = exprsMat_test[[testDataset_idx]],
+                                                 trainRes  = trainRes,
+                                                 cellTypes_test = cellTypes_test[[testDataset_idx]],
+                                                 k = k,
+                                                 prob_threshold = prob_threshold,
+                                                 cor_threshold_static = cor_threshold_static,
+                                                 cor_threshold_high = cor_threshold_high,
+                                                 algorithm = algorithm,
+                                                 features = selectFeatures,
+                                                 similarity = similarity,
+                                                 cutoff_method = cutoff_method,
+                                                 weighted_ensemble = weighted_ensemble,
+                                                 weights = weights,
+                                                 parallel = parallel,
+                                                 BPPARAM = BPPARAM,
+                                                 verbose = verbose)
+
+
+            }
+
+            testRes[[testDataset_idx]] <- predictRes
+        }
+
+        names(testRes) <- names(exprsMat_test)
+    }else{
+        # else only one dataset as a matrix in the test
+        if ("list" %in% is(exprsMat_train)) {
+            # for the case there are multiple training datasets
+            #
+            testRes <- list()
+            for (train_list_idx in seq_len(length(exprsMat_train))) {
+
+                if (verbose) {
+                    cat("Training using ")
+                    cat(names(exprsMat_train)[train_list_idx], "\n")
+                }
+                testRes[[train_list_idx]] <- predict_scClassify(exprsMat_test = exprsMat_test,
+                                                                trainRes  = trainRes[[train_list_idx]],
+                                                                cellTypes_test = cellTypes_test,
+                                                                k = k,
+                                                                prob_threshold = prob_threshold,
+                                                                cor_threshold_static = cor_threshold_static,
+                                                                cor_threshold_high = cor_threshold_high,
+                                                                algorithm = algorithm,
+                                                                features = selectFeatures,
+                                                                similarity = similarity,
+                                                                cutoff_method = cutoff_method,
+                                                                weighted_ensemble = weighted_ensemble,
+                                                                weights = weights,
+                                                                parallel = parallel,
+                                                                BPPARAM = BPPARAM,
+                                                                verbose = verbose)
+
+            }
+
+
+            names(testRes) <- paste("Trained_by", names(trainRes), sep = "_")
+
+            jointRes <- getJointRes(testRes, trainRes)
+
+            rownames(jointRes) <- colnames(exprsMat_test)
+
+
+            testRes$jointRes <- jointRes
+
+        }else {
+            predictRes <- predict_scClassify(exprsMat_test = exprsMat_test,
+                                             trainRes  = trainRes,
+                                             cellTypes_test = cellTypes_test,
+                                             k = k,
+                                             prob_threshold = prob_threshold,
+                                             cor_threshold_static = cor_threshold_static,
+                                             cor_threshold_high = cor_threshold_high,
+                                             algorithm = algorithm,
+                                             features = selectFeatures,
+                                             similarity = similarity,
+                                             cutoff_method = cutoff_method,
+                                             weighted_ensemble = weighted_ensemble,
+                                             weights = weights,
+                                             parallel = parallel,
+                                             BPPARAM = BPPARAM,
+                                             verbose = verbose)
+            testRes <- list(test = predictRes)
+        }
+
+
+
+
+    }
+
+
+    if (returnList) {
+        return(list(testRes = testRes, trainRes = trainRes))
+    } else {
+
+        if ("list" %in% is(exprsMat_train)) {
+            trainClassList <- list()
+            for (train_list_idx in seq_len(length(trainRes))) {
+                trainClassList[[train_list_idx]] <- .scClassifyTrainModel(
+                    name = names(trainRes)[train_list_idx],
+                    cellTypeTree = trainRes[[train_list_idx]]$cutree_list,
+                    cellTypeTrain = as.character(trainRes[[train_list_idx]]$cellTypes_train),
+                    features = names(trainRes[[train_list_idx]]$hierarchyKNNRes),
+                    model = trainRes[[train_list_idx]]$hierarchyKNNRes,
+                    modelweights = trainRes[[train_list_idx]]$modelweights,
+                    metaData = S4Vectors::DataFrame())
+
+            }
+            trainClassList <- scClassifyTrainModelList(trainClassList)
+        } else {
+            trainClassList <- .scClassifyTrainModel(
+                name = "training",
+                cellTypeTree = trainRes$cutree_list,
+                cellTypeTrain = as.character(trainRes$cellTypes_train),
+                features = names(trainRes$hierarchyKNNRes),
+                model = trainRes$hierarchyKNNRes,
+                modelweights = trainRes$modelweights,
+                metaData = S4Vectors::DataFrame())
+        }
+
+
+        return(list(testRes = testRes, trainRes = trainClassList))
+
+
+    }
 
 
 }

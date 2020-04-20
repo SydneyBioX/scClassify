@@ -21,6 +21,6 @@ To plot cell type tree
 
 data("trainClassExample_xin")
 
-plotCellTypeTree(slot(trainClassExample_xin, "cellTypeTree"))
+plotCellTypeTree(cellTypeTree(trainClassExample_xin))
 
 }

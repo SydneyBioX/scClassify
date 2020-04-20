@@ -7,6 +7,15 @@
 \format{
 An object of class \code{list} of length 4.
 }
+\source{
+Wang YJ, Schug J, Won K-J, Liu C, Naji A, Avrahami D, Golson ML &
+Kaestner KH (2016) Single cell transcriptomics of the human endocrine
+pancreas. Diabetes: db160405
+
+Xin Y, Kim J, Okamoto H, Ni M, Wei Y, Adler C, Murphy AJ, Yancopoulos GD,
+Lin C & Gromada J (2016) RNA sequencing of single human islet cells reveals
+type 2 diabetes genes. Cell Metab. 24: 608–615
+}
 \usage{
 data(scClassify_example, package = 'scClassify')
 }

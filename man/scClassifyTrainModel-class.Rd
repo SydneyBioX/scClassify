@@ -16,9 +16,11 @@ An S4 class to stored training model for scClassify
 
 \item{\code{cellTypeTree}}{A list indicate a cell type tree}
 
-\item{\code{features}}{A vector of character indicates the features that are trained for this data}
+\item{\code{features}}{A vector of character indicates the
+features that are trained for this data}
 
-\item{\code{model}}{A list stored the training model, including the features that are selected
+\item{\code{model}}{A list stored the training model,
+including the features that are selected
 and the cell expression matrix that are used for training}
 
 \item{\code{modelweights}}{A vector of numeric indicates the weights of each model}

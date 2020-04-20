@@ -1,13 +1,13 @@
 Package: scClassify
 Type: Package
 Title: scClassify: single-cell Hierarchical Classification 
-Version: 0.99.2
+Version: 0.99.3
 Author: Yingxin Lin
 Maintainer: Yingxin Lin <yingxin.lin@sydney.edu.au>
-Description: Classification of single cells via cell-type hierarchies based on ensemble learning and sample size estimation.
+Description: scClassify is a multiscale classification framework for single-cell RNA-seq data based on ensemble learning and cell type hierarchies, enabling sample size estimation required for accurate cell type classification and joint classification of cells using multiple references.
 License: GPL-3
 Encoding: UTF-8
-LazyData: true
+LazyData: false
 Depends: R (>= 4.0)
 Imports:
     S4Vectors,
@@ -32,6 +32,8 @@ Imports:
 RoxygenNote: 7.1.0
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    BiocStyle
 VignetteBuilder: knitr
 biocViews: SingleCell, GeneExpression, Classification
+BugReports: https://github.com/SydneyBioX/scClassify/issues

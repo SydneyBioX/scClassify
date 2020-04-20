@@ -7,6 +7,11 @@
 \format{
 An object of class \code{scClassifyTrainModel} of length 1.
 }
+\source{
+Xin Y, Kim J, Okamoto H, Ni M, Wei Y, Adler C, Murphy AJ, Yancopoulos GD,
+Lin C & Gromada J (2016) RNA sequencing of single human islet cells reveals
+type 2 diabetes genes. Cell Metab. 24: 608–615
+}
 \usage{
 data(trainClassExample_xin, package = 'scClassify')
 }

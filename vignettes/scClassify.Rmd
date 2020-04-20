@@ -1,26 +1,62 @@
 ---
 title: "scClassify Model Building and Prediction"
-output: rmarkdown::html_vignette
+author:
+- name: Yingxin Lin
+  affiliation: 
+  - School of Mathematics and Statistics, The University of Sydney, Australia
+  - Charles Perkins Centre, The University of Sydney, Australia
+date: "`r BiocStyle::doc_date()`"
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
 vignette: >
   %\VignetteIndexEntry{scClassify}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
+  
+  
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+    collapse = TRUE,
+    warning = FALSE,
+    message = FALSE,
+    comment = "#>"
 )
 ```
 
+
+
+
+
 # Introduction
 
-A common application of single-cell RNA sequencing (RNA-seq) data is to identify discrete cell types. To take advantage of the large collection of well-annotated scRNA-seq datasets, `scClassify` package implements a set of methods to perform accurate cell type classification based on *ensemble learning* and *sample size calculation*. This vignette demonstrates the usage of `scClassify`, providing a pithy description of each method with workable examples. 
+A common application of single-cell RNA sequencing (RNA-seq) data is 
+to identify discrete cell types. To take advantage of the large collection 
+of well-annotated scRNA-seq datasets, `scClassify` package implements 
+a set of methods to perform accurate cell type classification based on 
+*ensemble learning* and *sample size calculation*. 
+This vignette demonstrates the usage of `scClassify`, 
+providing a pithy description of each method with workable examples. 
+
+First, install `scClassify` via `BiocManager`.
+
+```{r eval = FALSE}
+# installation of scClassify
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+}
+BiocManager::install("scClassify")
+```
 
 # Setting up the data
 
-We assume that you have *log-transformed* (size-factor normalized) matrices where each row is a gene and each column a cell for a reference dataset and a query dataset. For demonstration purposes, we will take a subset of single-cell pancreas datasets from two independent studies (Wang et al., and Xin et al.).
+We assume that you have *log-transformed* (size-factor normalized) matrices 
+where each row is a gene and each column a cell for a reference dataset 
+and a query dataset. For demonstration purposes, we will take a subset of 
+single-cell pancreas datasets from two independent studies 
+(Wang et al., and Xin et al.).
 
 
 ```{r setup}
@@ -35,17 +71,17 @@ exprsMat_wang_subset <- as(exprsMat_wang_subset, "dgCMatrix")
 ```
 
 
-The original cell type annotations and compositions of the example datasets can be easily accessed as shown below.
+The original cell type annotations and compositions of the example datasets 
+can be easily accessed as shown below.
 
 
 ```{r}
-cat("Cell type composition of Xin et al. data")
 table(xin_cellTypes)
-cat("Cell type composition of Wang et al. data")
 table(wang_cellTypes)
 ```
 
-We can see that Xin et al. data only have 4 cell types, while Wang et al. has 7 cell types.
+We can see that Xin et al. data only have 4 cell types, 
+while Wang et al. has 7 cell types.
 
 
 # scClassify
@@ -54,19 +90,23 @@ We can see that Xin et al. data only have 4 cell types, while Wang et al. has 7 
 
 ## Non-ensemble scClassify
 
-We first perform non-ensemble `scClassify` by using Xin et al. as our reference dataset and Wang et al. data as ur query data. We use `WKNN` as the KNN algorithm, `DE` (differential expression genes) as the gene selection method, and lastly `pearson` as the similarity calculation method.
+We first perform non-ensemble `scClassify` by using Xin et al. 
+as our reference dataset and Wang et al. data as ur query data. 
+We use `WKNN` as the KNN algorithm, `DE` (differential expression genes) 
+as the gene selection method, and lastly `pearson` as 
+the similarity calculation method.
 
 ```{r}
 scClassify_res <- scClassify(exprsMat_train = exprsMat_xin_subset,
-                      cellTypes_train = xin_cellTypes,
-                      exprsMat_test = list(wang = exprsMat_wang_subset),
-                      cellTypes_test = list(wang = wang_cellTypes),
-                      tree = "HOPACH",
-                      algorithm = "WKNN",
-                      selectFeatures = c("limma"),
-                      similarity = c("pearson"),
-                      returnList = FALSE,
-                      verbose = FALSE)
+                             cellTypes_train = xin_cellTypes,
+                             exprsMat_test = list(wang = exprsMat_wang_subset),
+                             cellTypes_test = list(wang = wang_cellTypes),
+                             tree = "HOPACH",
+                             algorithm = "WKNN",
+                             selectFeatures = c("limma"),
+                             similarity = c("pearson"),
+                             returnList = FALSE,
+                             verbose = FALSE)
 
 ```
 
@@ -74,7 +114,7 @@ We can check the cell type tree generated by the reference data:
 
 ```{r warning=FALSE}
 scClassify_res$trainRes
-plotCellTypeTree(scClassify_res$trainRes@cellTypeTree)
+plotCellTypeTree(cellTypeTree(scClassify_res$trainRes))
 ```
 
 Noted that `scClassify_res$trainRes` is a `scClassifyTrainModel` class.
@@ -92,12 +132,20 @@ table(scClassify_res$testRes$wang$pearson_WKNN_limma$predRes, wang_cellTypes)
 ## Ensemble Classify
 
 
-We next perform ensemble `scClassify` by using Xin et al. as our reference dataset and Wang et al. data as our query data. We use `WKNN` as the KNN algorithm, `DE` as the gene selection method, and `pearson` and `spearman` as the similarity calculation methods. Thus, we will generate two combinations of gene selection models and similarity metrics as training classifiers: 
+We next perform ensemble `scClassify` by using Xin et al. 
+as our reference dataset and Wang et al. data as our query data. 
+We use `WKNN` as the KNN algorithm, `DE` as the gene selection method, 
+and `pearson` and `spearman` as the similarity calculation methods. 
+Thus, we will generate two combinations of gene selection models and 
+similarity metrics as training classifiers: 
 
 1. `WKNN` + `DE` + `pearson`
 2. `WKNN` + `DE` + `spearman`
 
-Here, we will weight these two classifiers equally by setting `weighted_ensemble = FALSE`. By default this is set as `TRUE`, so each base classifier will be weighted by the accuracy rates trained in the reference data.
+Here, we will weight these two classifiers equally by setting 
+`weighted_ensemble = FALSE`. By default this is set as `TRUE`, 
+so each base classifier will be weighted by the accuracy rates trained 
+in the reference data.
 
 ```{r}
 scClassify_res_ensemble <- scClassify(exprsMat_train = exprsMat_xin_subset,
@@ -135,16 +183,20 @@ table(scClassify_res_ensemble$testRes$wang$ensembleRes$cellTypes,
 
 # Train your own model
 
-You can also train your own model `scClassifyTrainModel` using `train_scClassify()`. Note that by setting `weightsCal = TRUE`, we will calculate the training error of the reference data as the weights for the individual classifiers.
+You can also train your own model `scClassifyTrainModel` using 
+`train_scClassify()`. Note that by setting `weightsCal = TRUE`,
+we will calculate the training error of the reference data as 
+the weights for the individual classifiers.
 
-Here, we illustrate the training function with gene selection methods based on differential expression ("limma") and biomodal distribution ("BI").
+Here, we illustrate the training function with gene selection methods 
+based on differential expression ("limma") and biomodal distribution ("BI").
 
 ```{r}
 trainClass <- train_scClassify(exprsMat_train = exprsMat_xin_subset,
-                 cellTypes_train = xin_cellTypes,
-                 selectFeatures = c("limma", "BI"),
-                 returnList = FALSE
-                 )
+                               cellTypes_train = xin_cellTypes,
+                               selectFeatures = c("limma", "BI"),
+                               returnList = FALSE
+)
 ```
 
 

@@ -24,33 +24,41 @@ predict_scClassify(
 )
 }
 \arguments{
-\item{exprsMat_test}{A list or a matrix indicates the log-transformed expression matrices
-of the query datasets}
+\item{exprsMat_test}{A list or a matrix indicates the log-transformed
+expression matrices of the query datasets}
 
-\item{trainRes}{A `scClassifyTrainModel` or a `list` indicates scClassify trained model}
+\item{trainRes}{A `scClassifyTrainModel` or a `list` indicates
+scClassify trained model}
 
-\item{cellTypes_test}{A list or a vector indicates cell types of the qurey datasets (Optional).}
+\item{cellTypes_test}{A list or a vector indicates cell types
+of the qurey datasets (Optional).}
 
 \item{k}{An integer indicates the number of neighbour}
 
-\item{prob_threshold}{A numeric indicates the probability threshold for KNN/WKNN/DWKNN.}
+\item{prob_threshold}{A numeric indicates the probability threshold
+for KNN/WKNN/DWKNN.}
 
-\item{cor_threshold_static}{A numeric indicates the static correlation threshold.}
+\item{cor_threshold_static}{A numeric indicates the static
+correlation threshold.}
 
-\item{cor_threshold_high}{A numeric indicates the highest correlation threshold}
+\item{cor_threshold_high}{A numeric indicates the highest
+correlation threshold}
 
-\item{features}{A vector indicates the gene selection method, set as "limma" by default.
+\item{features}{A vector indicates the gene selection method,
+set as "limma" by default.
 This should be one or more of "limma", "DV", "DD", "chisq", "BI".}
 
-\item{algorithm}{A vector indicates the KNN method that are used, set as "WKNN" by default.
+\item{algorithm}{A vector indicates the KNN method that are used,
+set as "WKNN" by default.
 This should be one or more of "WKNN", "KNN", "DWKNN".}
 
-\item{similarity}{A vector indicates the similarity measure that are used, set as "pearson" by default.
-This should be one or more of "pearson",  "spearman", "cosine", "jaccard", "kendall", "binomial",
-"weighted_rank","manhattan"}
+\item{similarity}{A vector indicates the similarity measure that are used,
+set as "pearson" by default.
+This should be one or more of "pearson",  "spearman", "cosine",
+"jaccard", "kendall", "binomial", "weighted_rank","manhattan"}
 
-\item{cutoff_method}{A vector indicates the method to cutoff the correlation distribution.
-Set as "dynamic" by default.}
+\item{cutoff_method}{A vector indicates the method to cutoff the
+correlation distribution. Set as "dynamic" by default.}
 
 \item{weighted_ensemble}{A logical input indicates in ensemble learning,
 whether the results is combined by a
@@ -63,7 +71,8 @@ weighted score for each base classifier.}
 \item{BPPARAM}{A \code{BiocParallelParam} class object
 from the \code{BiocParallel} package is used. Default is SerialParam().}
 
-\item{verbose}{A logical input indicates whether the intermediate steps will be printed}
+\item{verbose}{A logical input indicates whether the intermediate steps
+will be printed}
 }
 \value{
 list of results

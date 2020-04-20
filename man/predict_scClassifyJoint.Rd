@@ -63,6 +63,28 @@ list of results
 \description{
 Testing scClassify model (joint training)
 }
+\examples{
+data("scClassify_example")
+wang_cellTypes <- scClassify_example$wang_cellTypes
+exprsMat_wang_subset <- scClassify_example$exprsMat_wang_subset
+data("trainClassExample_xin")
+data("trainClassExample_wang")
+
+trainClassExampleJoint <- scClassifyTrainModelList(trainClassExample_wang,
+trainClassExample_xin)
+
+pred_res <- predict_scClassifyJoint(exprsMat_test = exprsMat_wang_subset,
+trainRes = trainClassExampleJoint,
+cellTypes_test = wang_cellTypes,
+algorithm = "WKNN",
+features = c("limma"),
+similarity = c("pearson"),
+prob_threshold = 0.7,
+verbose = FALSE)
+
+table(pred_res_joint$jointRes$cellTypes, wang_cellTypes)
+
+}
 \author{
 Yingxin Lin
 }

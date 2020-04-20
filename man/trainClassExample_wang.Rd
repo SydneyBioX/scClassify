@@ -7,6 +7,11 @@
 \format{
 An object of class \code{scClassifyTrainModel} of length 1.
 }
+\source{
+Wang YJ, Schug J, Won K-J, Liu C, Naji A, Avrahami D, Golson ML &
+Kaestner KH (2016) Single cell transcriptomics of the human endocrine
+pancreas. Diabetes: db160405
+}
 \usage{
 data(trainClassExample_wang, package = 'scClassify')
 }

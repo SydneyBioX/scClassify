@@ -2,7 +2,8 @@
 % Please edit documentation in R/learningCurve.R
 \name{getN}
 \alias{getN}
-\title{Function to get the required N given by the accuracy and the learning curve model}
+\title{Function to get the required N given by the accuracy and
+the learning curve model}
 \usage{
 getN(res, acc = 0.9)
 }
@@ -15,7 +16,8 @@ getN(res, acc = 0.9)
 sample size that are required
 }
 \description{
-Function to get the required N given by the accuracy and the learning curve model
+Function to get the required N given by the accuracy and
+the learning curve model
 }
 \examples{
 set.seed(2019)

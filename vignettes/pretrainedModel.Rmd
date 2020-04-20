@@ -1,15 +1,23 @@
 ---
 title: "Performing scClassify using pretrained model"
-output: rmarkdown::html_vignette
+author:
+- name: Yingxin Lin
+  affiliation: School of Mathematics and Statistics, The University of Sydney, Australia
+date: "`r BiocStyle::doc_date()`"
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
 vignette: >
   %\VignetteIndexEntry{pretrainedModel}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
-
-This vignette will provide an example showing how one can use a pretrained model to predict cell types.
-
+  
+  
+  
+  
+  
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -21,9 +29,42 @@ knitr::opts_chunk$set(
 
 
 
+# Introduction
+
+A common application of single-cell RNA sequencing (RNA-seq) data is 
+to identify discrete cell types. To take advantage of the large collection 
+of well-annotated scRNA-seq datasets, `scClassify` package implements 
+a set of methods to perform accurate cell type classification based on 
+*ensemble learning* and *sample size calculation*. 
+
+This vignette will provide an example showing how users can use a pretrained 
+model of scClassify to predict cell types. A pretrained model is a 
+`scClassifyTrainModel` object  returned by `train_scClassify()`. 
+A list of pretrained model can be found in
+https://sydneybiox.github.io/scClassify/index.html.
+
+
+First,  install `scClassify`, install `BiocManager` and use 
+`BiocManager::install` to install `scClassify` package.
+
+```{r eval = FALSE}
+# installation of scClassify
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
+}
+BiocManager::install("scClassify")
+```
+
+
+
+
+
 # Setting up the data
 
-We assume that you have *log-transformed* (size-factor normalized) matrices as query datasets, where each row refers to a gene and each column a cell. For demonstration purposes, we will take a subset of single-cell pancreas datasets from one independent study (Wang et al.).
+We assume that you have *log-transformed* (size-factor normalized) matrices as 
+query datasets, where each row refers to a gene and each column a cell. 
+For demonstration purposes, we will take a subset of single-cell pancreas 
+datasets from one independent study (Wang et al.).
 
 
 ```{r setup}
@@ -34,7 +75,8 @@ exprsMat_wang_subset <- scClassify_example$exprsMat_wang_subset
 exprsMat_wang_subset <- as(exprsMat_wang_subset, "dgCMatrix")
 ```
 
-Here, we load our pretrained model using a subset of the Xin et al. human pancreas dataset as our reference data.
+Here, we load our pretrained model using a subset of the Xin et al. 
+human pancreas dataset as our reference data.
 
 First, let us check basic information relating to our pretrained model. 
 
@@ -43,23 +85,28 @@ data("trainClassExample_xin")
 trainClassExample_xin
 ```
 
-In this pretrained model, we have selected the genes based on Differential Expression using limma. To check the genes that are available in the pretrained model: 
+In this pretrained model, we have selected the genes based on Differential 
+Expression using limma. To check the genes that are available 
+in the pretrained model: 
 
 
 ```{r}
-trainClassExample_xin@features
+features(trainClassExample_xin)
 ```
 
 
 We can also visualise the cell type tree of the reference data.
 
 ```{r}
-plotCellTypeTree(trainClassExample_xin@cellTypeTree)
+plotCellTypeTree(cellTypeTree(trainClassExample_xin))
 ```
 
 # Running scClassify
 
-Next, we perform `predict_scClassify` with our pretrained model `trainRes = trainClassExample` to predict the cell types of our query data matrix `exprsMat_wang_subset_sparse`. Here, we used `pearson` and `spearman` as similarity metrics.
+Next, we perform `predict_scClassify` with our pretrained model 
+`trainRes = trainClassExample` to predict the cell types of our 
+query data matrix `exprsMat_wang_subset_sparse`. Here, 
+we used `pearson` and `spearman` as similarity metrics.
 
 ```{r}
 pred_res <- predict_scClassify(exprsMat_test = exprsMat_wang_subset,
@@ -72,7 +119,9 @@ pred_res <- predict_scClassify(exprsMat_test = exprsMat_wang_subset,
                                verbose = TRUE)
 ```
 
-Noted that the `cellType_test` is not a required input. For datasets with unknown labels, users can simply leave it as `cellType_test = NULL`.
+Noted that the `cellType_test` is not a required input. 
+For datasets with unknown labels, users can simply leave it 
+as `cellType_test = NULL`.
 
 
 
@@ -88,6 +137,7 @@ Prediction results for spearman as the similarity metric:
 ```{r}
 table(pred_res$spearman_WKNN_limma$predRes, wang_cellTypes)
 ```
+
 
 
 

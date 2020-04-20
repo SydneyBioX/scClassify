@@ -175,7 +175,7 @@ train_scClassify <- function(exprsMat_train,
     if ("list" %in% is(exprsMat_train)) {
       trainClassList <- list()
       for (train_list_idx in seq_len(length(trainRes))) {
-        trainClassList[[train_list_idx]] <- scClassifyTrainModel(
+        trainClassList[[train_list_idx]] <- .scClassifyTrainModel(
           name = names(trainRes)[train_list_idx],
           cellTypeTree = trainRes[[train_list_idx]]$cutree_list,
           cellTypeTrain = as.character(trainRes[[train_list_idx]]$cellTypes_train),
@@ -187,7 +187,7 @@ train_scClassify <- function(exprsMat_train,
       }
       trainClassList <- scClassifyTrainModelList(trainClassList)
     } else {
-      trainClassList <- scClassifyTrainModel(
+      trainClassList <- .scClassifyTrainModel(
         name = "training",
         cellTypeTree = trainRes$cutree_list,
         cellTypeTrain = as.character(trainRes$cellTypes_train),
@@ -227,7 +227,8 @@ train_scClassifySingle <- function(exprsMat_train,
     stop("rownames of the exprsMat_train is NULL!")
   }
 
-  if (is.null(rownames(exprsMat_train)) | sum(duplicated(colnames(exprsMat_train))) != 0) {
+  if (is.null(rownames(exprsMat_train)) |
+      sum(duplicated(colnames(exprsMat_train))) != 0) {
     stop("colnames of exprsMat_train is NULL or not unique")
   }
 
@@ -261,12 +262,14 @@ train_scClassifySingle <- function(exprsMat_train,
     rownames(t)[seq_len(max(min(50, sum(t$adj.P.Val < 0.001)), 30))]))
 
   if (verbose) {
-    print(paste("Number of genes selected to construct HOPACH tree", length(de)))
+    print(paste("Number of genes selected to construct HOPACH tree",
+                length(de)))
   }
 
 
   if (is.null(cellType_tree)) {
-    # Calculate the centroid matrix for tree construction using selected features
+    # Calculate the centroid matrix for tree
+    # construction using selected features
     centroidMat <- do.call(cbind, lapply(unique(cellTypes_train), function(x)
       Matrix::rowMeans(as.matrix(exprsMat_train[de, cellTypes_train == x]))))
 
@@ -311,7 +314,7 @@ train_scClassifySingle <- function(exprsMat_train,
     for (ft in seq_len(length(selectFeatures))) {
 
       if (verbose) {
-        print(paste("============ selecting features by:", selectFeatures[ft], "============"))
+        print(paste("=== selecting features by:", selectFeatures[ft], "===="))
       }
 
       hierarchyKNNRes[[ft]] <- hierarchyKNNcor(exprsMat_train,
@@ -334,7 +337,7 @@ train_scClassifySingle <- function(exprsMat_train,
 
   if (weightsCal) {
     if (verbose) {
-      cat("=====================  SelfTraining to calculate weight  ========================== \n")
+      cat("=========  SelfTraining to calculate weight  ================= \n")
     }
 
     selfTrainRes <- predict_scClassify(exprsMat_test = exprsMat_train,
@@ -394,7 +397,8 @@ cutree_iterative <- function(hc, depth = 1){
   height_sort <- sort(hc$height, decreasing = TRUE)
   cutree_list <- list()
 
-  for (i in seq_len(sum(height_sort >= height_sort[round(length(height_sort)*depth)]))) {
+  for (i in seq_len(sum(height_sort >=
+                        height_sort[round(length(height_sort)*depth)]))) {
     cutree_list[[i]] <- cutree(hc, h = height_sort[i])
   }
 
@@ -446,7 +450,8 @@ hierarchyKNNcor <- function(exprsMat,
           )
 
           model[[j]] <- list(train = Matrix::t(exprsMat[na.omit(hvg[[j]]),
-                                                        trainIdx, drop = FALSE]),
+                                                        trainIdx,
+                                                        drop = FALSE]),
                              y = as.factor(trainClass))
 
         }else{

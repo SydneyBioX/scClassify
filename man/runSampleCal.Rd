@@ -63,8 +63,8 @@ exprsMat_xin_subset <- scClassify_example$exprsMat_xin_subset
 exprsMat_xin_subset <- as(exprsMat_xin_subset, "dgCMatrix")
 set.seed(2019)
 accMat <- runSampleCal(exprsMat_xin_subset,
-                                   xin_cellTypes,
-                                   n_list = seq(20, 100, 20),
-                                   num_repeat = 5, BPPARAM = BiocParallel::SerialParam())
+xin_cellTypes,
+n_list = seq(20, 100, 20),
+num_repeat = 5, BPPARAM = BiocParallel::SerialParam())
 
 }

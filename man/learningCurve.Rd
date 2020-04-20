@@ -18,7 +18,8 @@ learningCurve(
 )
 }
 \arguments{
-\item{accMat}{Matrix of accuracy rate where column indicate different sample size}
+\item{accMat}{Matrix of accuracy rate where column indicate
+different sample size}
 
 \item{n}{Vector indicates the sample size}
 
