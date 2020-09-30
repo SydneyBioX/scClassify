@@ -260,7 +260,7 @@ train_scClassifySingle <- function(exprsMat_train,
   tt <- doLimma(exprsMat_train, cellTypes_train)
   de <- Reduce(union, lapply(tt, function(t)
     rownames(t)[seq_len(max(min(50, sum(t$adj.P.Val < 0.001)), 30))]))
-
+  de <- na.omit(de)
   if (verbose) {
     print(paste("Number of genes selected to construct HOPACH tree",
                 length(de)))
