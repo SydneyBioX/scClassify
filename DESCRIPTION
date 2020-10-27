@@ -1,7 +1,7 @@
 Package: scClassify
 Type: Package
 Title: scClassify: single-cell Hierarchical Classification 
-Version: 1.2.0
+Version: 1.3.0
 Author: Yingxin Lin
 Maintainer: Yingxin Lin <yingxin.lin@sydney.edu.au>
 Description: scClassify is a multiscale classification framework for single-cell RNA-seq data based on ensemble learning and cell type hierarchies, enabling sample size estimation required for accurate cell type classification and joint classification of cells using multiple references.
