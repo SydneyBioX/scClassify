@@ -196,14 +196,17 @@ predict_scClassify <- function(exprsMat_test,
     if (is.null(weights)) {
         if ("list" %in% is(trainRes)) {
             weights <- trainRes$modelweights
+            weights <- weights[names(predictRes)]
         }
 
         if ("scClassifyTrainModel" %in% is(trainRes)) {
             weights <- modelweights(trainRes)
+            weights <- weights[names(predictRes)]
         }
 
     }
 
+    
     if (verbose) {
         cat("weights for each base method: \n")
         print(weights)

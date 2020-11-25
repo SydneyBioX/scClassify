@@ -7,7 +7,7 @@ os:
   - linux
 
 env:
-  - R_BIOC_VERSION: "3.11"
+  - R_BIOC_VERSION: "3.12"
 
 before_cache: Rscript -e 'remotes::install_cran("pkgdown")'
 
