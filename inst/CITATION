@@ -1,0 +1,23 @@
+citHeader("To cite lubridate in publications use:")
+citEntry(entry = "Article",
+  title        = "scClassify: sample size estimation and multiscale classification of cells using single and multiple reference",
+  author       = personList(as.person("Yingxin Lin"),
+                   as.person("Yue Cao"),
+                   as.person("Hani Jieun Kim"),
+                   as.person("Agus Salim"),
+                   as.person("Terence P Speed"),
+                   as.person("David M Lin"),
+                   as.person("Pengyi Yang"),
+                   as.person("Jean Yee Hwa Yang")),
+  journal      = "Molecular systems biology",
+  year         = "2020",
+  volume       = "16",
+  number       = "6",
+  pages        = "e9389",
+  url          = "https://doi.org/10.15252/msb.20199389",
+  textVersion  =
+  paste("Lin, Yingxin, Yue Cao, Hani Jieun Kim, Agus Salim, Terence P. Speed, David M. Lin, Pengyi Yang, and Jean Yee Hwa Yang. 2020.",
+        "scClassify: sample size estimation and multiscale classification of cells using single and multiple reference.",
+        "Molecular systems biology, 16(6), p.e9389.",
+        "doi: https://doi.org/10.15252/msb.20199389")
+)
