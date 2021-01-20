@@ -77,10 +77,9 @@ If you have any enquiries, especially about performing `scClassify` to classify 
 
 ## Reference
 
-**scClassify: hierarchical classification of cells**
+**scClassify: sample size estimation and multiscale classification of cells using single and multiple reference**
 
-Yingxin Lin, Yue Cao, Hani J Kim, Agus Salim, Terence P. Speed, Dave Lin, Pengyi Yang, Jean Yee Hwa Yang
+YingXin Lin, Yue Cao, Hani Kim, Agus Salim, Terence Speed, David Lin, Pengyi Yang† & Jean Yang†. Molecular Systems Biology, 2020, 16, e9389. [Full Text](https://doi.org/10.15252/msb.20199389) [BioC R package](http://www.bioconductor.org/packages/release/bioc/html/scClassify.html)
 
-bioRxiv 776948; doi: https://doi.org/10.1101/776948
 
 
