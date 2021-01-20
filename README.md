@@ -79,7 +79,7 @@ If you have any enquiries, especially about performing `scClassify` to classify 
 
 **scClassify: sample size estimation and multiscale classification of cells using single and multiple reference**
 
-YingXin Lin, Yue Cao, Hani Kim, Agus Salim, Terence Speed, David Lin, Pengyi Yang† & Jean Yang†. Molecular Systems Biology, 2020, 16, e9389. [Full Text](https://doi.org/10.15252/msb.20199389) [BioC R package](http://www.bioconductor.org/packages/release/bioc/html/scClassify.html)
+Yingxin Lin, Yue Cao, Hani Kim, Agus Salim, Terence Speed, David Lin, Pengyi Yang† & Jean Yang†. ***Molecular Systems Biology***, 2020, 16, e9389. [Full Text](https://doi.org/10.15252/msb.20199389); [BioC R package](http://www.bioconductor.org/packages/release/bioc/html/scClassify.html)
 
 
 
