@@ -282,7 +282,7 @@ predict_scClassify <- function(exprsMat_test,
 
 predict_scClassifyJoint <- function(exprsMat_test,
                                     trainRes,
-                                    cellTypes_test,
+                                    cellTypes_test = NULL,
                                     k = 10,
                                     prob_threshold = 0.7,
                                     cor_threshold_static = 0.5,

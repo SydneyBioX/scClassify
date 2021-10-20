@@ -1,4 +1,4 @@
-citHeader("To cite lubridate in publications use:")
+citHeader("To cite scClassify in publications use:")
 citEntry(entry = "Article",
   title        = "scClassify: sample size estimation and multiscale classification of cells using single and multiple reference",
   author       = personList(as.person("Yingxin Lin"),
