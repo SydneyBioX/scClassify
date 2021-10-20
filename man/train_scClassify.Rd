@@ -32,7 +32,7 @@ This should be one of "HOPACH" and "HC" (using stats::hclust).}
 
 \item{selectFeatures}{A vector indicates the gene selection method,
 set as "limma" by default.
-This should be one or more of "limma", "DV", "DD", "chisq", "BI".}
+This should be one or more of "limma", "DV", "DD", "chisq", "BI", "Cepo".}
 
 \item{topN}{An integer indicates the top number of features that are selected}
 

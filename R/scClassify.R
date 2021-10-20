@@ -7,7 +7,7 @@
 #' @param tree A vector indicates the method to build hierarchical tree, set as "HOPACH" by default.
 #' This should be one of "HOPACH" and "HC" (using hclust).
 #' @param selectFeatures A vector indicates the gene selection method, set as "limma" by default.
-#' This should be one or more of "limma", "DV", "DD", "chisq", "BI".
+#' This should be one or more of "limma", "DV", "DD", "chisq", "BI" and "Cepo".
 #' @param algorithm A vector indicates the KNN method that are used, set as
 #' "WKNN" by default. Thisshould be one or more of "WKNN", "KNN", "DWKNN".
 #' @param similarity A vector indicates the similarity measure that are used,
@@ -147,7 +147,7 @@ scClassify <- function(exprsMat_train = NULL,
 
     tree <- match.arg(tree, c("HOPACH", "HC"), several.ok = FALSE)
     selectFeatures <- match.arg(selectFeatures,
-                                c("limma", "DV", "DD", "chisq", "BI"),
+                                c("limma", "DV", "DD", "chisq", "BI", "Cepo"),
                                 several.ok = TRUE)
 
     algorithm <- match.arg(algorithm,

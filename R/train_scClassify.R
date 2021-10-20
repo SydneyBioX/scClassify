@@ -7,7 +7,7 @@
 #' This should be one of "HOPACH" and "HC" (using stats::hclust).
 #' @param selectFeatures A vector indicates the gene selection method,
 #' set as "limma" by default.
-#' This should be one or more of "limma", "DV", "DD", "chisq", "BI".
+#' This should be one or more of "limma", "DV", "DD", "chisq", "BI", "Cepo".
 #' @param topN An integer indicates the top number of features that are selected
 #' @param hopach_kmax An integer between 1 and 9 specifying the maximum number of
 #' children at each node in the HOPACH tree.
@@ -69,7 +69,7 @@ train_scClassify <- function(exprsMat_train,
 
   # Matching the argument of feature selection method
   selectFeatures <- match.arg(selectFeatures,
-                              c("limma", "DV", "DD", "chisq", "BI"),
+                              c("limma", "DV", "DD", "chisq", "BI", "Cepo"),
                               several.ok = TRUE)
 
 
@@ -247,7 +247,7 @@ train_scClassifySingle <- function(exprsMat_train,
 
   # Matching the argument of feature selection method
   selectFeatures <- match.arg(selectFeatures,
-                              c("limma", "DV", "DD", "chisq", "BI"),
+                              c("limma", "DV", "DD", "chisq", "BI", "Cepo"),
                               several.ok = TRUE)
 
 
@@ -424,7 +424,7 @@ hierarchyKNNcor <- function(exprsMat,
                             topN = 50,
                             pSig = 0.001,
                             verbose= TRUE){
-  feature <- match.arg(feature, c("limma", "DV", "DD", "chisq", "BI"))
+  feature <- match.arg(feature, c("limma", "DV", "DD", "chisq", "BI", "Cepo"))
   numHierchy <- length(cutree_list)
   levelModel <- list()
   levelHVG <- list()

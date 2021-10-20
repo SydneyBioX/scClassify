@@ -1,15 +1,17 @@
 #' @importFrom methods new
+#' @importFrom Cepo Cepo topGenes
 #' @import limma
 
 
 featureSelection <- function(exprsMat,
                              trainClass,
-                             feature = c("limma", "DV", "DD", "chisq", "BI"),
+                             feature = c("limma", "DV", "DD", "chisq", "BI",
+                                         "Cepo"),
                              topN = 50,
                              pSig = 0.001
 ){
 
-    feature <- match.arg(feature, c("limma", "DV", "DD", "chisq", "BI"),
+    feature <- match.arg(feature, c("limma", "DV", "DD", "chisq", "BI", "Cepo"),
                          several.ok = FALSE)
 
 
@@ -34,10 +36,10 @@ featureSelection <- function(exprsMat,
         tt <- lapply(tt, function(x)x)
         res <- Reduce(union, lapply(tt, function(t)
             names(t)[seq_len(topN)]))
-    }
-
-
-    else{
+    } else if (feature == "Cepo") {
+        tt <- Cepo::Cepo(as.matrix(exprsMat), trainClass, exprsPct = 0.05)
+        res <- Reduce(union, Cepo::topGenes(tt, n = topN))
+    } else{
         tt <- doLimma(exprsMat, trainClass)
         res <- Reduce(union, lapply(tt, function(t)
             rownames(t[t$logFC > 0 & (t$meanPct.2 - t$meanPct.1) > 0.05 &
