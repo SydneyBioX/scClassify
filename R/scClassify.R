@@ -2,12 +2,13 @@
 #'
 #' @param exprsMat_train A matrix of log-transformed expression matrix of reference dataset
 #' @param cellTypes_train A vector of cell types of reference dataset
+#' @param sampleID_train Default: \code{NULL}. A vector of sample IDs, if the cells come from more than one individual.
 #' @param exprsMat_test A list or a matrix indicates the expression matrices of the query datasets
 #' @param cellTypes_test A list or a vector indicates cell types of the query datasets (Optional).
 #' @param tree A vector indicates the method to build hierarchical tree, set as "HOPACH" by default.
 #' This should be one of "HOPACH" and "HC" (using hclust).
-#' @param selectFeatures A vector indicates the gene selection method, set as "limma" by default.
-#' This should be one or more of "limma", "DV", "DD", "chisq", "BI" and "Cepo".
+#' @param selectFeatures A vector indicates the gene selection method, set as "DM" (Difference in Means) by default.
+#' This should be one or more of "DM", "DV", "DD", "chisq", "BI" and "Cepo".
 #' @param algorithm A vector indicates the KNN method that are used, set as
 #' "WKNN" by default. Thisshould be one or more of "WKNN", "KNN", "DWKNN".
 #' @param similarity A vector indicates the similarity measure that are used,
@@ -56,7 +57,7 @@
 #' cellTypes_test = list(wang = wang_cellTypes),
 #' tree = "HOPACH",
 #' algorithm = "WKNN",
-#' selectFeatures = c("limma"),
+#' selectFeatures = "DM",
 #' similarity = c("pearson"),
 #' returnList = FALSE,
 #' verbose = FALSE)
@@ -69,11 +70,12 @@
 
 scClassify <- function(exprsMat_train = NULL,
                        cellTypes_train = NULL,
+                       sampleID_train = NULL,
                        exprsMat_test = NULL,
                        cellTypes_test = NULL,
                        tree = "HOPACH",
                        algorithm = "WKNN",
-                       selectFeatures = "limma",
+                       selectFeatures = "DM",
                        similarity = "pearson",
                        cutoff_method = c("dynamic", "static"),
                        weighted_ensemble = FALSE,
@@ -147,7 +149,7 @@ scClassify <- function(exprsMat_train = NULL,
 
     tree <- match.arg(tree, c("HOPACH", "HC"), several.ok = FALSE)
     selectFeatures <- match.arg(selectFeatures,
-                                c("limma", "DV", "DD", "chisq", "BI", "Cepo"),
+                                c("DM", "DV", "DD", "chisq", "BI", "Cepo"),
                                 several.ok = TRUE)
 
     algorithm <- match.arg(algorithm,
@@ -231,6 +233,7 @@ scClassify <- function(exprsMat_train = NULL,
     ### train_scClassify
     trainRes <- train_scClassify(exprsMat_train,
                                  cellTypes_train,
+                                 sampleID_train,
                                  tree = tree,
                                  selectFeatures = selectFeatures,
                                  topN = topN,

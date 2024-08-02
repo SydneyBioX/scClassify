@@ -2,12 +2,13 @@
 #'
 #' @param exprsMat_train A matrix of log-transformed expression matrix of reference dataset
 #' @param cellTypes_train A vector of cell types of reference dataset
+#' @param sampleID_train Default: \code{NULL}. A vector of sample IDs, if the cells come from more than one individual.
 #' @param tree A vector indicates the method to build hierarchical tree,
 #' set as "HOPACH" by default.
 #' This should be one of "HOPACH" and "HC" (using stats::hclust).
 #' @param selectFeatures A vector indicates the gene selection method,
-#' set as "limma" by default.
-#' This should be one or more of "limma", "DV", "DD", "chisq", "BI", "Cepo".
+#' set as "DM" (Difference in Means) by default.
+#' This should be one or more of "DM", "DV", "DD", "chisq", "BI", "Cepo".
 #' @param topN An integer indicates the top number of features that are selected
 #' @param hopach_kmax An integer between 1 and 9 specifying the maximum number of
 #' children at each node in the HOPACH tree.
@@ -32,7 +33,7 @@
 #' exprsMat_xin_subset <- scClassify_example$exprsMat_xin_subset
 #' trainClass <- train_scClassify(exprsMat_train = exprsMat_xin_subset,
 #' cellTypes_train = xin_cellTypes,
-#' selectFeatures = c("limma", "BI"),
+#' selectFeatures = c("DM", "BI"),
 #' returnList = FALSE
 #' )
 #'
@@ -46,8 +47,9 @@
 
 train_scClassify <- function(exprsMat_train,
                              cellTypes_train,
+                             sampleID_train = NULL,
                              tree = "HOPACH",
-                             selectFeatures = "limma",
+                             selectFeatures = "DM",
                              topN = 50,
                              hopach_kmax = 5,
                              pSig = 0.05,
@@ -69,7 +71,7 @@ train_scClassify <- function(exprsMat_train,
 
   # Matching the argument of feature selection method
   selectFeatures <- match.arg(selectFeatures,
-                              c("limma", "DV", "DD", "chisq", "BI", "Cepo"),
+                              c("DM", "DV", "DD", "chisq", "BI", "Cepo"),
                               several.ok = TRUE)
 
 
@@ -133,6 +135,7 @@ train_scClassify <- function(exprsMat_train,
     for (train_list_idx in seq_len(length(exprsMat_train))) {
       trainRes[[train_list_idx]] <- train_scClassifySingle(exprsMat_train[[train_list_idx]],
                                                            cellTypes_train[[train_list_idx]],
+                                                           sampleID_train[[train_list_idx]],
                                                            tree = tree,
                                                            selectFeatures = selectFeatures,
                                                            topN = topN,
@@ -149,6 +152,7 @@ train_scClassify <- function(exprsMat_train,
 
     trainRes <- train_scClassifySingle(exprsMat_train,
                                        cellTypes_train,
+                                       sampleID_train,
                                        tree = tree,
                                        selectFeatures = selectFeatures,
                                        topN = topN,
@@ -211,8 +215,9 @@ train_scClassify <- function(exprsMat_train,
 
 train_scClassifySingle <- function(exprsMat_train,
                                    cellTypes_train,
+                                   sampleID_train = NULL,
                                    tree = "HOPACH",
-                                   selectFeatures = "limma",
+                                   selectFeatures = "DM",
                                    topN = 50,
                                    hopach_kmax = 5,
                                    pSig = 0.05,
@@ -247,7 +252,7 @@ train_scClassifySingle <- function(exprsMat_train,
 
   # Matching the argument of feature selection method
   selectFeatures <- match.arg(selectFeatures,
-                              c("limma", "DV", "DD", "chisq", "BI", "Cepo"),
+                              c("DM", "DV", "DD", "chisq", "BI", "Cepo"),
                               several.ok = TRUE)
 
 
@@ -257,10 +262,12 @@ train_scClassifySingle <- function(exprsMat_train,
 
 
   # Select the features to construct tree
-  tt <- doLimma(exprsMat_train, cellTypes_train)
-  de <- Reduce(union, lapply(tt, function(t)
-    rownames(t)[seq_len(max(min(50, sum(t$adj.P.Val < 0.001)), 30))]))
-  de <- na.omit(de)
+  effectSizes <- scrapper::scoreMarkers(exprsMat_train, cellTypes_train, sampleID_train, block.weight.policy = "equal")
+  de <- Reduce(union, mapply(function(typeD, propDetect)
+  {
+    bestNames <- rownames(exprsMat_train)[order(typeD$mean, decreasing = TRUE)]
+    bestNames[max(30, nrow(exprsMat_train))]
+  }, effectSizes[["cohens.d"]], effectSizes[["delta.detected"]], SIMPLIFY = FALSE))
   if (verbose) {
     print(paste("Number of genes selected to construct HOPACH tree",
                 length(de)))
@@ -420,11 +427,11 @@ currentClass <- function(cellTypes, cutree_res){
 hierarchyKNNcor <- function(exprsMat,
                             cellTypes,
                             cutree_list,
-                            feature = c("limma", "DV", "DD", "chisq", "BI"),
+                            feature = c("DM", "DV", "DD", "chisq", "BI"),
                             topN = 50,
                             pSig = 0.001,
                             verbose= TRUE){
-  feature <- match.arg(feature, c("limma", "DV", "DD", "chisq", "BI", "Cepo"))
+  feature <- match.arg(feature, c("DM", "DV", "DD", "chisq", "BI", "Cepo"))
   numHierchy <- length(cutree_list)
   levelModel <- list()
   levelHVG <- list()

@@ -7,11 +7,12 @@
 scClassify(
   exprsMat_train = NULL,
   cellTypes_train = NULL,
+  sampleID_train = NULL,
   exprsMat_test = NULL,
   cellTypes_test = NULL,
   tree = "HOPACH",
   algorithm = "WKNN",
-  selectFeatures = "limma",
+  selectFeatures = "DM",
   similarity = "pearson",
   cutoff_method = c("dynamic", "static"),
   weighted_ensemble = FALSE,
@@ -36,6 +37,8 @@ scClassify(
 
 \item{cellTypes_train}{A vector of cell types of reference dataset}
 
+\item{sampleID_train}{Default: \code{NULL}. A vector of sample IDs, if the cells come from more than one individual.}
+
 \item{exprsMat_test}{A list or a matrix indicates the expression matrices of the query datasets}
 
 \item{cellTypes_test}{A list or a vector indicates cell types of the query datasets (Optional).}
@@ -46,8 +49,8 @@ This should be one of "HOPACH" and "HC" (using hclust).}
 \item{algorithm}{A vector indicates the KNN method that are used, set as
 "WKNN" by default. Thisshould be one or more of "WKNN", "KNN", "DWKNN".}
 
-\item{selectFeatures}{A vector indicates the gene selection method, set as "limma" by default.
-This should be one or more of "limma", "DV", "DD", "chisq", "BI" and "Cepo".}
+\item{selectFeatures}{A vector indicates the gene selection method, set as "DM" (Difference in Means) by default.
+This should be one or more of "DM", "DV", "DD", "chisq", "BI" and "Cepo".}
 
 \item{similarity}{A vector indicates the similarity measure that are used,
 set as "pearson" by default. This should be one or more of "pearson",
@@ -113,7 +116,7 @@ exprsMat_test = list(wang = exprsMat_wang_subset),
 cellTypes_test = list(wang = wang_cellTypes),
 tree = "HOPACH",
 algorithm = "WKNN",
-selectFeatures = c("limma"),
+selectFeatures = "DM",
 similarity = c("pearson"),
 returnList = FALSE,
 verbose = FALSE)

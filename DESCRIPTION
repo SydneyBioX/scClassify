@@ -11,7 +11,7 @@ LazyData: false
 Depends: R (>= 4.0)
 Imports:
     S4Vectors,
-    limma,
+    scrapper,
     ggraph,
     igraph,
     methods,
@@ -30,7 +30,7 @@ Imports:
     graphics,
     statmod,
     Cepo
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.2
 Suggests: 
     knitr,
     rmarkdown,

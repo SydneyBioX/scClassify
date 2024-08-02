@@ -7,8 +7,9 @@
 train_scClassify(
   exprsMat_train,
   cellTypes_train,
+  sampleID_train = NULL,
   tree = "HOPACH",
-  selectFeatures = "limma",
+  selectFeatures = "DM",
   topN = 50,
   hopach_kmax = 5,
   pSig = 0.05,
@@ -26,13 +27,15 @@ train_scClassify(
 
 \item{cellTypes_train}{A vector of cell types of reference dataset}
 
+\item{sampleID_train}{Default: \code{NULL}. A vector of sample IDs, if the cells come from more than one individual.}
+
 \item{tree}{A vector indicates the method to build hierarchical tree,
 set as "HOPACH" by default.
 This should be one of "HOPACH" and "HC" (using stats::hclust).}
 
 \item{selectFeatures}{A vector indicates the gene selection method,
-set as "limma" by default.
-This should be one or more of "limma", "DV", "DD", "chisq", "BI", "Cepo".}
+set as "DM" (Difference in Means) by default.
+This should be one or more of "DM", "DV", "DD", "chisq", "BI", "Cepo".}
 
 \item{topN}{An integer indicates the top number of features that are selected}
 
@@ -71,7 +74,7 @@ xin_cellTypes <- scClassify_example$xin_cellTypes
 exprsMat_xin_subset <- scClassify_example$exprsMat_xin_subset
 trainClass <- train_scClassify(exprsMat_train = exprsMat_xin_subset,
 cellTypes_train = xin_cellTypes,
-selectFeatures = c("limma", "BI"),
+selectFeatures = c("DM", "BI"),
 returnList = FALSE
 )
 

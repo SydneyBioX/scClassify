@@ -12,7 +12,7 @@ predict_scClassify(
   prob_threshold = 0.7,
   cor_threshold_static = 0.5,
   cor_threshold_high = 0.7,
-  features = "limma",
+  features = "DM",
   algorithm = "WKNN",
   similarity = "pearson",
   cutoff_method = c("dynamic", "static"),
@@ -45,8 +45,8 @@ correlation threshold.}
 correlation threshold}
 
 \item{features}{A vector indicates the gene selection method,
-set as "limma" by default.
-This should be one or more of "limma", "DV", "DD", "chisq", "BI".}
+set as "DM" (Difference in Means) by default.
+This should be one or more of "DM", "DV", "DD", "chisq", "BI".}
 
 \item{algorithm}{A vector indicates the KNN method that are used,
 set as "WKNN" by default.
@@ -90,7 +90,7 @@ pred_res <- predict_scClassify(exprsMat_test = exprsMat_wang_subset,
 trainRes = trainClassExample_xin,
 cellTypes_test = wang_cellTypes,
 algorithm = "WKNN",
-features = c("limma"),
+features = "DM",
 similarity = c("pearson"),
 prob_threshold = 0.7,
 verbose = TRUE)
