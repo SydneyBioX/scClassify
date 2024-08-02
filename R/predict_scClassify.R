@@ -14,8 +14,8 @@
 #' @param cor_threshold_high A numeric indicates the highest
 #' correlation threshold
 #' @param features A vector indicates the gene selection method,
-#' set as "limma" by default.
-#' This should be one or more of "limma", "DV", "DD", "chisq", "BI".
+#' set as "DM" (Difference in Means) by default.
+#' This should be one or more of "DM", "DV", "DD", "chisq", "BI".
 #' @param algorithm A vector indicates the KNN method that are used,
 #' set as "WKNN" by default.
 #' This should be one or more of "WKNN", "KNN", "DWKNN".
@@ -46,7 +46,7 @@
 #' trainRes = trainClassExample_xin,
 #' cellTypes_test = wang_cellTypes,
 #' algorithm = "WKNN",
-#' features = c("limma"),
+#' features = "DM",
 #' similarity = c("pearson"),
 #' prob_threshold = 0.7,
 #' verbose = TRUE)
@@ -67,7 +67,7 @@ predict_scClassify <- function(exprsMat_test,
                                prob_threshold = 0.7,
                                cor_threshold_static = 0.5,
                                cor_threshold_high = 0.7,
-                               features = "limma",
+                               features = "DM",
                                algorithm = "WKNN",
                                similarity = "pearson",
                                cutoff_method = c("dynamic", "static"),
@@ -238,8 +238,8 @@ predict_scClassify <- function(exprsMat_test,
 #' @param prob_threshold A numeric indicates the probability threshold for KNN/WKNN/DWKNN.
 #' @param cor_threshold_static A numeric indicates the static correlation threshold.
 #' @param cor_threshold_high A numeric indicates the highest correlation threshold
-#' @param features A vector indicates the method to select features, set as "limma" by default.
-#' This should be one or more of "limma", "DV", "DD", "chisq", "BI".
+#' @param features A vector indicates the method to select features, set as "DM" (Difference in Means) by default.
+#' This should be one or more of "DM", "DV", "DD", "chisq", "BI".
 #' @param algorithm A vector indicates the KNN method that are used, set as "WKNN" by default.
 #' This should be one or more of "WKNN", "KNN", "DWKNN".
 #' @param similarity A vector indicates the similarity measure that are used,
@@ -269,7 +269,7 @@ predict_scClassify <- function(exprsMat_test,
 #' trainRes = trainClassExampleJoint,
 #' cellTypes_test = wang_cellTypes,
 #' algorithm = "WKNN",
-#' features = c("limma"),
+#' features = "DM",
 #' similarity = c("pearson"),
 #' prob_threshold = 0.7,
 #' verbose = FALSE)
@@ -287,7 +287,7 @@ predict_scClassifyJoint <- function(exprsMat_test,
                                     prob_threshold = 0.7,
                                     cor_threshold_static = 0.5,
                                     cor_threshold_high = 0.7,
-                                    features = "limma",
+                                    features = "DM",
                                     algorithm = "WKNN",
                                     similarity = "pearson",
                                     cutoff_method = c("dynamic", "static"),
@@ -363,7 +363,7 @@ predict_scClassifySingle <- function(exprsMat_test,
                                      prob_threshold = 0.7,
                                      cor_threshold_static = 0.5,
                                      cor_threshold_high = 0.7,
-                                     features = "limma",
+                                     features = "DM",
                                      algorithm = c("WKNN", "KNN", "DWKNN"),
                                      similarity = c("pearson",  "spearman",
                                                     "cosine", "jaccard",
