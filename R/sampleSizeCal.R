@@ -170,7 +170,7 @@ runSubSampling <- function(exprsMat,
                                test = cellTypes_test),
                            ...)
 
-    acc_cls <- trainRes$testRes$test$pearson_WKNN_limma$classifyRes
+    acc_cls <- trainRes$testRes$test$pearson_WKNN_DM$classifyRes
     return(acc_cls)
 }
 

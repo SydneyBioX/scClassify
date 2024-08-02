@@ -103,7 +103,7 @@ scClassify_res <- scClassify(exprsMat_train = exprsMat_xin_subset,
                              cellTypes_test = list(wang = wang_cellTypes),
                              tree = "HOPACH",
                              algorithm = "WKNN",
-                             selectFeatures = c("limma"),
+                             selectFeatures = "DM",
                              similarity = c("pearson"),
                              returnList = FALSE,
                              verbose = FALSE)
@@ -123,7 +123,7 @@ Noted that `scClassify_res$trainRes` is a `scClassifyTrainModel` class.
 Check the prediction results.
 
 ```{r}
-table(scClassify_res$testRes$wang$pearson_WKNN_limma$predRes, wang_cellTypes)
+table(scClassify_res$testRes$wang$pearson_WKNN_DM$predRes, wang_cellTypes)
 ```
 
 
@@ -134,13 +134,13 @@ table(scClassify_res$testRes$wang$pearson_WKNN_limma$predRes, wang_cellTypes)
 
 We next perform ensemble `scClassify` by using Xin et al. 
 as our reference dataset and Wang et al. data as our query data. 
-We use `WKNN` as the KNN algorithm, `DE` as the gene selection method, 
+We use `WKNN` as the KNN algorithm, `DM` as the gene selection method, 
 and `pearson` and `spearman` as the similarity calculation methods. 
 Thus, we will generate two combinations of gene selection models and 
 similarity metrics as training classifiers: 
 
-1. `WKNN` + `DE` + `pearson`
-2. `WKNN` + `DE` + `spearman`
+1. `WKNN` + `DM` + `pearson`
+2. `WKNN` + `DM` + `spearman`
 
 Here, we will weight these two classifiers equally by setting 
 `weighted_ensemble = FALSE`. By default this is set as `TRUE`, 
@@ -154,7 +154,7 @@ scClassify_res_ensemble <- scClassify(exprsMat_train = exprsMat_xin_subset,
                                       cellTypes_test = list(wang = wang_cellTypes),
                                       tree = "HOPACH",
                                       algorithm = "WKNN",
-                                      selectFeatures = c("limma"),
+                                      selectFeatures = "DM",
                                       similarity = c("pearson", "cosine"),
                                       weighted_ensemble = FALSE,
                                       returnList = FALSE,
@@ -165,8 +165,8 @@ scClassify_res_ensemble <- scClassify(exprsMat_train = exprsMat_xin_subset,
 We can compare the two base classifiers predictions as below.
 
 ```{r}
-table(scClassify_res_ensemble$testRes$wang$pearson_WKNN_limma$predRes,
-      scClassify_res_ensemble$testRes$wang$cosine_WKNN_limma$predRes)
+table(scClassify_res_ensemble$testRes$wang$pearson_WKNN_DM$predRes,
+      scClassify_res_ensemble$testRes$wang$cosine_WKNN_DM$predRes)
 ```
 
 
@@ -189,12 +189,12 @@ we will calculate the training error of the reference data as
 the weights for the individual classifiers.
 
 Here, we illustrate the training function with gene selection methods 
-based on differential expression ("limma") and biomodal distribution ("BI").
+based on difference in means `"DM"` and biomodal distribution `"BI"`.
 
 ```{r}
 trainClass <- train_scClassify(exprsMat_train = exprsMat_xin_subset,
                                cellTypes_train = xin_cellTypes,
-                               selectFeatures = c("limma", "BI"),
+                               selectFeatures = c("DM", "BI"),
                                returnList = FALSE
 )
 ```

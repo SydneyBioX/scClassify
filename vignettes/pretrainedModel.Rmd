@@ -43,7 +43,6 @@ model of scClassify to predict cell types. A pretrained model is a
 A list of pretrained model can be found in
 https://sydneybiox.github.io/scClassify/index.html.
 
-
 First,  install `scClassify`, install `BiocManager` and use 
 `BiocManager::install` to install `scClassify` package.
 
@@ -54,10 +53,6 @@ if (!requireNamespace("BiocManager", quietly = TRUE)) {
 }
 BiocManager::install("scClassify")
 ```
-
-
-
-
 
 # Setting up the data
 
@@ -86,8 +81,8 @@ trainClassExample_xin
 ```
 
 In this pretrained model, we have selected the genes based on Differential 
-Expression using limma. To check the genes that are available 
-in the pretrained model: 
+Expression using Cohen's *d* To check the genes that are available 
+in the pretrained model:
 
 
 ```{r}
@@ -113,7 +108,7 @@ pred_res <- predict_scClassify(exprsMat_test = exprsMat_wang_subset,
                                trainRes = trainClassExample_xin,
                                cellTypes_test = wang_cellTypes,
                                algorithm = "WKNN",
-                               features = c("limma"),
+                               features = "DM",
                                similarity = c("pearson", "spearman"),
                                prob_threshold = 0.7,
                                verbose = TRUE)
@@ -123,23 +118,18 @@ Noted that the `cellType_test` is not a required input.
 For datasets with unknown labels, users can simply leave it 
 as `cellType_test = NULL`.
 
-
-
 Prediction results for pearson as the similarity metric:
 
 
 ```{r}
-table(pred_res$pearson_WKNN_limma$predRes, wang_cellTypes)
+table(pred_res$pearson_WKNN_DM$predRes, wang_cellTypes)
 ```
 
 Prediction results for spearman as the similarity metric:
 
 ```{r}
-table(pred_res$spearman_WKNN_limma$predRes, wang_cellTypes)
+table(pred_res$spearman_WKNN_DM$predRes, wang_cellTypes)
 ```
-
-
-
 
 # Session Info
 

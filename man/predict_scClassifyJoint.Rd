@@ -12,7 +12,7 @@ predict_scClassifyJoint(
   prob_threshold = 0.7,
   cor_threshold_static = 0.5,
   cor_threshold_high = 0.7,
-  features = "limma",
+  features = "DM",
   algorithm = "WKNN",
   similarity = "pearson",
   cutoff_method = c("dynamic", "static"),
@@ -36,8 +36,8 @@ predict_scClassifyJoint(
 
 \item{cor_threshold_high}{A numeric indicates the highest correlation threshold}
 
-\item{features}{A vector indicates the method to select features, set as "limma" by default.
-This should be one or more of "limma", "DV", "DD", "chisq", "BI".}
+\item{features}{A vector indicates the method to select features, set as "DM" (Difference in Means) by default.
+This should be one or more of "DM", "DV", "DD", "chisq", "BI".}
 
 \item{algorithm}{A vector indicates the KNN method that are used, set as "WKNN" by default.
 This should be one or more of "WKNN", "KNN", "DWKNN".}
@@ -77,7 +77,7 @@ pred_res_joint <- predict_scClassifyJoint(exprsMat_test = exprsMat_wang_subset,
 trainRes = trainClassExampleJoint,
 cellTypes_test = wang_cellTypes,
 algorithm = "WKNN",
-features = c("limma"),
+features = "DM",
 similarity = c("pearson"),
 prob_threshold = 0.7,
 verbose = FALSE)

@@ -7,12 +7,11 @@ Single cell classification via cell-type hierarchies based on ensemble learning 
 
 ## Installation
 
-
-Install Bioconductor packages `S4Vectors`, `hopach` and `limma` packages using `BiocManager`:
+Install Bioconductor packages `S4Vectors`, `hopach` and `scrapper` packages using `BiocManager`:
 
 ```r
 # install.packages("BiocManager")
-BiocManager::install(c("S4Vectors", "hopach", "limma"))
+BiocManager::install(c("S4Vectors", "hopach", "scrapper"))
 ```
 
 Then install the latest `scClassify` using `devtools` (For R >= 4.0):

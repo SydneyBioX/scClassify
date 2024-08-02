@@ -1,17 +1,17 @@
 #' @importFrom methods new
 #' @importFrom Cepo Cepo topGenes
-#' @import limma
-
+#' @importFrom scrapper scoreMarkers
 
 featureSelection <- function(exprsMat,
                              trainClass,
-                             feature = c("limma", "DV", "DD", "chisq", "BI",
+                             sampleID = NULL,
+                             feature = c("DM", "DV", "DD", "chisq", "BI",
                                          "Cepo"),
                              topN = 50,
                              pSig = 0.001
 ){
 
-    feature <- match.arg(feature, c("limma", "DV", "DD", "chisq", "BI", "Cepo"),
+    feature <- match.arg(feature, c("DM", "DV", "DD", "chisq", "BI", "Cepo"),
                          several.ok = FALSE)
 
 
@@ -40,68 +40,18 @@ featureSelection <- function(exprsMat,
         tt <- Cepo::Cepo(as.matrix(exprsMat), trainClass, exprsPct = 0.05)
         res <- Reduce(union, Cepo::topGenes(tt, n = topN))
     } else{
-        tt <- doLimma(exprsMat, trainClass)
-        res <- Reduce(union, lapply(tt, function(t)
-            rownames(t[t$logFC > 0 & (t$meanPct.2 - t$meanPct.1) > 0.05 &
-                           t$adj.P.Val < pSig,])[seq_len(topN)]))
+        effectSizes <- scrapper::scoreMarkers(exprsMat, trainClass, sampleID, block.weight.policy = "equal")
+        res <- Reduce(union, mapply(function(typeD, propDetect)
+        {
+          bestNames <- rownames(exprsMat)[order(typeD$mean, decreasing = TRUE)]
+          bestNames <- bestNames[propDetect$mean > 0.05]
+          bestNames[seq_len(topN)]
+        }, effectSizes[["cohens.d"]], effectSizes[["delta.detected"]], SIMPLIFY = FALSE))
 
     }
 
     return(res)
 }
-
-
-#' @importFrom limma eBayes lmFit
-#' @importFrom methods new
-
-doLimma <- function(exprsMat, cellTypes, exprs_pct = 0.05){
-
-    cellTypes <- droplevels(as.factor(cellTypes))
-    tt <- list()
-    for (i in seq_len(nlevels(cellTypes))) {
-        tmp_celltype <- (ifelse(cellTypes == levels(cellTypes)[i], 1, 0))
-        design <- stats::model.matrix(~tmp_celltype)
-
-
-        meanExprs <- do.call(cbind, lapply(c(0,1), function(i){
-            Matrix::rowMeans(exprsMat[, tmp_celltype == i, drop = FALSE])
-        }))
-
-        meanPct <- do.call(cbind, lapply(c(0,1), function(i){
-            Matrix::rowSums(exprsMat[, tmp_celltype == i,
-                                     drop = FALSE] > 0)/sum(tmp_celltype == i)
-        }))
-
-        keep <- meanPct[,2] > exprs_pct
-
-        y <- methods::new("EList")
-        y$E <- exprsMat[keep, ]
-        fit <- limma::lmFit(y, design = design)
-        fit <- limma::eBayes(fit, trend = TRUE, robust = TRUE)
-        tt[[i]] <- limma::topTable(fit, n = Inf, adjust.method = "BH", coef = 2)
-
-
-
-        if (!is.null(tt[[i]]$ID)) {
-            tt[[i]] <- tt[[i]][!duplicated(tt[[i]]$ID),]
-            rownames(tt[[i]]) <- tt[[i]]$ID
-        }
-
-        tt[[i]]$meanExprs.1 <- meanExprs[rownames(tt[[i]]), 1]
-        tt[[i]]$meanExprs.2 <- meanExprs[rownames(tt[[i]]), 2]
-        tt[[i]]$meanPct.1 <- meanPct[rownames(tt[[i]]), 1]
-        tt[[i]]$meanPct.2 <- meanPct[rownames(tt[[i]]), 2]
-    }
-
-
-
-    return(tt)
-
-
-}
-
-
-
 
 doDV <- function(exprsMat, cellTypes){
 
